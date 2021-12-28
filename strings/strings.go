@@ -14,7 +14,7 @@ func Abbreviate(s, abbreviateMarker string, offset, maxWidth int) string {
 	}
 	abbreviateMarkerLength := len(abbreviateMarker)
 	minAbbreviateWidth := abbreviateMarkerLength + 1
-	minAbbreviateWidthOffset := 2 * abbreviateMarkerLength + 1
+	minAbbreviateWidthOffset := 2*abbreviateMarkerLength + 1
 	if maxWidth < minAbbreviateWidth {
 		panic(fmt.Sprintf("minimum abbreviation width is %d", minAbbreviateWidth))
 	}
@@ -25,16 +25,16 @@ func Abbreviate(s, abbreviateMarker string, offset, maxWidth int) string {
 	if offset > l {
 		offset = l
 	}
-	if l - offset < maxWidth - abbreviateMarkerLength {
+	if l-offset < maxWidth-abbreviateMarkerLength {
 		offset = l - (maxWidth - abbreviateMarkerLength)
 	}
-	if offset <= abbreviateMarkerLength + 1 {
+	if offset <= abbreviateMarkerLength+1 {
 		return s[0:(maxWidth-abbreviateMarkerLength)] + abbreviateMarker
 	}
 	if maxWidth < minAbbreviateWidthOffset {
 		panic(fmt.Sprintf("minimum abbreviation width with offset is %d", minAbbreviateWidthOffset))
 	}
-	if offset + maxWidth - abbreviateMarkerLength < l {
+	if offset+maxWidth-abbreviateMarkerLength < l {
 		return abbreviateMarker + Abbreviate(s[offset:], abbreviateMarker, 0, maxWidth-abbreviateMarkerLength)
 	}
 	return abbreviateMarker + s[l-(maxWidth-abbreviateMarkerLength):]
@@ -43,10 +43,10 @@ func Abbreviate(s, abbreviateMarker string, offset, maxWidth int) string {
 func AbbreviateMiddle(s, middle string, length int) string {
 	l := len(s)
 	lm := len(middle)
-	if !IsAnyEmpty(s, middle) && length < l && length >= lm + 2 {
+	if !IsAnyEmpty(s, middle) && length < l && length >= lm+2 {
 		targetStringLength := length - lm
-		startOffset := targetStringLength / 2 + targetStringLength % 2
-		endOffset := l - targetStringLength / 2
+		startOffset := targetStringLength/2 + targetStringLength%2
+		endOffset := l - targetStringLength/2
 		return s[0:startOffset] + middle + s[endOffset:]
 	}
 	return s
@@ -80,6 +80,51 @@ func Capitalize(s string) string {
 	return u + s[1:]
 }
 
+func Center(s string, size int, padCharacter uint8) string {
+	if size > 0 {
+		l := len(s)
+		pads := size - l
+		if pads > 0 {
+			return RightPad(LeftPad(s, l+pads/2, padCharacter), size, padCharacter)
+		}
+	}
+	return s
+}
+
+func CenterString(s string, size int, padString string) string {
+	if IsEmpty(padString) {
+		padString = defaultPadString
+	}
+	l := len(s)
+	pads := size - l
+	if pads <= 0 {
+		return s
+	}
+	return RightPadString(LeftPadString(s, l+pads/2, padString), size, padString)
+}
+
+func Chomp(s string) string {
+	if IsEmpty(s) {
+		return s
+	}
+	l := len(s)
+	if l == 1 && s != carriageReturn && s != lineBreak {
+		return s
+	}
+	if l == 1 {
+		return empty
+	}
+	last := l - 1
+	if s[last] == lineBreakCharacter {
+		if s[last-1] == carriageReturnCharacter {
+			last -= 1
+		}
+	} else if s[last] != carriageReturnCharacter {
+		last += 1
+	}
+	return Substring(s, 0, last)
+}
+
 func EndsWithIgnoreCase(s, suffix string) bool {
 	return endsWith(s, suffix, true)
 }
@@ -99,6 +144,93 @@ func IsEmpty(s string) bool {
 
 func IsNotEmpty(s string) bool {
 	return !IsEmpty(s)
+}
+
+func LeftPad(s string, size int, padCharacter uint8) string {
+	l := len(s)
+	pads := size - l
+	if pads <= 0 {
+		return s
+	}
+	if pads > maxPadsRepeatSize {
+		return LeftPadString(s, size, string(padCharacter))
+	}
+	return Repeat(padCharacter, pads) + s
+}
+
+func LeftPadString(s string, size int, padString string) string {
+	if IsEmpty(padString) {
+		padString = defaultPadString
+	}
+	l := len(s)
+	pl := len(padString)
+	pads := size - l
+	if pads <= 0 {
+		return s
+	}
+	if pl == 1 && pads <= 8192 {
+		return LeftPad(s, size, padString[0])
+	}
+	if pl == pads {
+		return padString + s
+	}
+	if pads < pl {
+		return padString[0:pads] + s
+	}
+	p := make([]uint8, pads)
+	for i := 0; i < pads; i += 1 {
+		p[i] = padString[i%pl]
+	}
+	return string(p) + s
+}
+
+func Repeat(character uint8, repeat int) string {
+	if repeat <= 0 {
+		return ""
+	}
+	s := make([]uint8, repeat)
+	for i := 0; i < repeat; i += 1 {
+		s[i] = character
+	}
+	return string(s)
+}
+
+func RightPad(s string, size int, padCharacter uint8) string {
+	l := len(s)
+	pads := size - l
+	if pads <= 0 {
+		return s
+	}
+	if pads > maxPadsRepeatSize {
+		return RightPadString(s, size, string(padCharacter))
+	}
+	return s + Repeat(padCharacter, pads)
+}
+
+func RightPadString(s string, size int, padString string) string {
+	if IsEmpty(padString) {
+		padString = defaultPadString
+	}
+	l := len(s)
+	pl := len(padString)
+	pads := size - l
+	if pads <= 0 {
+		return s
+	}
+	if pl == 1 && pads <= 8192 {
+		return RightPad(s, size, padString[0])
+	}
+	if pl == pads {
+		return s + padString
+	}
+	if pads < pl {
+		return s + padString[0:pads]
+	}
+	p := make([]uint8, pads)
+	for i := 0; i < pads; i += 1 {
+		p[i] = padString[i%pl]
+	}
+	return s + string(p)
 }
 
 func SubstringTillEnd(s string, start int) string {
