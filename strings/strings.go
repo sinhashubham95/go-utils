@@ -912,6 +912,18 @@ func JoinStringsByString(ss []string, ds string) string {
 	return strings.Join(ss, ds)
 }
 
+// Left is used to get the specified number of leftmost characters of a string.
+func Left(s string, l int) string {
+	if l < 0 {
+		return ""
+	}
+	if len(s) < l {
+		return s
+	}
+	return Substring(s, 0, l)
+}
+
+// LeftPad is used to left pad the given character to the given string.
 func LeftPad(s string, size int, padCharacter uint8) string {
 	l := len(s)
 	pads := size - l
@@ -924,6 +936,7 @@ func LeftPad(s string, size int, padCharacter uint8) string {
 	return Repeat(padCharacter, pads) + s
 }
 
+// LeftPadString is used to left pad the given string to the given string.
 func LeftPadString(s string, size int, padString string) string {
 	if IsEmpty(padString) {
 		padString = defaultPadString
@@ -950,17 +963,52 @@ func LeftPadString(s string, size int, padString string) string {
 	return string(p) + s
 }
 
-func Repeat(character uint8, repeat int) string {
+// LowerCase is used to convert a string to lower case.
+func LowerCase(s string) string {
+	return strings.ToLower(s)
+}
+
+func Matches(a, b string) []int {
+	return nil
+}
+
+// Repeat is used to repeat the given character the given number of times.
+func Repeat(c uint8, repeat int) string {
 	if repeat <= 0 {
 		return ""
 	}
 	s := make([]uint8, repeat)
 	for i := 0; i < repeat; i += 1 {
-		s[i] = character
+		s[i] = c
 	}
 	return string(s)
 }
 
+// RepeatString is used to repeat the given string the given number of times.
+func RepeatString(s string, repeat int) string {
+	if repeat <= 0 {
+		return ""
+	}
+	var b strings.Builder
+	for i := 0; i < repeat; i += 1 {
+		b.WriteString(s)
+	}
+	return b.String()
+}
+
+// Right is used to get the specified number of rightmost characters of a string.
+func Right(s string, l int) string {
+	if l < 0 {
+		return ""
+	}
+	sl := len(s)
+	if sl < l {
+		return s
+	}
+	return Substring(s, sl-l, sl)
+}
+
+// RightPad is used to right pad the given character to the given string.
 func RightPad(s string, size int, padCharacter uint8) string {
 	l := len(s)
 	pads := size - l
@@ -973,6 +1021,7 @@ func RightPad(s string, size int, padCharacter uint8) string {
 	return s + Repeat(padCharacter, pads)
 }
 
+// RightPadString is used to right pad the given string to the given string.
 func RightPadString(s string, size int, padString string) string {
 	if IsEmpty(padString) {
 		padString = defaultPadString
@@ -1034,6 +1083,11 @@ func Substring(s string, start, end int) string {
 		end = 0
 	}
 	return s[start:end]
+}
+
+// UpperCase is used to convert a string to upper case.
+func UpperCase(s string) string {
+	return strings.ToUpper(s)
 }
 
 func appendIfMissing(s, suffix string, ignoreCase bool, suffixes ...string) string {
