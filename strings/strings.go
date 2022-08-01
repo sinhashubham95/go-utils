@@ -968,8 +968,127 @@ func LowerCase(s string) string {
 	return strings.ToLower(s)
 }
 
-func Matches(a, b string) []int {
-	return nil
+// Mid is used to return the string starting from the given position index upto the given length.
+func Mid(s string, pos, length int) string {
+	l := len(s)
+	if length < 0 && pos > l {
+		return ""
+	}
+	if pos < 0 {
+		pos = 0
+	}
+	if l <= pos+length {
+		return SubstringTillEnd(s, pos)
+	}
+	return Substring(s, pos, pos+length)
+}
+
+// NormalizeSpace is used to return the whitespace normalized string by removing the leading and trailing whitespace
+// and then replacing sequences of whitespace characters with a single space.
+func NormalizeSpace(s string) string {
+	l := len(s)
+	if l == 0 {
+		return s
+	}
+	b := strings.Builder{}
+	whitespacesCount := 0
+	startWhitespaces := true
+	for i := 0; i < l; i += 1 {
+		isWhitespace := unicode.IsSpace(rune(s[i]))
+		if isWhitespace {
+			if whitespacesCount == 0 && !startWhitespaces {
+				b.WriteRune(' ')
+				whitespacesCount++
+			}
+			whitespacesCount++
+		} else {
+			startWhitespaces = false
+			b.WriteByte(s[i])
+			whitespacesCount = 0
+		}
+	}
+	if whitespacesCount > 0 {
+		b.WriteRune(' ')
+	}
+	return b.String()
+}
+
+// Overlay overlays part of a String with another String.
+// A negative index is treated as zero. An index greater than the string length is treated as the string length.
+// The start index is always the smaller of the two indices.
+func Overlay(s, overlay string, start, end int) string {
+	l := len(s)
+	if start < 0 {
+		start = 0
+	}
+	if start > l {
+		start = l
+	}
+	if end < 0 {
+		end = 0
+	}
+	if end > l {
+		end = l
+	}
+	if start > end {
+		temp := start
+		start = end
+		end = temp
+	}
+	return Substring(s, 0, start) + overlay + SubstringTillEnd(s, end)
+}
+
+// PrependIfMissing is used to prepend a given prefix at the start of a string if it does not already start with one
+// on the given list.
+func PrependIfMissing(s, prefix string, prefixes ...string) string {
+	return prependIfMissing(s, prefix, false, prefixes...)
+}
+
+// PrependIfMissingIgnoreCase is used to prepend a given prefix at the start of a string if it does not already start with one
+// on the given list ignoring case.
+func PrependIfMissingIgnoreCase(s, prefix string, prefixes ...string) string {
+	return prependIfMissing(s, prefix, true, prefixes...)
+}
+
+// Remove is used to remove all occurrences of a given character in the string
+func Remove(s string, remove uint8) string {
+	l := len(s)
+	var b strings.Builder
+	for i := 0; i < l; i += 1 {
+		if s[i] != remove {
+			b.WriteByte(s[i])
+		}
+	}
+	return b.String()
+}
+
+// RemoveIgnoreCase is used to remove all occurrences of a given character in the string ignoring case
+func RemoveIgnoreCase(s string, remove uint8) string {
+	ls := strings.ToLower(s)
+	r := unicode.ToLower(rune(remove))
+	var b strings.Builder
+	for i, c := range ls {
+		if c != r {
+			b.WriteByte(s[i])
+		}
+	}
+	return b.String()
+}
+
+// RemoveString is used to remove all occurrences of a given string in the string
+func RemoveString(s, remove string) string {
+	if IsEmpty(s) || IsEmpty(remove) {
+		return s
+	}
+	return replace(s, remove, "", -1, false)
+}
+
+// RemoveStringIgnoreCase is used to remove all occurrences of a given string in the string ignoring case
+func RemoveStringIgnoreCase(s, remove string) string {
+	if IsEmpty(s) || IsEmpty(remove) {
+		return s
+	}
+	return replace(s, remove, "", -1, true)
 }
 
 // Repeat is used to repeat the given character the given number of times.
@@ -1048,20 +1167,7 @@ func RightPadString(s string, size int, padString string) string {
 	return s + string(p)
 }
 
-func SubstringTillEnd(s string, start int) string {
-	l := len(s)
-	if start < 0 {
-		start += l
-	}
-	if start < 0 {
-		start = 0
-	}
-	if start > l {
-		return ""
-	}
-	return s[start:]
-}
-
+// Substring returns the string between the given start and the end index.
 func Substring(s string, start, end int) string {
 	l := len(s)
 	if end < 0 {
@@ -1083,6 +1189,21 @@ func Substring(s string, start, end int) string {
 		end = 0
 	}
 	return s[start:end]
+}
+
+// SubstringTillEnd returns the string from the given start index till the end of the string.
+func SubstringTillEnd(s string, start int) string {
+	l := len(s)
+	if start < 0 {
+		start += l
+	}
+	if start < 0 {
+		start = 0
+	}
+	if start > l {
+		return ""
+	}
+	return s[start:]
 }
 
 // UpperCase is used to convert a string to upper case.
@@ -1143,4 +1264,51 @@ func getMinimumLength(ss ...string) int {
 		}
 	}
 	return minL
+}
+
+func prependIfMissing(s, prefix string, ignoreCase bool, prefixes ...string) string {
+	if !IsEmpty(prefix) && !startsWith(s, prefix, ignoreCase) {
+		for _, pr := range prefixes {
+			if startsWith(s, pr, ignoreCase) {
+				return s
+			}
+		}
+		return prefix + s
+	}
+	return s
+}
+
+func replace(s, search, replacement string, max int, ignoreCase bool) string {
+	if IsEmpty(s) || IsEmpty(search) || max == 0 {
+		return s
+	}
+	if max == -1 {
+		max = len(s)
+	}
+	if ignoreCase {
+		search = strings.ToLower(search)
+	}
+	searchLength := len(search)
+	idx := 0
+	if ignoreCase {
+		idx = IndexOfStringIgnoreCase(s, search)
+	} else {
+		idx = IndexOfString(s, search)
+	}
+	if idx == -1 {
+		return s
+	}
+	return replace(strings.Replace(s, s[idx:idx+searchLength], replacement, 1), search, replacement, max-1, ignoreCase)
+}
+
+func startsWith(s, prefix string, ignoreCase bool) bool {
+	l := len(s)
+	pl := len(prefix)
+	if pl > l {
+		return false
+	}
+	if ignoreCase {
+		return strings.EqualFold(s[:pl], prefix)
+	}
+	return s[:pl] == prefix
 }
