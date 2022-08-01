@@ -1091,6 +1091,38 @@ func RemoveStringIgnoreCase(s, remove string) string {
 	return replace(s, remove, "", -1, true)
 }
 
+// RemoveStart is used to remove the occurrence of the given string from the given string's start
+func RemoveStart(s, remove string) string {
+	if startsWith(s, remove, false) {
+		return SubstringTillEnd(s, len(remove))
+	}
+	return s
+}
+
+// RemoveStartIgnoreCase is used to remove the occurrence of the given string's start from the given string ignoring case
+func RemoveStartIgnoreCase(s, remove string) string {
+	if startsWith(s, remove, true) {
+		return SubstringTillEnd(s, len(remove))
+	}
+	return s
+}
+
+// RemoveEnd is used to remove the occurrence of the given string from the given string's end
+func RemoveEnd(s, remove string) string {
+	if endsWith(s, remove, false) {
+		return Substring(s, 0, len(s)-len(remove))
+	}
+	return s
+}
+
+// RemoveEndIgnoreCase is used to remove the occurrence of the given string from the given string's end ignoring case
+func RemoveEndIgnoreCase(s, remove string) string {
+	if endsWith(s, remove, true) {
+		return Substring(s, 0, len(s)-len(remove))
+	}
+	return s
+}
+
 // Repeat is used to repeat the given character the given number of times.
 func Repeat(c uint8, repeat int) string {
 	if repeat <= 0 {
@@ -1113,6 +1145,31 @@ func RepeatString(s string, repeat int) string {
 		b.WriteString(s)
 	}
 	return b.String()
+}
+
+// RepeatStringWithSeparator is used to repeat the given string the given number of times each separated by the given separator.
+func RepeatStringWithSeparator(s, separator string, repeat int) string {
+	if repeat <= 0 {
+		return ""
+	}
+	var b strings.Builder
+	for i := 0; i < repeat; i += 1 {
+		if i > 0 {
+			b.WriteString(separator)
+		}
+		b.WriteString(s)
+	}
+	return b.String()
+}
+
+// Replace is used to replace the given number of occurrences of a string in the given string with another string.
+func Replace(s, search, replacement string, max int) string {
+	return replace(s, search, replacement, max, false)
+}
+
+// ReplaceAll is used to replace all occurrences of a string in the given string with another string.
+func ReplaceAll(s, search, replacement string) string {
+	return Replace(s, search, replacement, -1)
 }
 
 // Right is used to get the specified number of rightmost characters of a string.
