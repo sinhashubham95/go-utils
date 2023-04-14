@@ -139,6 +139,21 @@ func Chomp(s string) string {
 	return Substring(s, 0, last)
 }
 
+// Chop is used to remove the last character and the second last character if it's newline.
+func Chop(s string) string {
+	l := len(s)
+	if l <= 2 {
+		return empty
+	}
+	lastIdx := l - 1
+	ret := Substring(s, 0, lastIdx)
+	last := s[lastIdx]
+	if last == '\n' && ret[lastIdx-1] == '\r' {
+		return Substring(ret, 0, lastIdx-1)
+	}
+	return ret
+}
+
 // Compare returns an integer comparing two strings lexicographically.
 // The result will be 0 if a==b, -1 if a < b, and +1 if a > b.
 func Compare(a, b string) int {
@@ -213,6 +228,11 @@ func ContainsOnlyIgnoreCase(s string, validChars ...uint8) bool {
 		}
 	}
 	return true
+}
+
+// ContainsWhitespace is used to check if the string contains whitespace
+func ContainsWhitespace(s string) bool {
+	return Contains(s, ' ')
 }
 
 // CountMatches is used to count the number of occurrences of a character or a substring in a larger string/text.
@@ -525,6 +545,20 @@ func IndexOfDifference(ss ...string) int {
 		}
 	}
 	return -1
+}
+
+// IndexOfStringStartingAt is used to get the index of the first occurrence of the given string starting with index provided.
+// If the character is not found, then it will return -1.
+func IndexOfStringStartingAt(s, search string, start int) int {
+	l := len(s)
+	if start >= l {
+		return -1
+	}
+	idx := IndexOfString(SubstringTillEnd(s, start), search)
+	if idx < 0 {
+		return idx
+	}
+	return idx + start
 }
 
 // LastIndexOf is used to get the index of the first occurrence of the given character. If the character is not found,
@@ -1013,6 +1047,23 @@ func NormalizeSpace(s string) string {
 	return b.String()
 }
 
+// OrdinalIndexOf is used to return the index of the nth occurrence of the search string in the given string
+func OrdinalIndexOf(s, search string, ordinal int) int {
+	found := 0
+	idx := -1
+	for {
+		if found > ordinal {
+			break
+		}
+		idx = IndexOfStringStartingAt(s, search, idx+1)
+		if idx < 0 {
+			return idx
+		}
+		found += 1
+	}
+	return idx
+}
+
 // Overlay overlays part of a String with another String.
 // A negative index is treated as zero. An index greater than the string length is treated as the string length.
 // The start index is always the smaller of the two indices.
@@ -1172,6 +1223,51 @@ func ReplaceAll(s, search, replacement string) string {
 	return Replace(s, search, replacement, -1)
 }
 
+// ReplaceEach is used to replace each of the
+func ReplaceEach(s string, searchList, replacementList []string) string {
+	if s == empty || len(searchList) == 0 {
+		return s
+	}
+	if len(searchList) != len(replacementList) {
+		panic(fmt.Sprintf("search and replacement list lengths don't match"))
+	}
+	l := len(searchList)
+	for i := 0; i < l; i += 1 {
+		s = Replace(s, searchList[i], replacementList[i], 1)
+	}
+	return s
+}
+
+// ReplaceIgnoreCase is used to replace the given number of occurrences of a string in the given string with
+// another string ignoring case.
+func ReplaceIgnoreCase(s, search, replacement string, max int) string {
+	return replace(s, search, replacement, max, true)
+}
+
+// Reverse is used to reverse the given string
+func Reverse(s string) string {
+	if s == empty {
+		return s
+	}
+	ret := empty
+	l := len(s)
+	for i := l - 1; i >= 0; i -= 1 {
+		ret += string(s[i])
+	}
+	return ret
+}
+
+// ReverseDelimited is used to reverse the given string split by the delimiter
+func ReverseDelimited(s string, d uint8) string {
+	split := strings.Split(s, string(d))
+	l := len(split)
+	retSplit := make([]string, l)
+	for i := 0; i < l; i += 1 {
+		retSplit[i] = split[l-i-1]
+	}
+	return JoinStringsByChar(retSplit, d)
+}
+
 // Right is used to get the specified number of rightmost characters of a string.
 func Right(s string, l int) string {
 	if l < 0 {
@@ -1195,6 +1291,11 @@ func RightPad(s string, size int, padCharacter uint8) string {
 		return RightPadString(s, size, string(padCharacter))
 	}
 	return s + Repeat(padCharacter, pads)
+}
+
+// Rotate is used to rotate the string by given number of characters
+func Rotate(s string, shift int) string {
+	return s
 }
 
 // RightPadString is used to right pad the given string to the given string.
