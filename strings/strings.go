@@ -1295,6 +1295,14 @@ func RightPad(s string, size int, padCharacter uint8) string {
 
 // Rotate is used to rotate the string by given number of characters
 func Rotate(s string, shift int) string {
+	if s == empty {
+		return s
+	}
+	l := len(s)
+	if shift > 0 && shift%l > 0 {
+		offset := -(shift % l)
+		return SubstringTillEnd(s, offset) + Substring(s, 0, offset)
+	}
 	return s
 }
 
@@ -1323,6 +1331,61 @@ func RightPadString(s string, size int, padString string) string {
 		p[i] = padString[i%pl]
 	}
 	return s + string(p)
+}
+
+// Split is used to split the string into a list of strings about the separator provided
+func Split(s string, separator uint8) []string {
+	if s == empty {
+		return nil
+	}
+	return strings.Split(s, string(separator))
+}
+
+// SplitByString is used to split the string by the separator provided
+func SplitByString(s, separator string) []string {
+	if s == empty {
+		return nil
+	}
+	return strings.Split(s, separator)
+}
+
+// SplitN slices s into substrings separated by sep and returns a slice of
+// the substrings between those separators.
+//
+// The count determines the number of substrings to return:
+//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//   n == 0: the result is nil (zero substrings)
+//   n < 0: all substrings
+//
+// Edge cases for s and sep (for example, empty strings) are handled
+// as described in the documentation for Split.
+func SplitN(s string, separator uint8, n int) []string {
+	if s == empty {
+		return nil
+	}
+	return strings.SplitN(s, string(separator), n)
+}
+
+// SplitNByString slices s into substrings separated by sep and returns a slice of
+// the substrings between those separators.
+//
+// The count determines the number of substrings to return:
+//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//   n == 0: the result is nil (zero substrings)
+//   n < 0: all substrings
+//
+// Edge cases for s and sep (for example, empty strings) are handled
+// as described in the documentation for Split.
+func SplitNByString(s, separator string, n int) []string {
+	if s == empty {
+		return nil
+	}
+	return strings.SplitN(s, separator, n)
+}
+
+// SplitWithTrim is used to split and
+func SplitWithTrim(s string, separator uint8) {
+
 }
 
 // Substring returns the string between the given start and the end index.
