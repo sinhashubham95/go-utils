@@ -1383,9 +1383,54 @@ func SplitNByString(s, separator string, n int) []string {
 	return strings.SplitN(s, separator, n)
 }
 
-// SplitWithTrim is used to split and
-func SplitWithTrim(s string, separator uint8) {
+// SplitWithTrim is used to split and trim the splits
+func SplitWithTrim(s string, separator uint8) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.Split(s, string(separator)))
+}
 
+// SplitByStringWithTrim is used to split the string by the separator provided and trim the splits
+func SplitByStringWithTrim(s, separator string) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.Split(s, separator))
+}
+
+// SplitNWithTrim slices s into substrings separated by sep and returns a slice of
+// the substrings between those separators and along with that trim the splits.
+//
+// The count determines the number of substrings to return:
+//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//   n == 0: the result is nil (zero substrings)
+//   n < 0: all substrings
+//
+// Edge cases for s and sep (for example, empty strings) are handled
+// as described in the documentation for Split.
+func SplitNWithTrim(s string, separator uint8, n int) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.SplitN(s, string(separator), n))
+}
+
+// SplitNByStringWithTrim slices s into substrings separated by sep and returns a slice of
+// the substrings between those separators and along with that trim the splits.
+//
+// The count determines the number of substrings to return:
+//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//   n == 0: the result is nil (zero substrings)
+//   n < 0: all substrings
+//
+// Edge cases for s and sep (for example, empty strings) are handled
+// as described in the documentation for Split.
+func SplitNByStringWithTrim(s, separator string, n int) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.SplitN(s, separator, n))
 }
 
 // Substring returns the string between the given start and the end index.
@@ -1532,4 +1577,16 @@ func startsWith(s, prefix string, ignoreCase bool) bool {
 		return strings.EqualFold(s[:pl], prefix)
 	}
 	return s[:pl] == prefix
+}
+
+func trimSplits(splits []string) []string {
+	result := make([]string, 0, len(splits))
+	for _, split := range splits {
+		r := strings.TrimSpace(split)
+		if r == empty {
+			continue
+		}
+		result = append(result, r)
+	}
+	return result
 }
