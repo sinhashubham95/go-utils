@@ -1388,7 +1388,7 @@ func SplitWithTrim(s string, separator uint8) []string {
 	if s == empty {
 		return nil
 	}
-	return trimSplits(strings.Split(s, string(separator)))
+	return trimSplits(strings.Split(s, string(separator)), space)
 }
 
 // SplitByStringWithTrim is used to split the string by the separator provided and trim the splits
@@ -1396,7 +1396,7 @@ func SplitByStringWithTrim(s, separator string) []string {
 	if s == empty {
 		return nil
 	}
-	return trimSplits(strings.Split(s, separator))
+	return trimSplits(strings.Split(s, separator), space)
 }
 
 // SplitNWithTrim slices s into substrings separated by sep and returns a slice of
@@ -1413,7 +1413,7 @@ func SplitNWithTrim(s string, separator uint8, n int) []string {
 	if s == empty {
 		return nil
 	}
-	return trimSplits(strings.SplitN(s, string(separator), n))
+	return trimSplits(strings.SplitN(s, string(separator), n), space)
 }
 
 // SplitNByStringWithTrim slices s into substrings separated by sep and returns a slice of
@@ -1430,7 +1430,58 @@ func SplitNByStringWithTrim(s, separator string, n int) []string {
 	if s == empty {
 		return nil
 	}
-	return trimSplits(strings.SplitN(s, separator, n))
+	return trimSplits(strings.SplitN(s, separator, n), space)
+}
+
+// SplitWithTrimCutSet is used to split and trailing Unicode code points contained in cut set removed.
+func SplitWithTrimCutSet(s string, separator uint8, set string) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.Split(s, string(separator)), set)
+}
+
+// SplitByStringWithTrimCutSet is used to split the string by the separator provided and trailing Unicode code points
+// contained in cut set removed.
+func SplitByStringWithTrimCutSet(s, separator string, set string) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.Split(s, separator), set)
+}
+
+// SplitNWithTrimCutSet slices s into substrings separated by sep and returns a slice of
+// the substrings between those separators and trailing Unicode code points contained in cut set removed.
+//
+// The count determines the number of substrings to return:
+//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//   n == 0: the result is nil (zero substrings)
+//   n < 0: all substrings
+//
+// Edge cases for s and sep (for example, empty strings) are handled
+// as described in the documentation for Split.
+func SplitNWithTrimCutSet(s string, separator uint8, n int, set string) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.SplitN(s, string(separator), n), set)
+}
+
+// SplitNByStringWithTrimCutSet slices s into substrings separated by sep and returns a slice of
+// the substrings between those separators and trailing Unicode code points contained in cut set removed.
+//
+// The count determines the number of substrings to return:
+//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//   n == 0: the result is nil (zero substrings)
+//   n < 0: all substrings
+//
+// Edge cases for s and sep (for example, empty strings) are handled
+// as described in the documentation for Split.
+func SplitNByStringWithTrimCutSet(s, separator string, n int, set string) []string {
+	if s == empty {
+		return nil
+	}
+	return trimSplits(strings.SplitN(s, separator, n), set)
 }
 
 // Substring returns the string between the given start and the end index.
@@ -1579,10 +1630,15 @@ func startsWith(s, prefix string, ignoreCase bool) bool {
 	return s[:pl] == prefix
 }
 
-func trimSplits(splits []string) []string {
+func trimSplits(splits []string, set string) []string {
 	result := make([]string, 0, len(splits))
 	for _, split := range splits {
-		r := strings.TrimSpace(split)
+		var r string
+		if set == space {
+			r = strings.TrimSpace(split)
+		} else {
+			r = strings.Trim(r, set)
+		}
 		if r == empty {
 			continue
 		}

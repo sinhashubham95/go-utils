@@ -5,6 +5,7 @@ const (
 	defaultPadString        = " "
 	maxPadsRepeatSize       = 8192
 	empty                   = ""
+	space                   = " "
 	carriageReturn          = "\r"
 	carriageReturnCharacter = '\r'
 	lineBreak               = "\n"
