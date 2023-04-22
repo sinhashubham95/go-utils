@@ -1484,7 +1484,125 @@ func SplitNByStringWithTrimCutSet(s, separator string, n int, set string) []stri
 	return trimSplits(strings.SplitN(s, separator, n), set)
 }
 
-// Substring returns the string between the given start and the end index.
+// StartsWith is used to check if the provided prefix is present at the beginning of the string or not.
+func StartsWith(s, prefix string) bool {
+	return startsWith(s, prefix, false)
+}
+
+// StartsWithIgnoreCase is used to check if the provided prefix is present at the beginning of the
+// string or not ignoring case.
+func StartsWithIgnoreCase(s, prefix string) bool {
+	return startsWith(s, prefix, true)
+}
+
+// StartsWithAny is used to check if any of the provided prefixes is present at the beginning of the string or not.
+func StartsWithAny(s string, prefixes ...string) bool {
+	if len(prefixes) == 0 {
+		return false
+	}
+	for _, prefix := range prefixes {
+		if startsWith(s, prefix, false) {
+			return true
+		}
+	}
+	return false
+}
+
+// StartsWithAnyIgnoreCase is used to check if any of the provided prefixes is present at the beginning of the
+// string or not ignoring case.
+func StartsWithAnyIgnoreCase(s string, prefixes ...string) bool {
+	if len(prefixes) == 0 {
+		return false
+	}
+	for _, prefix := range prefixes {
+		if startsWith(s, prefix, true) {
+			return true
+		}
+	}
+	return false
+}
+
+// StripStart is used to remove the given set of characters from the starting of the string
+func StripStart(s, cc string) string {
+	l := len(s)
+	if l == 0 {
+		return s
+	}
+	var i int
+	for i = 0; i < l; i += 1 {
+		if !Contains(cc, s[i]) {
+			break
+		}
+	}
+	if i == l {
+		return empty
+	}
+	return SubstringTillEnd(s, i)
+}
+
+// StripEnd is used to remove the given set of characters from the ending of the string
+func StripEnd(s, cc string) string {
+	l := len(s)
+	if l == 0 {
+		return s
+	}
+	var i int
+	for i = l - 1; i >= 0; i -= 1 {
+		if !Contains(cc, s[i]) {
+			break
+		}
+	}
+	if i == -1 {
+		return empty
+	}
+	return Substring(s, 0, i+1)
+}
+
+// Strip is used to remove the given set of characters from the starting and ending of the string
+func Strip(s, cc string) string {
+	return StripEnd(StripStart(s, cc), cc)
+}
+
+// StripAllStart is used to remove the given set of characters from the starting of the given list of strings
+func StripAllStart(ss []string, cc string) []string {
+	l := len(ss)
+	if l == 0 {
+		return ss
+	}
+	res := make([]string, l)
+	for i, s := range ss {
+		res[i] = StripStart(s, cc)
+	}
+	return res
+}
+
+// StripAllEnd is used to remove the given set of characters from the ending of the given list of strings
+func StripAllEnd(ss []string, cc string) []string {
+	l := len(ss)
+	if l == 0 {
+		return ss
+	}
+	res := make([]string, l)
+	for i, s := range ss {
+		res[i] = StripEnd(s, cc)
+	}
+	return res
+}
+
+// StripAll is used to remove the given set of characters from the starting and ending of the given list of strings
+func StripAll(ss []string, cc string) []string {
+	l := len(ss)
+	if l == 0 {
+		return ss
+	}
+	res := make([]string, l)
+	for i, s := range ss {
+		res[i] = StripEnd(StripStart(s, cc), cc)
+	}
+	return res
+}
+
+// Substring returns the string between the given start(inclusive) and the end(exclusive) index.
 func Substring(s string, start, end int) string {
 	l := len(s)
 	if end < 0 {
@@ -1521,6 +1639,222 @@ func SubstringTillEnd(s string, start int) string {
 		return ""
 	}
 	return s[start:]
+}
+
+// SubstringAfter returns the string after the first occurrence of the separator in the string.
+func SubstringAfter(s string, separator uint8) string {
+	if s == empty {
+		return s
+	}
+	idx := IndexOf(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return SubstringTillEnd(s, idx+1)
+}
+
+// SubstringAfterString returns the string after the first occurrence of the separator in the string.
+func SubstringAfterString(s, separator string) string {
+	if s == empty {
+		return s
+	}
+	idx := IndexOfString(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return SubstringTillEnd(s, idx+len(separator))
+}
+
+// SubstringAfterLast returns the string after the last occurrence of the separator in the string.
+func SubstringAfterLast(s string, separator uint8) string {
+	if s == empty {
+		return s
+	}
+	idx := LastIndexOf(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return SubstringTillEnd(s, idx+1)
+}
+
+// SubstringAfterLastString returns the string after the last occurrence of the separator in the string.
+func SubstringAfterLastString(s, separator string) string {
+	if s == empty {
+		return s
+	}
+	idx := LastIndexOfString(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return SubstringTillEnd(s, idx+len(separator))
+}
+
+// SubstringBefore returns the string after the first occurrence of the separator in the string.
+func SubstringBefore(s string, separator uint8) string {
+	if s == empty {
+		return s
+	}
+	idx := IndexOf(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return Substring(s, 0, idx)
+}
+
+// SubstringBeforeString returns the string after the first occurrence of the separator in the string.
+func SubstringBeforeString(s, separator string) string {
+	if s == empty {
+		return s
+	}
+	idx := IndexOfString(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return Substring(s, 0, idx)
+}
+
+// SubstringBeforeLast returns the string after the last occurrence of the separator in the string.
+func SubstringBeforeLast(s string, separator uint8) string {
+	if s == empty {
+		return s
+	}
+	idx := LastIndexOf(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return Substring(s, 0, idx)
+}
+
+// SubstringBeforeLastString returns the string after the last occurrence of the separator in the string.
+func SubstringBeforeLastString(s, separator string) string {
+	if s == empty {
+		return s
+	}
+	idx := LastIndexOfString(s, separator)
+	if idx == -1 {
+		return empty
+	}
+	return Substring(s, 0, idx)
+}
+
+// SwapCase is used to change the case of lower case characters to upper case and vice-versa.
+func SwapCase(s string) string {
+	l := len(s)
+	if l == 0 {
+		return s
+	}
+	b := strings.Builder{}
+	for _, c := range s {
+		if c >= 'A' && c <= 'Z' {
+			b.WriteRune(c + 32)
+		} else if c >= 'a' && c <= 'z' {
+			b.WriteRune(c - 32)
+		} else {
+			b.WriteRune(c)
+		}
+	}
+	return b.String()
+}
+
+// ToCodePoints returns the unicode code point for the characters of the string.
+func ToCodePoints(s string) []int32 {
+	l := len(s)
+	if l == 0 {
+		return nil
+	}
+	res := make([]int32, l)
+	for i, c := range s {
+		res[i] = c
+	}
+	return res
+}
+
+// Trim returns a slice of the string s with all leading and
+// trailing Unicode code points contained in cut set removed.
+func Trim(s, cc string) string {
+	return strings.Trim(s, cc)
+}
+
+// TrimSpace returns a slice of the string s, with all leading
+// and trailing white space removed, as defined by Unicode.
+func TrimSpace(s string) string {
+	return strings.TrimSpace(s)
+}
+
+// TrimLeft returns a slice of the string s with all leading
+// Unicode code points contained in cut set removed.
+//
+// To remove a prefix, use TrimPrefix instead.
+func TrimLeft(s, cc string) string {
+	return strings.TrimLeft(s, cc)
+}
+
+// TrimRight returns a slice of the string s, with all trailing
+// Unicode code points contained in cutset removed.
+//
+// To remove a suffix, use TrimSuffix instead.
+func TrimRight(s, cc string) string {
+	return strings.TrimRight(s, cc)
+}
+
+// TrimPrefix returns s without the provided leading prefix string.
+// If s doesn't start with prefix, s is returned unchanged.
+func TrimPrefix(s, prefix string) string {
+	return strings.TrimPrefix(s, prefix)
+}
+
+// TrimSuffix returns s without the provided trailing suffix string.
+// If s doesn't end with suffix, s is returned unchanged.
+func TrimSuffix(s, suffix string) string {
+	return strings.TrimSuffix(s, suffix)
+}
+
+// Truncate is used to return the substring of the string starting from the offset position and having a width <= max width.
+func Truncate(s string, offset, maxWidth int) string {
+	if offset < 0 {
+		panic("offset cannot be negative")
+	}
+	if maxWidth < 0 {
+		panic("max width cannot be negative")
+	}
+	l := len(s)
+	if l == 0 {
+		return s
+	}
+	if offset >= l {
+		return empty
+	}
+	if l > maxWidth {
+		end := offset + maxWidth
+		if l < end {
+			end = l
+		}
+		return Substring(s, offset, end)
+	}
+	return SubstringTillEnd(s, offset)
+}
+
+// TruncateFromStart is used to return the substring of the string starting from the beginning and having a width <= max width.
+func TruncateFromStart(s string, maxWidth int) string {
+	return Truncate(s, 0, maxWidth)
+}
+
+// Uncapitalize used to convert the first character of the given string to lower case.
+// The remaining characters of the string are not changed.
+func Uncapitalize(s string) string {
+	l := len(s)
+	if l == 0 {
+		return s
+	}
+	f := s[:1]
+	u := strings.ToLower(f)
+	if f == u {
+		return s
+	}
+	if l == 1 {
+		return u
+	}
+	return u + s[1:]
 }
 
 // UpperCase is used to convert a string to upper case.
