@@ -32,7 +32,7 @@ func Abbreviate(s, abbreviateMarker string, offset, maxWidth int) string {
 	if l-offset < maxWidth-abbreviateMarkerLength {
 		offset = l - (maxWidth - abbreviateMarkerLength)
 	}
-	if offset <= abbreviateMarkerLength+1 {
+	if offset <= minAbbreviateWidth {
 		return s[0:(maxWidth-abbreviateMarkerLength)] + abbreviateMarker
 	}
 	if maxWidth < minAbbreviateWidthOffset {
@@ -133,7 +133,11 @@ func Chomp(s string) string {
 		if s[last-1] == carriageReturnCharacter {
 			last -= 1
 		}
-	} else if s[last] != carriageReturnCharacter {
+	} else if s[last] == carriageReturnCharacter {
+		if s[last-1] == lineBreakCharacter {
+			last -= 1
+		}
+	} else {
 		last += 1
 	}
 	return Substring(s, 0, last)
