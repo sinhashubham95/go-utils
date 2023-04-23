@@ -239,20 +239,26 @@ func ContainsWhitespace(s string) bool {
 	return Contains(s, ' ')
 }
 
-// CountMatches is used to count the number of occurrences of a character or a substring in a larger string/text.
+// Count is used to count the number of occurrences of a character or a substring in a larger string/text.
 // Here, character or substring matching is case-sensitive in nature.
-func CountMatches(s string, ch uint8) int {
+func Count(s string, ch uint8) int {
 	l := len(s)
 	if l == 0 {
 		return 0
 	}
 	cnt := 0
 	for i := 0; i < l; i += 1 {
-		if s[l] == ch {
+		if s[i] == ch {
 			cnt++
 		}
 	}
 	return cnt
+}
+
+// CountIgnoreCase is used to count the number of occurrences of a character or a substring in a larger string/text.
+// Here, character or substring matching is not case-sensitive in nature.
+func CountIgnoreCase(s string, ch uint8) int {
+	return Count(LowerCase(s), toLower(ch))
 }
 
 // DefaultIfBlank takes 2 parameters a string and a default string. If the passed string is blank, then it returns the
@@ -293,6 +299,11 @@ func DeleteWhitespaces(s string) string {
 func Difference(a, b string) string {
 	i := IndexOfDifference(a, b)
 	if i == -1 {
+		la := len(a)
+		lb := len(b)
+		if la < lb {
+			return SubstringTillEnd(b, la)
+		}
 		return ""
 	}
 	return Substring(b, i, len(b))
