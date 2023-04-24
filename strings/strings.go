@@ -447,6 +447,9 @@ func GetDigits(s string) string {
 // String contains only whitespace characters.
 func GetIfBlank(ctx context.Context, s string, supplier func(ctx context.Context) string) string {
 	if IsBlank(s) {
+		if supplier == nil {
+			return empty
+		}
 		return supplier(ctx)
 	}
 	return s
@@ -455,6 +458,9 @@ func GetIfBlank(ctx context.Context, s string, supplier func(ctx context.Context
 // GetIfEmpty is used to call the function and get the data if the provided string is empty.
 func GetIfEmpty(ctx context.Context, s string, supplier func(ctx context.Context) string) string {
 	if IsEmpty(s) {
+		if supplier == nil {
+			return empty
+		}
 		return supplier(ctx)
 	}
 	return s

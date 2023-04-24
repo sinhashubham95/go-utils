@@ -1,6 +1,7 @@
 package strings_test
 
 import (
+	"context"
 	"github.com/sinhashubham95/go-utils/strings"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -279,4 +280,47 @@ func TestFirstNonEmpty(t *testing.T) {
 func TestGetCommonPrefix(t *testing.T) {
 	assert.Equal(t, "naruto", strings.GetCommonPrefix("naruto", "naruto", "naruto", "naruto rocks"))
 	assert.Equal(t, "", strings.GetCommonPrefix("naruto", "naruto", "naruto", "naruto rocks", "boruto"))
+}
+
+func TestGetDigits(t *testing.T) {
+	assert.Equal(t, "12311111", strings.GetDigits("abc$1231$ab111bc1b"))
+	assert.Equal(t, "", strings.GetDigits("naruto"))
+}
+
+func TestGetIfBlank(t *testing.T) {
+	ctx := context.Background()
+	assert.Equal(t, "naruto", strings.GetIfBlank(ctx, "naruto", nil))
+	assert.Equal(t, "", strings.GetIfBlank(ctx, "   ", nil))
+	assert.Equal(t, "naruto", strings.GetIfBlank(ctx, "   ", func(_ context.Context) string {
+		return "naruto"
+	}))
+}
+
+func TestGetIfEmpty(t *testing.T) {
+	ctx := context.Background()
+	assert.Equal(t, "naruto", strings.GetIfEmpty(ctx, "naruto", nil))
+	assert.Equal(t, "", strings.GetIfEmpty(ctx, "", nil))
+	assert.Equal(t, "   ", strings.GetIfEmpty(ctx, "   ", func(_ context.Context) string {
+		return "naruto"
+	}))
+}
+
+func TestIndexOf(t *testing.T) {
+	assert.Equal(t, 0, strings.IndexOf("naruto", 'n'))
+	assert.Equal(t, -1, strings.IndexOf("naruto", 'N'))
+	assert.Equal(t, -1, strings.IndexOf("naruto", 'x'))
+}
+
+func TestIndexOfIgnoreCase(t *testing.T) {
+	assert.Equal(t, 0, strings.IndexOfIgnoreCase("naruto", 'n'))
+	assert.Equal(t, 0, strings.IndexOfIgnoreCase("naruto", 'N'))
+	assert.Equal(t, -1, strings.IndexOfIgnoreCase("naruto", 'x'))
+}
+
+func TestIndexOfAny(t *testing.T) {
+
+}
+
+func TestIndexOfAnyIgnoreCase(t *testing.T) {
+
 }
