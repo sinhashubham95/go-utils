@@ -317,14 +317,36 @@ func TestIndexOfIgnoreCase(t *testing.T) {
 	assert.Equal(t, -1, strings.IndexOfIgnoreCase("naruto", 'x'))
 }
 
+func TestIndexOfString(t *testing.T) {
+	assert.Equal(t, 0, strings.IndexOfString("naruto rocks", "naruto"))
+	assert.Equal(t, -1, strings.IndexOfString("naruto rocks", "boruto"))
+	assert.Equal(t, 0, strings.IndexOfString("naruto rocks", ""))
+	assert.Equal(t, -1, strings.IndexOfString("naruto rocks", "NARUTO"))
+}
+
+func TestIndexOfStringIgnoreCase(t *testing.T) {
+	assert.Equal(t, 0, strings.IndexOfStringIgnoreCase("naruto rocks", "naruto"))
+	assert.Equal(t, -1, strings.IndexOfStringIgnoreCase("naruto rocks", "boruto"))
+	assert.Equal(t, 0, strings.IndexOfStringIgnoreCase("naruto rocks", ""))
+	assert.Equal(t, 0, strings.IndexOfStringIgnoreCase("naruto rocks", "NARUTO"))
+}
+
 func TestIndexOfAny(t *testing.T) {
 	assert.Equal(t, 0, strings.IndexOfAny("naruto", 'x', 'y', 'a', 'n'))
 	assert.Equal(t, -1, strings.IndexOfAny("", 'x', 'y', 'a', 'n'))
-	assert.Equal(t, -1, strings.IndexOfAny("naruto", 'x', 'y', 'a', 'N'))
+	assert.Equal(t, 1, strings.IndexOfAny("naruto", 'x', 'y', 'a', 'N'))
 }
 
 func TestIndexOfAnyIgnoreCase(t *testing.T) {
 	assert.Equal(t, 0, strings.IndexOfAnyIgnoreCase("naruto", 'x', 'y', 'a', 'n'))
 	assert.Equal(t, -1, strings.IndexOfAnyIgnoreCase("", 'x', 'y', 'a', 'n'))
 	assert.Equal(t, 0, strings.IndexOfAnyIgnoreCase("naruto", 'x', 'y', 'a', 'N'))
+}
+
+func TestIndexOfAnyBut(t *testing.T) {
+
+}
+
+func TestIndexOfAnyButIgnoreCase(t *testing.T) {
+
 }
