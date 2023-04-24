@@ -275,3 +275,8 @@ func TestFirstNonEmpty(t *testing.T) {
 	assert.Equal(t, "  ", strings.FirstNonEmpty("", "  ", " ", "    ", " ", "", ""))
 	assert.Equal(t, "", strings.FirstNonEmpty("", "", "", ""))
 }
+
+func TestGetCommonPrefix(t *testing.T) {
+	assert.Equal(t, "naruto", strings.GetCommonPrefix("naruto", "naruto", "naruto", "naruto rocks"))
+	assert.Equal(t, "", strings.GetCommonPrefix("naruto", "naruto", "naruto", "naruto rocks", "boruto"))
+}
