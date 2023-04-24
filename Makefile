@@ -11,5 +11,5 @@ bench:
 	go test -benchmem -count 3 -bench ./...
 
 coverage:
-	${BIN} test -v -coverprofile=cover.out -covermode=atomic .
+	${BIN} test -v -coverprofile=cover.out -covermode=atomic ./...
 	${BIN} tool cover -html=cover.out -o cover.html
