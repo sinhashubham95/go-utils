@@ -1250,7 +1250,7 @@ func ReplaceEach(s string, searchList, replacementList []string) string {
 		return s
 	}
 	if len(searchList) != len(replacementList) {
-		panic(fmt.Sprintf("search and replacement list lengths don't match"))
+		panic("search and replacement list lengths don't match")
 	}
 	l := len(searchList)
 	for i := 0; i < l; i += 1 {
