@@ -318,9 +318,13 @@ func TestIndexOfIgnoreCase(t *testing.T) {
 }
 
 func TestIndexOfAny(t *testing.T) {
-
+	assert.Equal(t, 0, strings.IndexOfAny("naruto", 'x', 'y', 'a', 'n'))
+	assert.Equal(t, -1, strings.IndexOfAny("", 'x', 'y', 'a', 'n'))
+	assert.Equal(t, -1, strings.IndexOfAny("", 'x', 'y', 'a', 'N'))
 }
 
 func TestIndexOfAnyIgnoreCase(t *testing.T) {
-
+	assert.Equal(t, 0, strings.IndexOfAnyIgnoreCase("naruto", 'x', 'y', 'a', 'n'))
+	assert.Equal(t, -1, strings.IndexOfAnyIgnoreCase("", 'x', 'y', 'a', 'n'))
+	assert.Equal(t, 0, strings.IndexOfAnyIgnoreCase("", 'x', 'y', 'a', 'N'))
 }
