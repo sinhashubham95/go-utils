@@ -344,9 +344,187 @@ func TestIndexOfAnyIgnoreCase(t *testing.T) {
 }
 
 func TestIndexOfAnyBut(t *testing.T) {
-
+	assert.Equal(t, 0, strings.IndexOfAnyBut("naruto", 's', 'h'))
+	assert.Equal(t, -1, strings.IndexOfAnyBut("naruto", 'n', 'a', 'r', 'u', 't', 'o'))
+	assert.Equal(t, 5, strings.IndexOfAnyBut("naruto", 'n', 'a', 'r', 'u', 't', 'O'))
 }
 
 func TestIndexOfAnyButIgnoreCase(t *testing.T) {
+	assert.Equal(t, 0, strings.IndexOfAnyButIgnoreCase("naruto", 's', 'h'))
+	assert.Equal(t, -1, strings.IndexOfAnyButIgnoreCase("naruto", 'n', 'a', 'r', 'u', 't', 'O'))
+	assert.Equal(t, 5, strings.IndexOfAnyButIgnoreCase("naruto", 'n', 'a', 'r', 'u', 'T'))
+}
 
+func TestIndexOfDifference(t *testing.T) {
+	assert.Equal(t, 0, strings.IndexOfDifference("naruto", "boruto", "sakura", "hinata"))
+	assert.Equal(t, -1, strings.IndexOfDifference("nnn", "nnnn", "nnnnn", "nnnnnn"))
+	assert.Equal(t, 2, strings.IndexOfDifference("nnn", "nnnn", "nnnnn", "nnnnnn", "nna"))
+	assert.Equal(t, -1, strings.IndexOfDifference("nnn", "nnnn", "nnnnn", "nnnnnn", "nnnna"))
+}
+
+func TestIndexOfStringStartingAt(t *testing.T) {
+	assert.Equal(t, 2, strings.IndexOfStringStartingAt("naruto", "r", 2))
+	assert.Equal(t, -1, strings.IndexOfStringStartingAt("naruto", "r", 3))
+}
+
+func TestLastIndexOf(t *testing.T) {
+	assert.Equal(t, 4, strings.LastIndexOf("aabaa", 'a'))
+	assert.Equal(t, 3, strings.LastIndexOf("aabbaa", 'b'))
+}
+
+func TestLastIndexOfIgnoreCase(t *testing.T) {
+	assert.Equal(t, 4, strings.LastIndexOfIgnoreCase("aabaa", 'A'))
+	assert.Equal(t, 3, strings.LastIndexOfIgnoreCase("aabbaa", 'B'))
+}
+
+func TestLastIndexOfString(t *testing.T) {
+	assert.Equal(t, 4, strings.LastIndexOfString("aabaa", "a"))
+	assert.Equal(t, 3, strings.LastIndexOfString("aabbaa", "b"))
+}
+
+func TestLastIndexOfStringIgnoreCase(t *testing.T) {
+	assert.Equal(t, 4, strings.LastIndexOfStringIgnoreCase("aabaa", "A"))
+	assert.Equal(t, 3, strings.LastIndexOfStringIgnoreCase("aabbaa", "B"))
+}
+
+func TestLastIndexOfAny(t *testing.T) {
+	assert.Equal(t, 5, strings.LastIndexOfAny("naruto", 'n', 'a', 'r', 'u', 't', 'o'))
+	assert.Equal(t, 4, strings.LastIndexOfAny("naruto", 'n', 'a', 'r', 'u', 't'))
+	assert.Equal(t, 0, strings.LastIndexOfAny("naruto", 'n'))
+}
+
+func TestLastIndexOfAnyIgnoreCase(t *testing.T) {
+	assert.Equal(t, 5, strings.LastIndexOfAnyIgnoreCase("naruto", 'n', 'a', 'r', 'u', 't', 'O'))
+	assert.Equal(t, 4, strings.LastIndexOfAnyIgnoreCase("naruto", 'n', 'a', 'r', 'u', 'T'))
+	assert.Equal(t, 0, strings.LastIndexOfAnyIgnoreCase("naruto", 'N'))
+}
+
+func TestLastIndexOfAnyBut(t *testing.T) {
+	assert.Equal(t, 5, strings.LastIndexOfAnyBut("naruto", 's', 'h'))
+	assert.Equal(t, -1, strings.LastIndexOfAnyBut("naruto", 'n', 'a', 'r', 'u', 't', 'o'))
+	assert.Equal(t, 0, strings.LastIndexOfAnyBut("naruto", 'N', 'a', 'r', 'u', 't', 'o'))
+}
+
+func TestLastIndexOfAnyButIgnoreCase(t *testing.T) {
+	assert.Equal(t, 5, strings.LastIndexOfAnyButIgnoreCase("naruto", 's', 'h'))
+	assert.Equal(t, -1, strings.LastIndexOfAnyButIgnoreCase("naruto", 'n', 'a', 'r', 'u', 't', 'O'))
+	assert.Equal(t, 0, strings.LastIndexOfAnyButIgnoreCase("naruto", 'a', 'r', 'u', 'T', 'o'))
+}
+
+func TestIsBlank(t *testing.T) {
+	assert.True(t, strings.IsBlank("     "))
+	assert.True(t, strings.IsBlank(""))
+	assert.False(t, strings.IsBlank("   n   "))
+}
+
+func TestIsAllBlank(t *testing.T) {
+	assert.True(t, strings.IsAllBlank("     ", "   ", ""))
+	assert.True(t, strings.IsAllBlank(""))
+	assert.False(t, strings.IsAllBlank("", "", "    ", "   n   "))
+}
+
+func TestIsNoneBlank(t *testing.T) {
+	assert.False(t, strings.IsNoneBlank("     ", "   ", ""))
+	assert.False(t, strings.IsNoneBlank(""))
+	assert.False(t, strings.IsNoneBlank("", "", "    ", "   n   "))
+	assert.True(t, strings.IsNoneBlank("naruto", "boruto", "hinata", "   n   "))
+}
+
+func TestIsAnyBlank(t *testing.T) {
+	assert.True(t, strings.IsAnyBlank("     ", "   ", ""))
+	assert.True(t, strings.IsAnyBlank(""))
+	assert.True(t, strings.IsAnyBlank("", "", "    ", "   n   "))
+	assert.False(t, strings.IsAnyBlank("naruto", "boruto", "hinata", "   n   "))
+}
+
+func TestIsEmpty(t *testing.T) {
+	assert.False(t, strings.IsEmpty("     "))
+	assert.True(t, strings.IsEmpty(""))
+	assert.False(t, strings.IsEmpty("   n   "))
+}
+
+func TestIsAllEmpty(t *testing.T) {
+	assert.False(t, strings.IsAllEmpty("     ", "   ", ""))
+	assert.True(t, strings.IsAllEmpty(""))
+	assert.False(t, strings.IsAllEmpty("", "", "    ", "   n   "))
+}
+
+func TestIsNoneEmpty(t *testing.T) {
+	assert.False(t, strings.IsNoneEmpty("     ", "   ", ""))
+	assert.False(t, strings.IsNoneEmpty(""))
+	assert.False(t, strings.IsNoneEmpty("", "", "    ", "   n   "))
+	assert.True(t, strings.IsNoneEmpty("naruto", "boruto", "hinata", "   n   "))
+}
+
+func TestIsAnyEmpty(t *testing.T) {
+	assert.True(t, strings.IsAnyEmpty("     ", "   ", ""))
+	assert.True(t, strings.IsAnyEmpty(""))
+	assert.True(t, strings.IsAnyEmpty("", "", "    ", "   n   "))
+	assert.False(t, strings.IsAnyEmpty("naruto", "boruto", "hinata", "   n   "))
+}
+
+func TestIsLowerCase(t *testing.T) {
+	assert.True(t, strings.IsLowerCase("naruto"))
+	assert.True(t, strings.IsLowerCase(""))
+	assert.False(t, strings.IsLowerCase("Naruto"))
+}
+
+func TestIsAllLowerCase(t *testing.T) {
+	assert.True(t, strings.IsAllLowerCase("naruto", "boruto"))
+	assert.True(t, strings.IsAllLowerCase("", "n"))
+	assert.False(t, strings.IsAllLowerCase("Naruto"))
+}
+
+func TestIsAnyLowerCase(t *testing.T) {
+	assert.True(t, strings.IsAnyLowerCase("naruto"))
+	assert.True(t, strings.IsAnyLowerCase(""))
+	assert.False(t, strings.IsAnyLowerCase("Naruto"))
+}
+
+func TestIsUpperCase(t *testing.T) {
+	assert.True(t, strings.IsUpperCase("NARUTO"))
+	assert.True(t, strings.IsUpperCase(""))
+	assert.False(t, strings.IsUpperCase("Naruto"))
+}
+
+func TestIsAllUpperCase(t *testing.T) {
+	assert.True(t, strings.IsAllUpperCase("NARUTO", "BORUTO"))
+	assert.True(t, strings.IsAllUpperCase("", "N"))
+	assert.False(t, strings.IsAllUpperCase("Naruto"))
+}
+
+func TestIsAnyUpperCase(t *testing.T) {
+	assert.True(t, strings.IsAnyUpperCase("NARUTO"))
+	assert.True(t, strings.IsAnyUpperCase(""))
+	assert.False(t, strings.IsAnyUpperCase("Naruto"))
+}
+
+func TestIsMixedCase(t *testing.T) {
+	assert.False(t, strings.IsMixedCase("NARUTO"))
+	assert.False(t, strings.IsMixedCase(""))
+	assert.True(t, strings.IsMixedCase("Naruto"))
+}
+
+func TestIsAllMixedCase(t *testing.T) {
+	assert.False(t, strings.IsAllMixedCase("NARUTO", "BORUTO"))
+	assert.False(t, strings.IsAllMixedCase("", "N"))
+	assert.True(t, strings.IsAllMixedCase("Naruto"))
+}
+
+func TestIsAnyMixedCase(t *testing.T) {
+	assert.False(t, strings.IsAnyMixedCase("NARUTO"))
+	assert.False(t, strings.IsAnyMixedCase(""))
+	assert.True(t, strings.IsAnyMixedCase("Naruto"))
+}
+
+func TestIsAlpha(t *testing.T) {
+	assert.True(t, strings.IsAlpha("naruto"))
+	assert.False(t, strings.IsAlpha("naruto123"))
+	assert.False(t, strings.IsAlpha(""))
+}
+
+func TestIsNumeric(t *testing.T) {
+	assert.False(t, strings.IsNumeric("naruto123"))
+	assert.True(t, strings.IsNumeric("123"))
+	assert.False(t, strings.IsNumeric(""))
 }

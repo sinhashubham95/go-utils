@@ -522,12 +522,14 @@ func IndexOfAnyIgnoreCase(s string, searchChars ...uint8) int {
 // If the character is not found, then it will return -1.
 func IndexOfAnyBut(s string, searchChars ...uint8) int {
 	return strings.IndexFunc(s, func(r rune) bool {
+		found := false
 		for _, c := range searchChars {
-			if rune(c) != r {
-				return true
+			if rune(c) == r {
+				found = true
+				break
 			}
 		}
-		return false
+		return !found
 	})
 }
 
@@ -535,12 +537,14 @@ func IndexOfAnyBut(s string, searchChars ...uint8) int {
 // given characters ignoring case. If the character is not found, then it will return -1.
 func IndexOfAnyButIgnoreCase(s string, searchChars ...uint8) int {
 	return strings.IndexFunc(s, func(r rune) bool {
+		found := false
 		for _, c := range searchChars {
-			if unicode.ToLower(r) != unicode.ToLower(rune(c)) {
-				return true
+			if unicode.ToLower(rune(c)) == unicode.ToLower(r) {
+				found = true
+				break
 			}
 		}
-		return false
+		return !found
 	})
 }
 
@@ -638,12 +642,14 @@ func LastIndexOfAnyIgnoreCase(s string, searchChars ...uint8) int {
 // If the character is not found, then it will return -1.
 func LastIndexOfAnyBut(s string, searchChars ...uint8) int {
 	return strings.LastIndexFunc(s, func(r rune) bool {
+		found := false
 		for _, c := range searchChars {
-			if rune(c) != r {
-				return true
+			if rune(c) == r {
+				found = true
+				break
 			}
 		}
-		return false
+		return !found
 	})
 }
 
@@ -651,12 +657,14 @@ func LastIndexOfAnyBut(s string, searchChars ...uint8) int {
 // given characters ignoring case. If the character is not found, then it will return -1.
 func LastIndexOfAnyButIgnoreCase(s string, searchChars ...uint8) int {
 	return strings.LastIndexFunc(s, func(r rune) bool {
+		found := false
 		for _, c := range searchChars {
-			if unicode.ToLower(r) != unicode.ToLower(rune(c)) {
-				return true
+			if unicode.ToLower(rune(c)) == unicode.ToLower(r) {
+				found = true
+				break
 			}
 		}
-		return false
+		return !found
 	})
 }
 
@@ -694,7 +702,7 @@ func IsNoneBlank(ss ...string) bool {
 			return false
 		}
 	}
-	return false
+	return true
 }
 
 // IsAnyBlank is used to check if any of the given strings is blank or not.
@@ -733,7 +741,7 @@ func IsNoneEmpty(ss ...string) bool {
 			return false
 		}
 	}
-	return false
+	return true
 }
 
 // IsAnyEmpty is used to check if any of the given strings is empty or not.
@@ -773,7 +781,7 @@ func IsAnyLowerCase(ss ...string) bool {
 			return true
 		}
 	}
-	return true
+	return false
 }
 
 // IsUpperCase is used to check if all characters in the string is in upper case.
@@ -803,7 +811,7 @@ func IsAnyUpperCase(ss ...string) bool {
 			return true
 		}
 	}
-	return true
+	return false
 }
 
 // IsMixedCase is used to check if it contains both upper and lower case characters.
@@ -838,7 +846,7 @@ func IsAnyMixedCase(ss ...string) bool {
 			return true
 		}
 	}
-	return true
+	return false
 }
 
 // IsAlpha checks whether a given string contains only letters. The function returns false if the
@@ -1374,9 +1382,10 @@ func SplitByString(s, separator string) []string {
 // the substrings between those separators.
 //
 // The count determines the number of substrings to return:
-//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
-//   n == 0: the result is nil (zero substrings)
-//   n < 0: all substrings
+//
+//	n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//	n == 0: the result is nil (zero substrings)
+//	n < 0: all substrings
 //
 // Edge cases for s and sep (for example, empty strings) are handled
 // as described in the documentation for Split.
@@ -1391,9 +1400,10 @@ func SplitN(s string, separator uint8, n int) []string {
 // the substrings between those separators.
 //
 // The count determines the number of substrings to return:
-//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
-//   n == 0: the result is nil (zero substrings)
-//   n < 0: all substrings
+//
+//	n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//	n == 0: the result is nil (zero substrings)
+//	n < 0: all substrings
 //
 // Edge cases for s and sep (for example, empty strings) are handled
 // as described in the documentation for Split.
@@ -1424,9 +1434,10 @@ func SplitByStringWithTrim(s, separator string) []string {
 // the substrings between those separators and along with that trim the splits.
 //
 // The count determines the number of substrings to return:
-//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
-//   n == 0: the result is nil (zero substrings)
-//   n < 0: all substrings
+//
+//	n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//	n == 0: the result is nil (zero substrings)
+//	n < 0: all substrings
 //
 // Edge cases for s and sep (for example, empty strings) are handled
 // as described in the documentation for Split.
@@ -1441,9 +1452,10 @@ func SplitNWithTrim(s string, separator uint8, n int) []string {
 // the substrings between those separators and along with that trim the splits.
 //
 // The count determines the number of substrings to return:
-//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
-//   n == 0: the result is nil (zero substrings)
-//   n < 0: all substrings
+//
+//	n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//	n == 0: the result is nil (zero substrings)
+//	n < 0: all substrings
 //
 // Edge cases for s and sep (for example, empty strings) are handled
 // as described in the documentation for Split.
@@ -1475,9 +1487,10 @@ func SplitByStringWithTrimCutSet(s, separator string, set string) []string {
 // the substrings between those separators and trailing Unicode code points contained in cut set removed.
 //
 // The count determines the number of substrings to return:
-//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
-//   n == 0: the result is nil (zero substrings)
-//   n < 0: all substrings
+//
+//	n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//	n == 0: the result is nil (zero substrings)
+//	n < 0: all substrings
 //
 // Edge cases for s and sep (for example, empty strings) are handled
 // as described in the documentation for Split.
@@ -1492,9 +1505,10 @@ func SplitNWithTrimCutSet(s string, separator uint8, n int, set string) []string
 // the substrings between those separators and trailing Unicode code points contained in cut set removed.
 //
 // The count determines the number of substrings to return:
-//   n > 0: at most n substrings; the last substring will be the remainder which won't be split.
-//   n == 0: the result is nil (zero substrings)
-//   n < 0: all substrings
+//
+//	n > 0: at most n substrings; the last substring will be the remainder which won't be split.
+//	n == 0: the result is nil (zero substrings)
+//	n < 0: all substrings
 //
 // Edge cases for s and sep (for example, empty strings) are handled
 // as described in the documentation for Split.
