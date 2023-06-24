@@ -3,35 +3,35 @@ package collections
 import "math/bits"
 
 // insertionSortOrdered sorts data[a:b] using insertion sort.
-func insertionSortOrdered[E ordered](data []E, a, b int) {
+func insertionSortOrdered[E any](data []E, a, b int, less func(a, b E) bool) {
 	for i := a + 1; i < b; i++ {
-		for j := i; j > a && (data[j] < data[j-1]); j-- {
+		for j := i; j > a && less(data[j], data[j-1]); j-- {
 			data[j], data[j-1] = data[j-1], data[j]
 		}
 	}
 }
 
 // heapSortOrdered sorts data[a:b] using heap sort.
-func heapSortOrdered[E ordered](data []E, a, b int) {
+func heapSortOrdered[E any](data []E, a, b int, less func(a, b E) bool) {
 	first := a
 	lo := 0
 	hi := b - a
 
 	// Build heap with the greatest element at top.
 	for i := (hi - 1) / 2; i >= 0; i-- {
-		shiftDownOrdered(data, i, hi, first)
+		shiftDownOrdered(data, i, hi, first, less)
 	}
 
 	// Pop elements, the largest first, into end of data.
 	for i := hi - 1; i >= 0; i-- {
 		data[first], data[first+i] = data[first+i], data[first]
-		shiftDownOrdered(data, lo, i, first)
+		shiftDownOrdered(data, lo, i, first, less)
 	}
 }
 
 // breakPatternsOrdered scatters some elements around in an attempt to break some patterns
 // that might cause imbalanced partitions in quicksort.
-func breakPatternsOrdered[E ordered](data []E, a, b int) {
+func breakPatternsOrdered[E any](data []E, a, b int) {
 	length := b - a
 	if length >= 8 {
 		random := xorShift(length)
@@ -48,8 +48,8 @@ func breakPatternsOrdered[E ordered](data []E, a, b int) {
 }
 
 // order2Ordered returns x,y where data[x] <= data[y], where x,y=a,b or x,y=b,a.
-func order2Ordered[E ordered](data []E, a, b int, swaps *int) (int, int) {
-	if data[b] < data[a] {
+func order2Ordered[E any](data []E, a, b int, swaps *int, less func(a, b E) bool) (int, int) {
+	if less(data[b], data[a]) {
 		*swaps++
 		return b, a
 	}
@@ -57,16 +57,16 @@ func order2Ordered[E ordered](data []E, a, b int, swaps *int) (int, int) {
 }
 
 // medianOrdered returns x where data[x] is the median of data[a],data[b],data[c], where x is a, b, or c.
-func medianOrdered[E ordered](data []E, a, b, c int, swaps *int) int {
-	a, b = order2Ordered(data, a, b, swaps)
-	b, c = order2Ordered(data, b, c, swaps)
-	a, b = order2Ordered(data, a, b, swaps)
+func medianOrdered[E any](data []E, a, b, c int, swaps *int, less func(a, b E) bool) int {
+	a, b = order2Ordered(data, a, b, swaps, less)
+	b, c = order2Ordered(data, b, c, swaps, less)
+	a, b = order2Ordered(data, a, b, swaps, less)
 	return b
 }
 
 // medianAdjacentOrdered finds the median of data[a - 1], data[a], data[a + 1] and stores the index into a.
-func medianAdjacentOrdered[E ordered](data []E, a int, swaps *int) int {
-	return medianOrdered(data, a-1, a, a+1, swaps)
+func medianAdjacentOrdered[E any](data []E, a int, swaps *int, less func(a, b E) bool) int {
+	return medianOrdered(data, a-1, a, a+1, swaps, less)
 }
 
 // choosePivotOrdered chooses a pivot in data[a:b].
@@ -74,7 +74,7 @@ func medianAdjacentOrdered[E ordered](data []E, a int, swaps *int) int {
 // [0,8): chooses a static pivot.
 // [8,shortestNinth): uses the simple median-of-three method.
 // [shortestNinth,∞): uses the TUKEY NINTH method.
-func choosePivotOrdered[E ordered](data []E, a, b int) (pivot int, hint sortedHint) {
+func choosePivotOrdered[E any](data []E, a, b int, less func(a, b E) bool) (pivot int, hint sortedHint) {
 	const (
 		shortestNinth = 50
 		maxSwaps      = 4 * 3
@@ -92,12 +92,12 @@ func choosePivotOrdered[E ordered](data []E, a, b int) (pivot int, hint sortedHi
 	if l >= 8 {
 		if l >= shortestNinth {
 			// Tukey ninth method, the idea came from Rust's implementation.
-			i = medianAdjacentOrdered(data, i, &swaps)
-			j = medianAdjacentOrdered(data, j, &swaps)
-			k = medianAdjacentOrdered(data, k, &swaps)
+			i = medianAdjacentOrdered(data, i, &swaps, less)
+			j = medianAdjacentOrdered(data, j, &swaps, less)
+			k = medianAdjacentOrdered(data, k, &swaps, less)
 		}
 		// Find the median among i, j, k and stores it into j.
-		j = medianOrdered(data, i, j, k, &swaps)
+		j = medianOrdered(data, i, j, k, &swaps, less)
 	}
 
 	switch swaps {
@@ -111,14 +111,14 @@ func choosePivotOrdered[E ordered](data []E, a, b int) (pivot int, hint sortedHi
 }
 
 // partialInsertionSortOrdered partially sorts a slice, returns true if the slice is sorted at the end.
-func partialInsertionSortOrdered[E ordered](data []E, a, b int) bool {
+func partialInsertionSortOrdered[E any](data []E, a, b int, less func(a, b E) bool) bool {
 	const (
 		maxSteps         = 5  // maximum number of adjacent out-of-order pairs that will get shifted
 		shortestShifting = 50 // don't shift any elements on short arrays
 	)
 	i := a + 1
 	for j := 0; j < maxSteps; j++ {
-		for i < b && !(data[i] < data[i-1]) {
+		for i < b && !less(data[i], data[i-1]) {
 			i++
 		}
 
@@ -135,7 +135,7 @@ func partialInsertionSortOrdered[E ordered](data []E, a, b int) bool {
 		// Shift the smaller one to the left.
 		if i-a >= 2 {
 			for j := i - 1; j >= 1; j-- {
-				if !(data[j] < data[j-1]) {
+				if !less(data[j], data[j-1]) {
 					break
 				}
 				data[j], data[j-1] = data[j-1], data[j]
@@ -144,7 +144,7 @@ func partialInsertionSortOrdered[E ordered](data []E, a, b int) bool {
 		// Shift the greater one to the right.
 		if b-i >= 2 {
 			for j := i + 1; j < b; j++ {
-				if !(data[j] < data[j-1]) {
+				if !less(data[j], data[j-1]) {
 					break
 				}
 				data[j], data[j-1] = data[j-1], data[j]
@@ -156,15 +156,15 @@ func partialInsertionSortOrdered[E ordered](data []E, a, b int) bool {
 
 // partitionEqualOrdered partitions data[a:b] into elements equal to data[pivot] followed by elements greater than data[pivot].
 // It assumed that data[a:b] does not contain elements smaller than the data[pivot].
-func partitionEqualOrdered[E ordered](data []E, a, b, pivot int) (newPivot int) {
+func partitionEqualOrdered[E any](data []E, a, b, pivot int, less func(a, b E) bool) (newPivot int) {
 	data[a], data[pivot] = data[pivot], data[a]
 	i, j := a+1, b-1 // i and j are inclusive of the elements remaining to be partitioned
 
 	for {
-		for i <= j && !(data[a] < data[i]) {
+		for i <= j && !less(data[a], data[i]) {
 			i++
 		}
-		for i <= j && (data[a] < data[j]) {
+		for i <= j && less(data[a], data[j]) {
 			j--
 		}
 		if i > j {
@@ -181,14 +181,14 @@ func partitionEqualOrdered[E ordered](data []E, a, b, pivot int) (newPivot int) 
 // Let p = data[pivot]
 // Moves elements in data[a:b] around, so that data[i]<p and data[j]>=p for i<newPivot and j>newPivot.
 // On return, data[new-pivot] = p
-func partitionOrdered[E ordered](data []E, a, b, pivot int) (newPivot int, alreadyPartitioned bool) {
+func partitionOrdered[E any](data []E, a, b, pivot int, less func(a, b E) bool) (newPivot int, alreadyPartitioned bool) {
 	data[a], data[pivot] = data[pivot], data[a]
 	i, j := a+1, b-1 // i and j are inclusive of the elements remaining to be partitioned
 
-	for i <= j && (data[i] < data[a]) {
+	for i <= j && less(data[i], data[a]) {
 		i++
 	}
-	for i <= j && !(data[j] < data[a]) {
+	for i <= j && !less(data[j], data[a]) {
 		j--
 	}
 	if i > j {
@@ -200,10 +200,10 @@ func partitionOrdered[E ordered](data []E, a, b, pivot int) (newPivot int, alrea
 	j--
 
 	for {
-		for i <= j && (data[i] < data[a]) {
+		for i <= j && less(data[i], data[a]) {
 			i++
 		}
-		for i <= j && !(data[j] < data[a]) {
+		for i <= j && !less(data[j], data[a]) {
 			j--
 		}
 		if i > j {
@@ -217,7 +217,7 @@ func partitionOrdered[E ordered](data []E, a, b, pivot int) (newPivot int, alrea
 	return j, false
 }
 
-func reverseRangeOrdered[E ordered](data []E, a, b int) {
+func reverseRangeOrdered[E any](data []E, a, b int) {
 	i := a
 	j := b - 1
 	for i < j {
@@ -227,7 +227,7 @@ func reverseRangeOrdered[E ordered](data []E, a, b int) {
 	}
 }
 
-func pdqSortOrdered[E ordered](data []E, a, b, limit int) {
+func pdqSortOrdered[E any](data []E, a, b, limit int, less func(a, b E) bool) {
 	const maxInsertion = 12
 
 	var (
@@ -239,13 +239,13 @@ func pdqSortOrdered[E ordered](data []E, a, b, limit int) {
 		length := b - a
 
 		if length <= maxInsertion {
-			insertionSortOrdered(data, a, b)
+			insertionSortOrdered(data, a, b, less)
 			return
 		}
 
 		// Fall back to heapsort if too many bad choices were made.
 		if limit == 0 {
-			heapSortOrdered(data, a, b)
+			heapSortOrdered(data, a, b, less)
 			return
 		}
 
@@ -255,7 +255,7 @@ func pdqSortOrdered[E ordered](data []E, a, b, limit int) {
 			limit--
 		}
 
-		pivot, hint := choosePivotOrdered(data, a, b)
+		pivot, hint := choosePivotOrdered(data, a, b, less)
 		if hint == decreasingHint {
 			reverseRangeOrdered(data, a, b)
 			// The chosen pivot was pivot-a elements after the start of the array.
@@ -267,31 +267,31 @@ func pdqSortOrdered[E ordered](data []E, a, b, limit int) {
 
 		// The slice is likely already sorted.
 		if wasBalanced && wasPartitioned && hint == increasingHint {
-			if partialInsertionSortOrdered(data, a, b) {
+			if partialInsertionSortOrdered(data, a, b, less) {
 				return
 			}
 		}
 
 		// Probably the slice contains many duplicate elements, partition the slice into
 		// elements equal to and elements greater than the pivot.
-		if a > 0 && !(data[a-1] < data[pivot]) {
-			mid := partitionEqualOrdered(data, a, b, pivot)
+		if a > 0 && !less(data[a-1], data[pivot]) {
+			mid := partitionEqualOrdered(data, a, b, pivot, less)
 			a = mid
 			continue
 		}
 
-		mid, alreadyPartitioned := partitionOrdered(data, a, b, pivot)
+		mid, alreadyPartitioned := partitionOrdered(data, a, b, pivot, less)
 		wasPartitioned = alreadyPartitioned
 
 		leftLen, rightLen := mid-a, b-mid
 		balanceThreshold := length / 8
 		if leftLen < rightLen {
 			wasBalanced = leftLen >= balanceThreshold
-			pdqSortOrdered(data, a, mid, limit)
+			pdqSortOrdered(data, a, mid, limit, less)
 			a = mid + 1
 		} else {
 			wasBalanced = rightLen >= balanceThreshold
-			pdqSortOrdered(data, mid+1, b, limit)
+			pdqSortOrdered(data, mid+1, b, limit, less)
 			b = mid
 		}
 	}
@@ -299,5 +299,10 @@ func pdqSortOrdered[E ordered](data []E, a, b, limit int) {
 
 func sort[K ordered](x []K) {
 	n := len(x)
-	pdqSortOrdered(x, 0, n, bits.Len(uint(n)))
+	pdqSortOrdered(x, 0, n, bits.Len(uint(n)), func(a, b K) bool { return a < b })
+}
+
+func sortWithLess[K any](x []K, less func(a, b K) bool) {
+	n := len(x)
+	pdqSortOrdered(x, 0, n, bits.Len(uint(n)), less)
 }
