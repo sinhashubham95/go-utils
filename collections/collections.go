@@ -1,5 +1,17 @@
 package collections
 
+import (
+	"golang.org/x/exp/constraints"
+)
+
+type sortedHint int // hint for pdqsort when choosing the pivot
+
+const (
+	unknownHint sortedHint = iota
+	increasingHint
+	decreasingHint
+)
+
 // AddAll adds all elements given to the given collection.
 func AddAll[K any](c []K, e ...K) []K {
 	return append(c, e...)
@@ -14,6 +26,24 @@ func AddAllIgnoringEmpty[K comparable](c []K, e ...K) []K {
 		c = append(c, v)
 	}
 	return c
+}
+
+// Collate merges two sorted Collections, a and b, into a single, sorted List such that the natural ordering of the elements is retained.
+func Collate[K constraints.Ordered](a, b []K) []K {
+	la := len(a)
+	lb := len(b)
+	if la == 0 && lb == 0 {
+		return Empty[K]()
+	}
+	if la == 0 {
+		return b
+	}
+	if lb == 0 {
+		return a
+	}
+	sort(a)
+	sort(b)
+	return b
 }
 
 // Empty is used to return an empty collection of the required type.
@@ -65,9 +95,4 @@ func Union[K comparable](a, b []K) []K {
 		c[v] -= 1
 	}
 	return r
-}
-
-func getZeroValue[K comparable]() K {
-	var v K
-	return v
 }
