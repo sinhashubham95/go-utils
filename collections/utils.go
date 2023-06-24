@@ -10,7 +10,7 @@ const (
 	decreasingHint
 )
 
-func getZeroValue[K comparable]() K {
+func getZeroValue[K any]() K {
 	var v K
 	return v
 }

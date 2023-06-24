@@ -107,6 +107,9 @@ func CollateWithComparatorRemovingDuplicates[K comparable](a, b []K, less func(x
 // Collect returns a new Collection containing all elements of the input collection transformed by the given transformer.
 // This function returns a completely new copy of the collection and none of the existing collections are modified.
 func Collect[K any](a []K, transformer func(a K) K) []K {
+	if transformer == nil {
+		panic("predicate must not be nil")
+	}
 	r := make([]K, len(a))
 	for i, v := range a {
 		r[i] = transformer(v)
@@ -166,6 +169,9 @@ func Count[K comparable](a []K, x K) int {
 // CountMatches Counts the number of elements in the input iterable that match the predicate.
 // A null or empty iterable matches no elements.
 func CountMatches[K any](a []K, predicate func(x K) bool) int {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
 	cnt := 0
 	for _, v := range a {
 		if predicate(v) {
@@ -186,7 +192,7 @@ func Disjunction[K comparable](a, b []K) []K {
 		if x < 0 {
 			x = -x
 		}
-		for i := 0; i < (c - mb[v]); i += 1 {
+		for i := 0; i < x; i += 1 {
 			r = append(r, v)
 		}
 	}
@@ -224,6 +230,143 @@ func EmptyIfNil[K any](c []K) []K {
 	return c
 }
 
+// ExtractSingleton extracts the lone element of the specified Collection
+func ExtractSingleton[K any](a []K) K {
+	if len(a) != 1 {
+		panic("can extract singleton only when collection size is 1")
+	}
+	return a[0]
+}
+
+// Filter filters the collection by applying a Predicate to each element.
+// This function returns a completely new copy of the collection and the existing collection is not modified.
+func Filter[K any](a []K, predicate func(x K) bool) []K {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
+	r := make([]K, 0)
+	for _, v := range a {
+		if predicate(v) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// FilterInverse filters the collection by applying a Predicate to each element.
+// This function returns a completely new copy of the collection and the existing collection is not modified.
+func FilterInverse[K any](a []K, predicate func(x K) bool) []K {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
+	r := make([]K, 0)
+	for _, v := range a {
+		if !predicate(v) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// Find finds the first element in the given iterable which matches the given predicate.
+// It returns the default value of the type if the value is not found.
+// This also returns a helper boolean to denote whether the element was found or not.
+func Find[K any](a []K, predicate func(x K) bool) (K, bool) {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
+	for _, v := range a {
+		if predicate(v) {
+			return v, true
+		}
+	}
+	return getZeroValue[K](), false
+}
+
+// FindInverse finds the first element in the given iterable which does not match the given predicate.
+// It returns the default value of the type if the value is not found.
+// This also returns a helper boolean to denote whether the element was found or not.
+func FindInverse[K any](a []K, predicate func(x K) bool) (K, bool) {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
+	for _, v := range a {
+		if !predicate(v) {
+			return v, true
+		}
+	}
+	return getZeroValue[K](), false
+}
+
+// FindOrDefault finds the first element in the given iterable which matches the given predicate.
+// It returns the default value provided if the value is not found.
+// This also returns a helper boolean to denote whether the element was found or not.
+func FindOrDefault[K any](a []K, predicate func(x K) bool, defaultValue K) (K, bool) {
+	for _, v := range a {
+		if predicate(v) {
+			return v, true
+		}
+	}
+	return defaultValue, false
+}
+
+// FindInverseOrDefault finds the first element in the given iterable which does not match the given predicate.
+// It returns the default value provided if the value is not found.
+// This also returns a helper boolean to denote whether the element was found or not.
+func FindInverseOrDefault[K any](a []K, predicate func(x K) bool, defaultValue K) (K, bool) {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
+	for _, v := range a {
+		if !predicate(v) {
+			return v, true
+		}
+	}
+	return defaultValue, false
+}
+
+// ForEach Applies the closure to each element of the provided iterable.
+func ForEach[K any](a []K, closure func(x K)) {
+	if closure == nil {
+		panic("closure must not be nil")
+	}
+	for _, v := range a {
+		closure(v)
+	}
+}
+
+// ForEachButLast Applies the closure to each but the last element of the provided iterable.
+func ForEachButLast[K any](a []K, closure func(x K)) {
+	if closure == nil {
+		panic("closure must not be nil")
+	}
+	l := len(a)
+	for i, v := range a {
+		if i+1 == l {
+			break
+		}
+		closure(v)
+	}
+}
+
+// Intersection returns a Collection containing the intersection of the given collections.
+// This means the set of elements which are in both the given collections.
+func Intersection[K comparable](a, b []K) []K {
+	ma := CardinalityMap(a)
+	mb := CardinalityMap(b)
+	r := make([]K, 0)
+	for v, c := range ma {
+		x := c
+		if mb[v] < x {
+			x = mb[v]
+		}
+		for i := 0; i < x; i += 1 {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
 // IsEmpty returns true if the given collection is nil or does not contain any elements.
 func IsEmpty[K any](c []K) bool {
 	return len(c) == 0
@@ -232,6 +375,9 @@ func IsEmpty[K any](c []K) bool {
 // MatchesAll answers true if a predicate is true for every element of an iterable.
 // A null or empty iterable returns true.
 func MatchesAll[K any](a []K, predicate func(x K) bool) bool {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
 	for _, v := range a {
 		if !predicate(v) {
 			return false
@@ -243,6 +389,9 @@ func MatchesAll[K any](a []K, predicate func(x K) bool) bool {
 // MatchesAny Answers true if a predicate is true for any element of the iterable.
 // A null or empty iterable returns false.
 func MatchesAny[K any](a []K, predicate func(x K) bool) bool {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
 	for _, v := range a {
 		if predicate(v) {
 			return true
