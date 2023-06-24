@@ -16,6 +16,16 @@ func AddAllIgnoringEmpty[K comparable](c []K, e ...K) []K {
 	return c
 }
 
+// CardinalityMap returns a Map mapping each unique element in the given Collection to an Integer
+// representing the number of occurrences of that element in the Collection.
+func CardinalityMap[K comparable](a []K) map[K]int {
+	m := make(map[K]int)
+	for _, v := range a {
+		m[v] += 1
+	}
+	return m
+}
+
 // Collate merges two Collections, a and b, into a single, sorted List such that the natural ordering of the elements is retained.
 // This function returns a completely new copy of the collection and none of the existing collections are modified.
 func Collate[K ordered](a, b []K) []K {
@@ -94,6 +104,103 @@ func CollateWithComparatorRemovingDuplicates[K comparable](a, b []K, less func(x
 	return RemoveDuplicates(CollateWithComparator(a, b, less))
 }
 
+// Collect returns a new Collection containing all elements of the input collection transformed by the given transformer.
+// This function returns a completely new copy of the collection and none of the existing collections are modified.
+func Collect[K any](a []K, transformer func(a K) K) []K {
+	r := make([]K, len(a))
+	for i, v := range a {
+		r[i] = transformer(v)
+	}
+	return r
+}
+
+// Contains is used to check if x is contained in the collection a
+func Contains[K comparable](a []K, x K) bool {
+	for _, v := range a {
+		if v == x {
+			return true
+		}
+	}
+	return false
+}
+
+// ContainsAll returns true if all the elements of collection b are also contained in collection a
+func ContainsAll[K comparable](a, b []K) bool {
+	m := make(map[K]bool)
+	for _, v := range a {
+		m[v] = true
+	}
+	for _, v := range b {
+		if !m[v] {
+			return false
+		}
+	}
+	return true
+}
+
+// ContainsAny returns true if any of the elements of collection b are contained in collection a
+func ContainsAny[K comparable](a, b []K) bool {
+	m := make(map[K]bool)
+	for _, v := range a {
+		m[v] = true
+	}
+	for _, v := range b {
+		if m[v] {
+			return true
+		}
+	}
+	return false
+}
+
+// Count is used to find the count of x in the collection a
+func Count[K comparable](a []K, x K) int {
+	cnt := 0
+	for _, v := range a {
+		if v == x {
+			cnt += 1
+		}
+	}
+	return cnt
+}
+
+// CountMatches Counts the number of elements in the input iterable that match the predicate.
+// A null or empty iterable matches no elements.
+func CountMatches[K any](a []K, predicate func(x K) bool) int {
+	cnt := 0
+	for _, v := range a {
+		if predicate(v) {
+			cnt += 1
+		}
+	}
+	return cnt
+}
+
+// Disjunction returns a Collection containing the exclusive disjunction (symmetric difference) of the given collections.
+// This means the set of elements which are in either one of the collections but not in both.
+func Disjunction[K comparable](a, b []K) []K {
+	ma := CardinalityMap(a)
+	mb := CardinalityMap(b)
+	r := make([]K, 0)
+	for v, c := range ma {
+		x := c - mb[v]
+		if x < 0 {
+			x = -x
+		}
+		for i := 0; i < (c - mb[v]); i += 1 {
+			r = append(r, v)
+		}
+	}
+	for v, c := range mb {
+		if ma[v] >= 0 {
+			continue
+		}
+		for i := 0; i < c; i += 1 {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
 // Empty is used to return an empty collection of the required type.
 func Empty[K any]() []K {
 	return make([]K, 0)
@@ -120,6 +227,28 @@ func EmptyIfNil[K any](c []K) []K {
 // IsEmpty returns true if the given collection is nil or does not contain any elements.
 func IsEmpty[K any](c []K) bool {
 	return len(c) == 0
+}
+
+// MatchesAll answers true if a predicate is true for every element of an iterable.
+// A null or empty iterable returns true.
+func MatchesAll[K any](a []K, predicate func(x K) bool) bool {
+	for _, v := range a {
+		if !predicate(v) {
+			return false
+		}
+	}
+	return true
+}
+
+// MatchesAny Answers true if a predicate is true for any element of the iterable.
+// A null or empty iterable returns false.
+func MatchesAny[K any](a []K, predicate func(x K) bool) bool {
+	for _, v := range a {
+		if predicate(v) {
+			return true
+		}
+	}
+	return false
 }
 
 // RemoveDuplicates is used to remove duplicates from the collection given.
@@ -151,10 +280,7 @@ func Union[K comparable](a, b []K) []K {
 	if IsEmpty(b) {
 		return a
 	}
-	c := make(map[K]int)
-	for _, v := range a {
-		c[v] += 1
-	}
+	c := CardinalityMap(a)
 	r := append(make([]K, 0, len(a)), a...)
 	for _, v := range b {
 		if c[v] <= 0 {
