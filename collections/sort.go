@@ -297,11 +297,6 @@ func pdqSortOrdered[E any](data []E, a, b, limit int, less func(a, b E) bool) {
 	}
 }
 
-func sort[K ordered](x []K) {
-	n := len(x)
-	pdqSortOrdered(x, 0, n, bits.Len(uint(n)), func(a, b K) bool { return a < b })
-}
-
 func sortWithLess[K any](x []K, less func(a, b K) bool) {
 	n := len(x)
 	pdqSortOrdered(x, 0, n, bits.Len(uint(n)), less)
