@@ -9,9 +9,9 @@
 [![Contributors](https://img.shields.io/github/contributors/sinhashubham95/go-utils)](https://github.com/sinhashubham95/go-utils/graphs/contributors)
 [![License](https://img.shields.io/github/license/sinhashubham95/go-utils)](./LICENSE)
 
-✨ **`sinhashubham95/go-utils` is an End-To-End Golang Utilities library compatible with Go version >= 1.13. You name it you find it here.**
+✨ **`sinhashubham95/go-utils` is an End-To-End Golang Utilities library compatible with Go version >= 1.18. You name it you find it here.**
 
-This library provides a ready replacement for most of the Golang standard packages, and also offers many more valuable abstractions.
+This library provides a ready replacement for most of the Golang standard packages, and also offers many more valuable abstractions. It's completely light-weight implementing all the methods natively, and not bloating this beautiful library with any additional dependencies.
 
 ## 🚀 Install
 

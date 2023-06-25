@@ -1,5 +1,7 @@
 package collections
 
+import "fmt"
+
 // AddAll adds all elements given to the given collection.
 func AddAll[K any](c []K, e ...K) []K {
 	return append(c, e...)
@@ -24,6 +26,20 @@ func CardinalityMap[K comparable](a []K) map[K]int {
 		m[v] += 1
 	}
 	return m
+}
+
+// Chain Combines the provided collections into a single collection.
+// This function returns a completely new copy of the collection and none of the existing collections are modified.
+func Chain[K any](a ...[]K) []K {
+	l := 0
+	for _, v := range a {
+		l += len(v)
+	}
+	r := make([]K, 0, l)
+	for _, v := range a {
+		r = append(r, v...)
+	}
+	return r
 }
 
 // Collate merges two Collections, a and b, into a single, sorted List such that the natural ordering of the elements is retained.
@@ -127,6 +143,19 @@ func Contains[K comparable](a []K, x K) bool {
 	return false
 }
 
+// ContainsWithEquator is used to check if x is contained in the collection a according to the equator
+func ContainsWithEquator[K any](a []K, x K, equator func(a, b K) bool) bool {
+	if equator == nil {
+		panic("equator cannot be nil")
+	}
+	for _, v := range a {
+		if equator(v, x) {
+			return true
+		}
+	}
+	return false
+}
+
 // ContainsAll returns true if all the elements of collection b are also contained in collection a
 func ContainsAll[K comparable](a, b []K) bool {
 	m := make(map[K]bool)
@@ -153,6 +182,15 @@ func ContainsAny[K comparable](a, b []K) bool {
 		}
 	}
 	return false
+}
+
+// Copy is used to copy the elements of the collection into a new collection maintaining the order of the elements.
+func Copy[K any](a []K) []K {
+	r := make([]K, len(a))
+	for i, v := range a {
+		r[i] = v
+	}
+	return r
 }
 
 // Count is used to find the count of x in the collection a
@@ -325,6 +363,26 @@ func FindInverseOrDefault[K any](a []K, predicate func(x K) bool, defaultValue K
 	return defaultValue, false
 }
 
+// First is used to get the first element of the collection.
+// If the collection is empty or nil, then it returns the default value of the type.
+// This also returns a helper boolean to know if the first value was returned from the collection or not.
+func First[K any](a []K) (K, bool) {
+	if len(a) == 0 {
+		return getZeroValue[K](), false
+	}
+	return a[0], true
+}
+
+// FirstOrDefault is used to get the first element of the collection.
+// If the collection is empty or nil, then it returns the default value provided.
+// This also returns a helper boolean to know if the first value was returned from the collection or not.
+func FirstOrDefault[K any](a []K, defaultValue K) (K, bool) {
+	if len(a) == 0 {
+		return defaultValue, false
+	}
+	return a[0], true
+}
+
 // ForEach Applies the closure to each element of the provided iterable.
 func ForEach[K any](a []K, closure func(x K)) {
 	if closure == nil {
@@ -349,6 +407,51 @@ func ForEachButLast[K any](a []K, closure func(x K)) {
 	}
 }
 
+// Get returns the ith element of the collection.
+// If the index is out of bound, then it will return the default value of the type.
+func Get[K any](a []K, i int) K {
+	l := len(a)
+	if i >= l {
+		return getZeroValue[K]()
+	}
+	return a[i]
+}
+
+// GetOrDefault returns the ith element of the collection.
+// If the index is out of bound, then it will return the default value provided.
+func GetOrDefault[K any](a []K, i int, defaultValue K) K {
+	l := len(a)
+	if i >= l {
+		return defaultValue
+	}
+	return a[i]
+}
+
+// IndexOf returns the index of the first element in the specified collection that matches the search element.
+// If the element is not found it returns -1.
+func IndexOf[K comparable](a []K, x K) int {
+	for i, v := range a {
+		if v == x {
+			return i
+		}
+	}
+	return -1
+}
+
+// IndexOfWithPredicate returns the index of the first element in the specified collection that matches the predicate.
+// If the element is not found it returns -1.
+func IndexOfWithPredicate[K any](a []K, predicate func(x K) bool) int {
+	if predicate == nil {
+		panic("predicate cannot be nil")
+	}
+	for i, v := range a {
+		if predicate(v) {
+			return i
+		}
+	}
+	return -1
+}
+
 // Intersection returns a Collection containing the intersection of the given collections.
 // This means the set of elements which are in both the given collections.
 func Intersection[K comparable](a, b []K) []K {
@@ -370,6 +473,105 @@ func Intersection[K comparable](a, b []K) []K {
 // IsEmpty returns true if the given collection is nil or does not contain any elements.
 func IsEmpty[K any](c []K) bool {
 	return len(c) == 0
+}
+
+// IsNotEmpty returns true if the given collection contains at least 1 element.
+func IsNotEmpty[K any](c []K) bool {
+	return len(c) > 0
+}
+
+// IsEqual Returns true iff the given Collections contain exactly the same elements with exactly the same cardinalities.
+func IsEqual[K comparable](a, b []K) bool {
+	la := len(a)
+	lb := len(b)
+	if la != lb {
+		return false
+	}
+	for i := 0; i < la; i += 1 {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// IsEqualWithEquator Returns true iff the given Collections contain exactly the same elements according to the equator
+// with exactly the same cardinalities.
+func IsEqualWithEquator[K any](a, b []K, equator func(x, y K) bool) bool {
+	if equator == nil {
+		panic("equator cannot be nil")
+	}
+	la := len(a)
+	lb := len(b)
+	if la != lb {
+		return false
+	}
+	for i := 0; i < la; i += 1 {
+		if !equator(a[i], b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+// IsProperSubCollection returns true if and only if the first collection a is a proper sub-collection of the
+// second collection b, that is, iff the cardinality of each element in a is less than or equal to the cardinality of
+// that element in b, for each element e in a, and there is at least one element f such that the cardinality of
+// f in b is strictly greater than the cardinality of f in a.
+func IsProperSubCollection[K comparable](a, b []K) bool {
+	ma := CardinalityMap(a)
+	mb := CardinalityMap(b)
+	cg := 0
+	for _, v := range a {
+		if mb[v] < ma[v] {
+			return false
+		}
+		if mb[v] > ma[v] {
+			cg += 1
+		}
+	}
+	return cg > 0
+}
+
+// IsSubCollection returns true if and only if the first collection a is a proper sub-collection of the
+// second collection b, that is, iff the cardinality of each element in a is less than or equal to the cardinality of
+// that element in b.
+func IsSubCollection[K comparable](a, b []K) bool {
+	ma := CardinalityMap(a)
+	mb := CardinalityMap(b)
+	for _, v := range a {
+		if mb[v] < ma[v] {
+			return false
+		}
+	}
+	return true
+}
+
+// LastIndexOf returns the index of the last element in the specified collection that matches the search element.
+// If the element is not found it returns -1.
+func LastIndexOf[K comparable](a []K, x K) int {
+	l := len(a)
+	for i := l - 1; i >= 0; i -= 1 {
+		if a[i] == x {
+			return i
+		}
+	}
+	return -1
+}
+
+// LastIndexOfWithPredicate returns the index of the last element in the specified collection that matches the predicate.
+// If the element is not found it returns -1.
+func LastIndexOfWithPredicate[K any](a []K, predicate func(x K) bool) int {
+	if predicate == nil {
+		panic("predicate cannot be nil")
+	}
+	l := len(a)
+	for i := l - 1; i >= 0; i -= 1 {
+		if predicate(a[i]) {
+			return i
+		}
+	}
+	return -1
 }
 
 // MatchesAll answers true if a predicate is true for every element of an iterable.
@@ -400,6 +602,74 @@ func MatchesAny[K any](a []K, predicate func(x K) bool) bool {
 	return false
 }
 
+// Partition Partitions all elements from iterable into separate output collections, based on the evaluation of the given predicates.
+func Partition[K any](a []K, predicates ...func(x K) bool) [][]K {
+	l := len(predicates)
+	r := make([][]K, l+1)
+	for _, x := range a {
+		assigned := false
+		for i, p := range predicates {
+			if p == nil {
+				panic("predicate cannot be nil")
+			}
+			if p(x) {
+				r[i] = append(r[i], x)
+				assigned = true
+				break
+			}
+		}
+		if !assigned {
+			r[l] = append(r[l], x)
+		}
+	}
+	return r
+}
+
+// Permutations returns a Collection of all the permutations of the input collection.
+func Permutations[K any](a []K) [][]K {
+	l := len(a)
+	curr := make([]K, 0)
+	vis := make(map[int]bool)
+	p := make([][]K, 0)
+	permutations(a, l, 0, curr, vis, p)
+	return p
+}
+
+// PredicatedCollection returns a predicated (validating) collection backed by the given collection.
+func PredicatedCollection[K any](a []K, predicate func(x K) bool) {
+	for _, v := range a {
+		if predicate(v) {
+			panic(fmt.Sprintf("%s rejected by predicate", v))
+		}
+	}
+}
+
+// RemoveAll Removes the elements in remove from collection.
+func RemoveAll[K comparable](a, remove []K) []K {
+	m := CardinalityMap(remove)
+	r := make([]K, 0)
+	for _, v := range a {
+		if m[v] == 0 {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// RemoveAllWithEquator Removes the elements in remove from collection according to the equator
+func RemoveAllWithEquator[K any](a, remove []K, equator func(x, y K) bool) []K {
+	if equator == nil {
+		panic("equator cannot be nil")
+	}
+	r := make([]K, 0)
+	for _, v := range a {
+		if !ContainsWithEquator(remove, v, equator) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
 // RemoveDuplicates is used to remove duplicates from the collection given.
 // This function returns a new collection in itself and the existing collection is not affected.
 func RemoveDuplicates[K comparable](a []K) []K {
@@ -416,6 +686,102 @@ func RemoveDuplicates[K comparable](a []K) []K {
 		}
 		last = v
 		r = append(r, last)
+	}
+	return r
+}
+
+// RetainAll Retains the elements in retain from collection.
+func RetainAll[K comparable](a, retain []K) []K {
+	m := CardinalityMap(retain)
+	r := make([]K, 0)
+	for _, v := range a {
+		if m[v] > 0 {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// RetainAllWithEquator Retains the elements in retain from collection according to the equator
+func RetainAllWithEquator[K any](a, retain []K, equator func(x, y K) bool) []K {
+	if equator == nil {
+		panic("equator cannot be nil")
+	}
+	r := make([]K, 0)
+	for _, v := range a {
+		if ContainsWithEquator(retain, v, equator) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// Reverse is used to reverse the order of the given collection.
+// This returns a new collection without affecting the existing collection.
+func Reverse[K any](a []K) []K {
+	l := len(a)
+	r := make([]K, len(a))
+	for i := 0; i < l; i += 1 {
+		r[i] = a[l-1-i]
+	}
+	return r
+}
+
+// Select Selects all elements from input collection which match the given predicate into an output collection.
+// This returns a new collection without affecting the existing collection.
+func Select[K any](a []K, predicate func(x K) bool) []K {
+	if predicate == nil {
+		panic("predicate cannot be nil")
+	}
+	r := make([]K, 0)
+	for _, v := range a {
+		if predicate(v) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// SelectRejected Selects all elements from input collection which do not match the given predicate into an output collection.
+// This returns a new collection without affecting the existing collection.
+func SelectRejected[K any](a []K, predicate func(x K) bool) []K {
+	if predicate == nil {
+		panic("predicate cannot be nil")
+	}
+	r := make([]K, 0)
+	for _, v := range a {
+		if !predicate(v) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// Subtract Returns a new Collection containing a - b.
+// This function returns a completely new copy of the collection and none of the existing collections are modified.
+func Subtract[K comparable](a, b []K) []K {
+	m := CardinalityMap(b)
+	r := make([]K, 0)
+	for _, v := range a {
+		c := m[v]
+		if c > 0 {
+			m[v] -= 1
+		} else if c == 0 {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
+// Transform transforms the collection by applying a Transformer to each element.
+// This returns a new collection without affecting the existing collection.
+func Transform[K, L any](a []K, transformer func(x K) L) []L {
+	if transformer == nil {
+		panic("transformer cannot be nil")
+	}
+	r := make([]L, len(a))
+	for _, v := range a {
+		r = append(r, transformer(v))
 	}
 	return r
 }
@@ -438,4 +804,21 @@ func Union[K comparable](a, b []K) []K {
 		c[v] -= 1
 	}
 	return r
+}
+
+func permutations[K any](a []K, l, ind int, curr []K, vis map[int]bool, p [][]K) {
+	if ind == l {
+		p = append(p, curr)
+		return
+	}
+	for i := 0; i < l; i += 1 {
+		if vis[i] {
+			continue
+		}
+		vis[i] = true
+		curr = append(curr, a[i])
+		permutations(a, l, ind+1, curr, vis, p)
+		curr = curr[:ind]
+		vis[i] = false
+	}
 }
