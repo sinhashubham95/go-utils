@@ -5,13 +5,13 @@
 [![GoDoc](https://godoc.org/github.com/sinhashubham95/go-utils?status.svg)](https://pkg.go.dev/github.com/sinhashubham95/go-utils)
 ![Build Status](https://github.com/sinhashubham95/go-utils/actions/workflows/test.yml/badge.svg)
 [![Go report](https://goreportcard.com/badge/github.com/sinhashubham95/go-utils)](https://goreportcard.com/report/github.com/sinhashubham95/go-utils)
-[![Coverage](https://img.shields.io/codecov/c/github/sinhashubham95/go-utils)](https://codecov.io/gh/sinhashubham95/go-utils)
+[![codecov](https://codecov.io/gh/sinhashubham95/go-utils/branch/master/graph/badge.svg?token=D6ND052IDH)](https://codecov.io/gh/sinhashubham95/go-utils)
 [![Contributors](https://img.shields.io/github/contributors/sinhashubham95/go-utils)](https://github.com/sinhashubham95/go-utils/graphs/contributors)
 [![License](https://img.shields.io/github/license/sinhashubham95/go-utils)](./LICENSE)
 
-✨ **`sinhashubham95/go-utils` is an End-To-End Golang Utilities library compatible with Go version >= 1.13. You name it you find it here.**
+✨ **`sinhashubham95/go-utils` is an End-To-End Golang Utilities library compatible with Go version >= 1.18. You name it you find it here.**
 
-This library provides a ready replacement for most of the Golang standard packages, and also offers many more valuable abstractions.
+This library provides a ready replacement for most of the Golang standard packages, and also offers many more valuable abstractions. It's completely light-weight implementing all the methods natively, and not bloating this beautiful library with any additional dependencies.
 
 ## 🚀 Install
 
