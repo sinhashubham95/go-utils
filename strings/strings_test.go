@@ -519,6 +519,7 @@ func TestIsAnyMixedCase(t *testing.T) {
 
 func TestIsAlpha(t *testing.T) {
 	assert.True(t, strings.IsAlpha("naruto"))
+	assert.False(t, strings.IsAlpha("naruto   "))
 	assert.False(t, strings.IsAlpha("naruto123"))
 	assert.False(t, strings.IsAlpha(""))
 }
@@ -526,5 +527,71 @@ func TestIsAlpha(t *testing.T) {
 func TestIsNumeric(t *testing.T) {
 	assert.False(t, strings.IsNumeric("naruto123"))
 	assert.True(t, strings.IsNumeric("123"))
+	assert.False(t, strings.IsNumeric("123    "))
 	assert.False(t, strings.IsNumeric(""))
+}
+
+func IsAlphaNumeric(t *testing.T) {
+	assert.True(t, strings.IsAlphaNumeric("naruto123"))
+	assert.False(t, strings.IsAlphaNumeric("naruto123    "))
+	assert.True(t, strings.IsAlphaNumeric("123"))
+	assert.True(t, strings.IsAlphaNumeric("naruto"))
+	assert.False(t, strings.IsAlphaNumeric(""))
+}
+
+func TestIsAlphaSpace(t *testing.T) {
+	assert.True(t, strings.IsAlphaSpace("naruto"))
+	assert.True(t, strings.IsAlphaSpace("naruto   "))
+	assert.False(t, strings.IsAlphaSpace("naruto123"))
+	assert.False(t, strings.IsAlphaSpace(""))
+}
+
+func TestIsNumericSpace(t *testing.T) {
+	assert.False(t, strings.IsNumericSpace("naruto123"))
+	assert.True(t, strings.IsNumericSpace("123"))
+	assert.True(t, strings.IsNumericSpace("123    "))
+	assert.False(t, strings.IsNumericSpace(""))
+}
+
+func IsAlphaNumericSpace(t *testing.T) {
+	assert.True(t, strings.IsAlphaNumericSpace("naruto123"))
+	assert.True(t, strings.IsAlphaNumeric("naruto123    "))
+	assert.True(t, strings.IsAlphaNumericSpace("123"))
+	assert.True(t, strings.IsAlphaNumericSpace("naruto"))
+	assert.False(t, strings.IsAlphaNumericSpace(""))
+}
+
+func TestIsAsciiPrintable(t *testing.T) {
+	assert.True(t, strings.IsAsciiPrintable("naruto"))
+	assert.True(t, strings.IsAsciiPrintable("NARUTO"))
+	assert.True(t, strings.IsAsciiPrintable("NARUTO1223456576"))
+	assert.True(t, strings.IsAsciiPrintable("NARUTO    "))
+	assert.True(t, strings.IsAsciiPrintable("@NARUTO@"))
+	assert.True(t, strings.IsAsciiPrintable("`@NARUTO@`"))
+	assert.True(t, strings.IsAsciiPrintable("`@NARUTO@`"))
+	assert.False(t, strings.IsAsciiPrintable(string(rune(0))))
+}
+
+func TestJoinByChar(t *testing.T) {
+	assert.Equal(t, "n a r u t o", strings.JoinByChar([]uint8{'n', 'a', 'r', 'u', 't', 'o'}, ' '))
+}
+
+func TestJoinStringsByChar(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.JoinStringsByChar([]string{"naruto", "rocks"}, ' '))
+}
+
+func TestJoinStringsByString(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.JoinStringsByString([]string{"naruto", "rocks"}, " "))
+}
+
+func TestLeft(t *testing.T) {
+	assert.Equal(t, "", strings.Left("naruto", -1))
+	assert.Equal(t, "naruto", strings.Left("naruto", 10))
+	assert.Equal(t, "nar", strings.Left("naruto", 3))
+}
+
+func TestLeftPad(t *testing.T) {
+	assert.Equal(t, "naruto", strings.LeftPad("naruto", 1, ' '))
+	assert.Equal(t, "naruto", strings.LeftPad("naruto", 1, ' '))
+	assert.Equal(t, "XXXXnaruto", strings.LeftPad("naruto", 10, 'X'))
 }

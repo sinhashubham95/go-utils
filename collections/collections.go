@@ -639,7 +639,7 @@ func Permutations[K any](a []K) [][]K {
 func PredicatedCollection[K any](a []K, predicate func(x K) bool) {
 	for _, v := range a {
 		if predicate(v) {
-			panic(fmt.Sprintf("%s rejected by predicate", v))
+			panic(fmt.Sprintf("%v rejected by predicate", v))
 		}
 	}
 }
