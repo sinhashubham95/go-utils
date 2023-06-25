@@ -59,8 +59,8 @@ func order2Ordered[E any](data []E, a, b int, swaps *int, less func(a, b E) bool
 // medianOrdered returns x where data[x] is the median of data[a],data[b],data[c], where x is a, b, or c.
 func medianOrdered[E any](data []E, a, b, c int, swaps *int, less func(a, b E) bool) int {
 	a, b = order2Ordered(data, a, b, swaps, less)
-	b, c = order2Ordered(data, b, c, swaps, less)
-	a, b = order2Ordered(data, a, b, swaps, less)
+	b, _ = order2Ordered(data, b, c, swaps, less)
+	_, b = order2Ordered(data, a, b, swaps, less)
 	return b
 }
 

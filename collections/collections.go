@@ -187,9 +187,7 @@ func ContainsAny[K comparable](a, b []K) bool {
 // Copy is used to copy the elements of the collection into a new collection maintaining the order of the elements.
 func Copy[K any](a []K) []K {
 	r := make([]K, len(a))
-	for i, v := range a {
-		r[i] = v
-	}
+	copy(r, a)
 	return r
 }
 
@@ -630,8 +628,8 @@ func Permutations[K any](a []K) [][]K {
 	l := len(a)
 	curr := make([]K, 0)
 	vis := make(map[int]bool)
-	p := make([][]K, 0)
-	permutations(a, l, 0, curr, vis, p)
+	p := make([][]K, factorial(l))
+	permutations(a, l, 0, curr, vis, p, &pointerInt{v: 0})
 	return p
 }
 
@@ -806,9 +804,10 @@ func Union[K comparable](a, b []K) []K {
 	return r
 }
 
-func permutations[K any](a []K, l, ind int, curr []K, vis map[int]bool, p [][]K) {
+func permutations[K any](a []K, l, ind int, curr []K, vis map[int]bool, p [][]K, rind *pointerInt) {
 	if ind == l {
-		p = append(p, curr)
+		p[rind.value()] = curr
+		rind.increment()
 		return
 	}
 	for i := 0; i < l; i += 1 {
@@ -817,7 +816,7 @@ func permutations[K any](a []K, l, ind int, curr []K, vis map[int]bool, p [][]K)
 		}
 		vis[i] = true
 		curr = append(curr, a[i])
-		permutations(a, l, ind+1, curr, vis, p)
+		permutations(a, l, ind+1, curr, vis, p, rind)
 		curr = curr[:ind]
 		vis[i] = false
 	}

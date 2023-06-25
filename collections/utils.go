@@ -4,6 +4,18 @@ import "math/bits"
 
 type sortedHint int // hint for sort when choosing the pivot
 
+type pointerInt struct {
+	v int
+}
+
+func (p *pointerInt) increment() {
+	p.v += 1
+}
+
+func (p *pointerInt) value() int {
+	return p.v
+}
+
 const (
 	unknownHint sortedHint = iota
 	increasingHint
@@ -37,4 +49,12 @@ func shiftDownOrdered[E any](data []E, lo, hi, first int, less func(a, b E) bool
 
 func nextPowerOfTwo(length int) uint {
 	return 1 << bits.Len(uint(length))
+}
+
+func factorial(n int) int {
+	f := 1
+	for i := 1; i <= n; i += 1 {
+		f *= i
+	}
+	return f
 }
