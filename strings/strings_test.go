@@ -595,3 +595,182 @@ func TestLeftPad(t *testing.T) {
 	assert.Equal(t, "naruto", strings.LeftPad("naruto", 1, ' '))
 	assert.Equal(t, "XXXXnaruto", strings.LeftPad("naruto", 10, 'X'))
 }
+
+func TestRight(t *testing.T) {
+	assert.Equal(t, "", strings.Right("naruto", -1))
+	assert.Equal(t, "naruto", strings.Right("naruto", 10))
+	assert.Equal(t, "uto", strings.Right("naruto", 3))
+}
+
+func TestRightPad(t *testing.T) {
+	assert.Equal(t, "naruto", strings.RightPad("naruto", 1, ' '))
+	assert.Equal(t, "naruto", strings.RightPad("naruto", 1, ' '))
+	assert.Equal(t, "narutoXXXX", strings.RightPad("naruto", 10, 'X'))
+}
+
+func TestRotate(t *testing.T) {
+	assert.Equal(t, "utonar", strings.Rotate("naruto", 3))
+	assert.Equal(t, "utonar", strings.Rotate("naruto", 9))
+	assert.Equal(t, "naruto", strings.Rotate("naruto", 0))
+	assert.Equal(t, "naruto", strings.Rotate("naruto", 6))
+}
+
+func TestSplit(t *testing.T) {
+	assert.Len(t, strings.Split("naruto rocks", ' '), 2)
+	assert.Len(t, strings.Split("", ' '), 0)
+	assert.Nil(t, strings.Split("", ' '))
+	assert.Len(t, strings.Split("naruto rocks", 'a'), 2)
+}
+
+func TestSplitByString(t *testing.T) {
+	assert.Len(t, strings.SplitByString("naruto rocks", " "), 2)
+	assert.Len(t, strings.SplitByString("", " "), 0)
+	assert.Nil(t, strings.SplitByString("", " "))
+	assert.Len(t, strings.SplitByString("naruto rocks", "a"), 2)
+}
+
+func TestSplitN(t *testing.T) {
+	assert.Len(t, strings.SplitN("naruto rocks", ' ', -1), 2)
+	assert.Len(t, strings.SplitN("", ' ', -1), 0)
+	assert.Nil(t, strings.SplitN("", ' ', -1))
+	assert.Len(t, strings.SplitN("naruto rocks", 'a', -1), 2)
+	assert.Len(t, strings.SplitN("naruto rocks", ' ', 1), 1)
+	assert.Len(t, strings.SplitN("", ' ', 1), 0)
+	assert.Nil(t, strings.SplitN("", ' ', 1))
+	assert.Len(t, strings.SplitN("naruto rocks", 'a', 1), 1)
+	assert.Len(t, strings.SplitN("naruto rocks", ' ', 0), 0)
+	assert.Len(t, strings.SplitN("", ' ', 0), 0)
+	assert.Nil(t, strings.SplitN("", ' ', 0))
+	assert.Len(t, strings.SplitN("naruto rocks", 'a', 0), 0)
+}
+
+func TestSplitNByString(t *testing.T) {
+	assert.Len(t, strings.SplitNByString("naruto rocks", " ", -1), 2)
+	assert.Len(t, strings.SplitNByString("", " ", -1), 0)
+	assert.Nil(t, strings.SplitNByString("", " ", -1))
+	assert.Len(t, strings.SplitNByString("naruto rocks", "a", -1), 2)
+	assert.Len(t, strings.SplitNByString("naruto rocks", " ", 1), 1)
+	assert.Len(t, strings.SplitNByString("", " ", 1), 0)
+	assert.Nil(t, strings.SplitNByString("", " ", 1))
+	assert.Len(t, strings.SplitNByString("naruto rocks", "a", 1), 1)
+	assert.Len(t, strings.SplitNByString("naruto rocks", " ", 0), 0)
+	assert.Len(t, strings.SplitNByString("", " ", 0), 0)
+	assert.Nil(t, strings.SplitNByString("", " ", 0))
+	assert.Len(t, strings.SplitNByString("naruto rocks", "a", 0), 0)
+}
+
+func TestSplitWithTrim(t *testing.T) {
+	assert.Len(t, strings.SplitWithTrim("naruto rocks", ' '), 2)
+	assert.Len(t, strings.SplitWithTrim("naruto      rocks", ' '), 2)
+	assert.Len(t, strings.SplitWithTrim("", ' '), 0)
+	assert.Nil(t, strings.SplitWithTrim("", ' '))
+	assert.Len(t, strings.SplitWithTrim("naruto rocks", 'a'), 2)
+}
+
+func TestSplitByStringWithTrim(t *testing.T) {
+	assert.Len(t, strings.SplitByStringWithTrim("naruto rocks", " "), 2)
+	assert.Len(t, strings.SplitByStringWithTrim("", " "), 0)
+	assert.Nil(t, strings.SplitByStringWithTrim("", " "))
+	assert.Len(t, strings.SplitByStringWithTrim("naruto rocks", "a"), 2)
+}
+
+func TestSplitNWithTrim(t *testing.T) {
+	assert.Len(t, strings.SplitNWithTrim("naruto rocks", ' ', -1), 2)
+	assert.Len(t, strings.SplitNWithTrim("", ' ', -1), 0)
+	assert.Nil(t, strings.SplitNWithTrim("", ' ', -1))
+	assert.Len(t, strings.SplitNWithTrim("naruto rocks", 'a', -1), 2)
+	assert.Len(t, strings.SplitNWithTrim("naruto rocks", ' ', 1), 1)
+	assert.Len(t, strings.SplitNWithTrim("", ' ', 1), 0)
+	assert.Nil(t, strings.SplitNWithTrim("", ' ', 1))
+	assert.Len(t, strings.SplitNWithTrim("naruto rocks", 'a', 1), 1)
+	assert.Len(t, strings.SplitNWithTrim("naruto rocks", ' ', 0), 0)
+	assert.Len(t, strings.SplitNWithTrim("", ' ', 0), 0)
+	assert.Nil(t, strings.SplitNWithTrim("", ' ', 0))
+	assert.Len(t, strings.SplitNWithTrim("naruto rocks", 'a', 0), 0)
+}
+
+func TestSplitNByStringWithTrim(t *testing.T) {
+	assert.Len(t, strings.SplitNByStringWithTrim("naruto rocks", " ", -1), 2)
+	assert.Len(t, strings.SplitNByStringWithTrim("", " ", -1), 0)
+	assert.Nil(t, strings.SplitNByStringWithTrim("", " ", -1))
+	assert.Len(t, strings.SplitNByStringWithTrim("naruto rocks", "a", -1), 2)
+	assert.Len(t, strings.SplitNByStringWithTrim("naruto rocks", " ", 1), 1)
+	assert.Len(t, strings.SplitNByStringWithTrim("", " ", 1), 0)
+	assert.Nil(t, strings.SplitNByStringWithTrim("", " ", 1))
+	assert.Len(t, strings.SplitNByStringWithTrim("naruto rocks", "a", 1), 1)
+	assert.Len(t, strings.SplitNByStringWithTrim("naruto rocks", " ", 0), 0)
+	assert.Len(t, strings.SplitNByStringWithTrim("", " ", 0), 0)
+	assert.Nil(t, strings.SplitNByStringWithTrim("", " ", 0))
+	assert.Len(t, strings.SplitNByStringWithTrim("naruto rocks", "a", 0), 0)
+}
+
+func TestSplitWithTrimCutSet(t *testing.T) {
+	assert.Len(t, strings.SplitWithTrimCutSet("naruto rocks", ' ', " "), 2)
+	assert.Len(t, strings.SplitWithTrimCutSet("naruto      rocks", ' ', " "), 2)
+	assert.Len(t, strings.SplitWithTrimCutSet("", ' ', " "), 0)
+	assert.Nil(t, strings.SplitWithTrimCutSet("", ' ', " "))
+	assert.Len(t, strings.SplitWithTrimCutSet("naruto rocks", 'a', " "), 2)
+}
+
+func TestSplitByStringWithTrimCutSet(t *testing.T) {
+	assert.Len(t, strings.SplitByStringWithTrimCutSet("naruto rocks", " ", " "), 2)
+	assert.Len(t, strings.SplitByStringWithTrimCutSet("", " ", " "), 0)
+	assert.Nil(t, strings.SplitByStringWithTrimCutSet("", " ", " "))
+	assert.Len(t, strings.SplitByStringWithTrimCutSet("naruto rocks", "a", "x"), 2)
+	assert.Len(t, strings.SplitByStringWithTrimCutSet("naruto rocks", "a", "x"), 2)
+	assert.Len(t, strings.SplitByStringWithTrimCutSet("naruto rocks", "a", "n"), 1)
+}
+
+func TestSplitNWithTrimCutSet(t *testing.T) {
+	assert.Len(t, strings.SplitNWithTrimCutSet("naruto rocks", ' ', -1, " "), 2)
+	assert.Len(t, strings.SplitNWithTrimCutSet("", ' ', -1, " "), 0)
+	assert.Nil(t, strings.SplitNWithTrimCutSet("", ' ', -1, " "))
+	assert.Len(t, strings.SplitNWithTrimCutSet("naruto rocks", 'a', -1, " "), 2)
+	assert.Len(t, strings.SplitNWithTrimCutSet("naruto rocks", ' ', 1, " "), 1)
+	assert.Len(t, strings.SplitNWithTrimCutSet("", ' ', 1, " "), 0)
+	assert.Nil(t, strings.SplitNWithTrimCutSet("", ' ', 1, " "))
+	assert.Len(t, strings.SplitNWithTrimCutSet("naruto rocks", 'a', 1, " "), 1)
+	assert.Len(t, strings.SplitNWithTrimCutSet("naruto rocks", ' ', 0, " "), 0)
+	assert.Len(t, strings.SplitNWithTrimCutSet("", ' ', 0, " "), 0)
+	assert.Nil(t, strings.SplitNWithTrimCutSet("", ' ', 0, " "))
+	assert.Len(t, strings.SplitNWithTrimCutSet("naruto rocks", 'a', 0, " "), 0)
+}
+
+func TestSplitNByStringWithTrimCutSet(t *testing.T) {
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("naruto rocks", " ", -1, " "), 2)
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("", " ", -1, " "), 0)
+	assert.Nil(t, strings.SplitNByStringWithTrimCutSet("", " ", -1, " "))
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("naruto rocks", "a", -1, " "), 2)
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("naruto rocks", " ", 1, " "), 1)
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("", " ", 1, " "), 0)
+	assert.Nil(t, strings.SplitNByStringWithTrimCutSet("", " ", 1, " "))
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("naruto rocks", "a", 1, " "), 1)
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("naruto rocks", " ", 0, " "), 0)
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("", " ", 0, " "), 0)
+	assert.Nil(t, strings.SplitNByStringWithTrimCutSet("", " ", 0, " "))
+	assert.Len(t, strings.SplitNByStringWithTrimCutSet("naruto rocks", "a", 0, " "), 0)
+}
+
+func TestStartsWith(t *testing.T) {
+	assert.True(t, strings.StartsWith("naruto", "n"))
+	assert.False(t, strings.StartsWith("naruto", "nap"))
+	assert.True(t, strings.StartsWith("naruto", ""))
+}
+
+func TestStartsWithAny(t *testing.T) {
+	assert.True(t, strings.StartsWithAny("naruto", "n"))
+	assert.False(t, strings.StartsWithAny("naruto", "nap"))
+	assert.True(t, strings.StartsWithAny("naruto", ""))
+}
+
+func TestStartsWithIgnoreCase(t *testing.T) {
+	assert.True(t, strings.StartsWithIgnoreCase("naruto", "N"))
+	assert.False(t, strings.StartsWithIgnoreCase("naruto", "nap"))
+	assert.True(t, strings.StartsWithIgnoreCase("naruto", ""))
+}
+
+func TestStartsWithAnyIgnoreCase(t *testing.T) {
+	assert.True(t, strings.StartsWithAnyIgnoreCase("naruto", "N"))
+	assert.False(t, strings.StartsWithAnyIgnoreCase("naruto", "nap"))
+	assert.True(t, strings.StartsWithAnyIgnoreCase("naruto", ""))
+}
