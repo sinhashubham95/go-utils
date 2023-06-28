@@ -1322,19 +1322,6 @@ func RightPad(s string, size int, padCharacter uint8) string {
 	return s + Repeat(padCharacter, pads)
 }
 
-// Rotate is used to rotate the string by given number of characters
-func Rotate(s string, shift int) string {
-	if s == empty {
-		return s
-	}
-	l := len(s)
-	if shift > 0 && shift%l > 0 {
-		offset := -(shift % l)
-		return SubstringTillEnd(s, offset) + Substring(s, 0, offset)
-	}
-	return s
-}
-
 // RightPadString is used to right pad the given string to the given string.
 func RightPadString(s string, size int, padString string) string {
 	if IsEmpty(padString) {
@@ -1360,6 +1347,19 @@ func RightPadString(s string, size int, padString string) string {
 		p[i] = padString[i%pl]
 	}
 	return s + string(p)
+}
+
+// Rotate is used to rotate the string by given number of characters
+func Rotate(s string, shift int) string {
+	if s == empty {
+		return s
+	}
+	l := len(s)
+	if shift > 0 && shift%l > 0 {
+		offset := -(shift % l)
+		return SubstringTillEnd(s, offset) + Substring(s, 0, offset)
+	}
+	return s
 }
 
 // Split is used to split the string into a list of strings about the separator provided
@@ -2006,7 +2006,7 @@ func trimSplits(splits []string, set string) []string {
 		if set == space {
 			r = strings.TrimSpace(split)
 		} else {
-			r = strings.Trim(r, set)
+			r = strings.Trim(split, set)
 		}
 		if r == empty {
 			continue
