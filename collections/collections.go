@@ -18,6 +18,31 @@ func AddAllIgnoringEmpty[K comparable](c []K, e ...K) []K {
 	return c
 }
 
+// Cardinality returns the number of occurrences of the given element in the collection.
+func Cardinality[K comparable](a []K, x K) int {
+	cnt := 0
+	for _, v := range a {
+		if v == x {
+			cnt += 1
+		}
+	}
+	return cnt
+}
+
+// CardinalityWithEquator returns the number of occurrences of the given element in the collection according to the equator.
+func CardinalityWithEquator[K any](a []K, x K, equator func(a, b K) bool) int {
+	if equator == nil {
+		panic("equator cannot be nil")
+	}
+	cnt := 0
+	for _, v := range a {
+		if equator(v, x) {
+			cnt += 1
+		}
+	}
+	return cnt
+}
+
 // CardinalityMap returns a Map mapping each unique element in the given Collection to an Integer
 // representing the number of occurrences of that element in the Collection.
 func CardinalityMap[K comparable](a []K) map[K]int {
@@ -124,7 +149,7 @@ func CollateWithComparatorRemovingDuplicates[K comparable](a, b []K, less func(x
 // This function returns a completely new copy of the collection and none of the existing collections are modified.
 func Collect[K any](a []K, transformer func(a K) K) []K {
 	if transformer == nil {
-		panic("predicate must not be nil")
+		panic("transformer must not be nil")
 	}
 	r := make([]K, len(a))
 	for i, v := range a {
