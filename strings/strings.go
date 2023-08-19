@@ -1825,7 +1825,7 @@ func TrimLeft(s, cc string) string {
 }
 
 // TrimRight returns a slice of the string s, with all trailing
-// Unicode code points contained in cutset removed.
+// Unicode code points contained in cut-set removed.
 //
 // To remove a suffix, use TrimSuffix instead.
 func TrimRight(s, cc string) string {

@@ -1,7 +1,7 @@
 # Go Utils - Fully Tested, Benchmarked and Error Free Set of Utilities
 
 [![tag](https://img.shields.io/github/tag/sinhashubham95/go-utils.svg)](https://github.com/sinhashubham95/go-utils/releases)
-![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.13-%23007d9c)
+![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c)
 [![GoDoc](https://godoc.org/github.com/sinhashubham95/go-utils?status.svg)](https://pkg.go.dev/github.com/sinhashubham95/go-utils)
 ![Build Status](https://github.com/sinhashubham95/go-utils/actions/workflows/test.yml/badge.svg)
 [![Go report](https://goreportcard.com/badge/github.com/sinhashubham95/go-utils)](https://goreportcard.com/report/github.com/sinhashubham95/go-utils)

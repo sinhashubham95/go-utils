@@ -143,7 +143,7 @@ func Contains[K comparable](a []K, x K) bool {
 	return false
 }
 
-// ContainsWithEquator is used to check if x is contained in the collection a according to the equator
+// ContainsWithEquator is used to check if x is contained in the collection according to the equator
 func ContainsWithEquator[K any](a []K, x K, equator func(a, b K) bool) bool {
 	if equator == nil {
 		panic("equator cannot be nil")
@@ -512,10 +512,10 @@ func IsEqualWithEquator[K any](a, b []K, equator func(x, y K) bool) bool {
 	return true
 }
 
-// IsProperSubCollection returns true if and only if the first collection a is a proper sub-collection of the
-// second collection b, that is, iff the cardinality of each element in a is less than or equal to the cardinality of
-// that element in b, for each element e in a, and there is at least one element f such that the cardinality of
-// f in b is strictly greater than the cardinality of f in a.
+// IsProperSubCollection returns true if and only if the first collection is a proper sub-collection of the
+// second collection B, that is, iff the cardinality of each element in A is less than or equal to the cardinality of
+// that element in B, for each element E in A, and there is at least one element F such that the cardinality of
+// f in b is strictly greater than the cardinality of F in A.
 func IsProperSubCollection[K comparable](a, b []K) bool {
 	ma := CardinalityMap(a)
 	mb := CardinalityMap(b)
@@ -531,8 +531,8 @@ func IsProperSubCollection[K comparable](a, b []K) bool {
 	return cg > 0
 }
 
-// IsSubCollection returns true if and only if the first collection a is a proper sub-collection of the
-// second collection b, that is, iff the cardinality of each element in a is less than or equal to the cardinality of
+// IsSubCollection returns true if and only if the first collection A is a proper sub-collection of the
+// second collection b, that is, iff the cardinality of each element in A is less than or equal to the cardinality of
 // that element in b.
 func IsSubCollection[K comparable](a, b []K) bool {
 	ma := CardinalityMap(a)
