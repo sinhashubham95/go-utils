@@ -1071,7 +1071,7 @@ func NormalizeSpace(s string) string {
 		}
 	}
 	if whitespacesCount > 0 {
-		b.WriteRune(' ')
+		return b.String()[:b.Len()-1]
 	}
 	return b.String()
 }
@@ -1081,7 +1081,7 @@ func OrdinalIndexOf(s, search string, ordinal int) int {
 	found := 0
 	idx := -1
 	for {
-		if found > ordinal {
+		if found >= ordinal {
 			break
 		}
 		idx = IndexOfStringStartingAt(s, search, idx+1)

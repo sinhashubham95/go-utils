@@ -596,6 +596,96 @@ func TestLeftPad(t *testing.T) {
 	assert.Equal(t, "XXXXnaruto", strings.LeftPad("naruto", 10, 'X'))
 }
 
+func TestLeftPadString(t *testing.T) {
+	assert.Equal(t, "naruto", strings.LeftPadString("naruto", 1, " "))
+	assert.Equal(t, "naruto", strings.LeftPadString("naruto", 1, " "))
+	assert.Equal(t, "XXXXnaruto", strings.LeftPadString("naruto", 10, "X"))
+}
+
+func TestLowerCase(t *testing.T) {
+	assert.Equal(t, "naruto", strings.LowerCase("Naruto"))
+	assert.Equal(t, "naruto", strings.LowerCase("NARUTO"))
+	assert.Equal(t, "naruto", strings.LowerCase("naruto"))
+	assert.Equal(t, "", strings.LowerCase(""))
+}
+
+func TestMid(t *testing.T) {
+	assert.Equal(t, "ru", strings.Mid("naruto", 2, 2))
+	assert.Equal(t, "nar", strings.Mid("naruto", 0, 3))
+	assert.Equal(t, "naruto", strings.Mid("naruto", 0, 10))
+	assert.Equal(t, "", strings.Mid("naruto", 10, 2))
+	assert.Equal(t, "", strings.Mid("naruto", 2, -1))
+}
+
+func TestNormalizeSpace(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.NormalizeSpace("    naruto    rocks   "))
+	assert.Equal(t, "naruto rocks", strings.NormalizeSpace("    naruto rocks "))
+	assert.Equal(t, "naruto rocks", strings.NormalizeSpace("    naruto rocks    "))
+	assert.Equal(t, "naruto rocks", strings.NormalizeSpace("naruto rocks    "))
+	assert.Equal(t, "naruto rocks", strings.NormalizeSpace("naruto rocks"))
+}
+
+func TestOrdinalIndexOf(t *testing.T) {
+	assert.Equal(t, 2, strings.OrdinalIndexOf("nnnnnnnn", "n", 3))
+	assert.Equal(t, -1, strings.OrdinalIndexOf("nnnnnnnn", "a", 3))
+}
+
+func TestOverlay(t *testing.T) {
+	assert.Equal(t, "naruto", strings.Overlay("naruto", "aru", 1, 4))
+}
+
+func TestPrependIfMissing(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.PrependIfMissing(" rocks", "naruto", "xyz"))
+	assert.Equal(t, "naruto", strings.PrependIfMissing("naruto", "", "xyz"))
+	assert.Equal(t, "naruto", strings.PrependIfMissing("naruto", "rocks", "nar"))
+}
+
+func TestPrependIfMissingIgnoreCase(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.PrependIfMissingIgnoreCase(" rocks", "naruto", "XYZ"))
+	assert.Equal(t, "naruto", strings.PrependIfMissingIgnoreCase("naruto", "", "xyz"))
+	assert.Equal(t, "naruto", strings.PrependIfMissingIgnoreCase("naruto", "rocks", "NAR", "xyz"))
+}
+
+func TestRemove(t *testing.T) {
+	assert.Equal(t, "naruto", strings.Remove("ncacrcuctco", 'c'))
+	assert.Equal(t, "naruto", strings.Remove("naruto", 'x'))
+}
+
+func TestRemoveIgnoreCase(t *testing.T) {
+	assert.Equal(t, "naruto", strings.RemoveIgnoreCase("ncacrcuctco", 'C'))
+	assert.Equal(t, "naruto", strings.RemoveIgnoreCase("naruto", 'X'))
+}
+
+func TestRemoveString(t *testing.T) {
+	assert.Equal(t, "naruto", strings.RemoveString("ncacrcuctco", "c"))
+	assert.Equal(t, "naruto", strings.RemoveString("naruto", "x"))
+}
+
+func TestRemoveStringIgnoreCase(t *testing.T) {
+	assert.Equal(t, "naruto", strings.RemoveStringIgnoreCase("ncacrcuctco", "C"))
+	assert.Equal(t, "naruto", strings.RemoveStringIgnoreCase("naruto", "X"))
+}
+
+func TestRemoveStart(t *testing.T) {
+	assert.Equal(t, "uto", strings.RemoveStart("naruto", "nar"))
+	assert.Equal(t, "naruto", strings.RemoveStart("naruto", "xyz"))
+}
+
+func TestRemoveStartIgnoreCase(t *testing.T) {
+	assert.Equal(t, "uto", strings.RemoveStartIgnoreCase("naruto", "NAR"))
+	assert.Equal(t, "naruto", strings.RemoveStartIgnoreCase("naruto", "XYZ"))
+}
+
+func TestRemoveEnd(t *testing.T) {
+	assert.Equal(t, "nar", strings.RemoveEnd("naruto", "uto"))
+	assert.Equal(t, "naruto", strings.RemoveEnd("naruto", "xyz"))
+}
+
+func TestRemoveEndIgnoreCase(t *testing.T) {
+	assert.Equal(t, "nar", strings.RemoveEndIgnoreCase("naruto", "UTO"))
+	assert.Equal(t, "naruto", strings.RemoveEndIgnoreCase("naruto", "XYZ"))
+}
+
 func TestRight(t *testing.T) {
 	assert.Equal(t, "", strings.Right("naruto", -1))
 	assert.Equal(t, "naruto", strings.Right("naruto", 10))
