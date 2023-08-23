@@ -390,33 +390,113 @@ func TestPartition(t *testing.T) {
 }
 
 func TestPermutations(t *testing.T) {
-
+	assert.Equal(t, [][]int{{1, 2}, {2, 1}}, collections.Permutations([]int{1, 2}))
+	assert.Equal(t, [][]int{}, collections.Permutations[int](nil))
 }
 
 func TestPredicatedCollection(t *testing.T) {
-
+	assert.NotPanics(t, func() {
+		collections.PredicatedCollection([]int{1, 2, 3}, func(x int) bool { return x == 1 || x == 2 || x == 3 })
+	})
+	assert.Panics(t, func() {
+		collections.PredicatedCollection([]int{1, 2, 3}, func(x int) bool { return x == 5 })
+	})
 }
 
 func TestRemoveAll(t *testing.T) {
-
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveAll([]int{1, 5, 9, 9, 2, 3}, []int{5, 9}))
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveAll([]int{1, 2, 3}, []int{5, 9}))
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveAll([]int{1, 2, 3}, nil))
+	assert.Equal(t, []int{}, collections.RemoveAll[int](nil, nil))
 }
 
 func TestRemoveAllWithEquator(t *testing.T) {
-
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveAllWithEquator([]int{1, 5, 9, 9, 2, 3}, []int{5, 9},
+		func(x, y int) bool { return x == y }))
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveAllWithEquator([]int{1, 2, 3}, []int{5, 9},
+		func(x, y int) bool { return x == y }))
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveAllWithEquator([]int{1, 2, 3}, nil,
+		func(x, y int) bool { return x == y }))
+	assert.Equal(t, []int{}, collections.RemoveAllWithEquator(nil, nil,
+		func(x, y int) bool { return x == y }))
 }
 
 func TestRemoveDuplicates(t *testing.T) {
-
+	assert.Equal(t, []int{1, 2, 3}, collections.RemoveDuplicatesFromSorted([]int{1, 1, 1, 2, 2, 2, 3, 3, 3}))
 }
 
 func TestRetainAll(t *testing.T) {
-
+	assert.Equal(t, []int{1, 2, 3}, collections.RetainAll([]int{1, 5, 9, 9, 2, 3}, []int{1, 2, 3}))
+	assert.Equal(t, []int{}, collections.RetainAll([]int{1, 2, 3}, []int{5, 9}))
+	assert.Equal(t, []int{}, collections.RetainAll([]int{1, 2, 3}, nil))
+	assert.Equal(t, []int{}, collections.RetainAll[int](nil, nil))
 }
 
 func TestRetainAllWithEquator(t *testing.T) {
-
+	assert.Equal(t, []int{1, 2, 3}, collections.RetainAllWithEquator([]int{1, 5, 9, 9, 2, 3}, []int{1, 2, 3},
+		func(x, y int) bool { return x == y }))
+	assert.Equal(t, []int{}, collections.RetainAllWithEquator([]int{1, 2, 3}, []int{5, 9},
+		func(x, y int) bool { return x == y }))
+	assert.Equal(t, []int{}, collections.RetainAllWithEquator([]int{1, 2, 3}, nil,
+		func(x, y int) bool { return x == y }))
+	assert.Equal(t, []int{}, collections.RetainAllWithEquator(nil, nil,
+		func(x, y int) bool { return x == y }))
 }
 
 func TestReverse(t *testing.T) {
+	assert.Equal(t, []int{3, 2, 9, 5, 1}, collections.Reverse([]int{1, 5, 9, 2, 3}))
+	assert.Equal(t, []int{}, collections.Reverse[int](nil))
+	assert.Equal(t, []int{1, 2, 1}, collections.Reverse([]int{1, 2, 1}))
+}
 
+func TestSelect(t *testing.T) {
+	assert.Equal(t, []int{1, 2, 3}, collections.Select([]int{1, 5, 9, 2, 3}, func(x int) bool { return x == 1 || x == 2 || x == 3 }))
+	assert.Equal(t, []int{}, collections.Select(nil, func(x int) bool { return x == 1 || x == 2 || x == 3 }))
+	assert.Panics(t, func() {
+		collections.Select[int](nil, nil)
+	})
+}
+
+func TestSelectRejected(t *testing.T) {
+	assert.Equal(t, []int{5, 9}, collections.SelectRejected([]int{1, 5, 9, 2, 3}, func(x int) bool { return x == 1 || x == 2 || x == 3 }))
+	assert.Equal(t, []int{}, collections.SelectRejected(nil, func(x int) bool { return x == 1 || x == 2 || x == 3 }))
+	assert.Panics(t, func() {
+		collections.SelectRejected[int](nil, nil)
+	})
+}
+
+func TestSort(t *testing.T) {
+	a := []int{1, 5, 9, 2, 3}
+	collections.Sort(a)
+	assert.Equal(t, []int{1, 2, 3, 5, 9}, a)
+	a = []int{1, 5, 1, 9, 1, 2, 1, 2, 3}
+	collections.Sort(a)
+	assert.Equal(t, []int{1, 1, 1, 1, 2, 2, 3, 5, 9}, a)
+}
+
+func TestSortWithLess(t *testing.T) {
+	a := []int{1, 5, 9, 2, 3}
+	collections.SortWithLess(a, func(x, y int) bool { return x < y })
+	assert.Equal(t, []int{1, 2, 3, 5, 9}, a)
+	a = []int{1, 5, 1, 9, 1, 2, 1, 2, 3}
+	collections.SortWithLess(a, func(x, y int) bool { return x < y })
+	assert.Equal(t, []int{1, 1, 1, 1, 2, 2, 3, 5, 9}, a)
+}
+
+func TestSubtract(t *testing.T) {
+	assert.Equal(t, []int{}, collections.Subtract[int](nil, nil))
+	assert.Equal(t, []int{1, 2, 3, 5, 9}, collections.Subtract([]int{1, 1, 2, 2, 3, 3, 5, 9}, []int{1, 2, 3}))
+}
+
+func TestTransform(t *testing.T) {
+	assert.Equal(t, []float64{1.5, 2.5, 3.5}, collections.Transform([]int{1, 2, 3}, func(x int) float64 { return float64(x) + 0.5 }))
+	assert.Equal(t, []float64{}, collections.Transform(nil, func(x int) float64 { return float64(x) + 0.5 }))
+	assert.Panics(t, func() {
+		collections.Transform[int, float64](nil, nil)
+	})
+}
+
+func TestUnion(t *testing.T) {
+	assert.Equal(t, []int{1, 5, 9, 2, 3}, collections.Union([]int{1, 5, 9}, []int{2, 3}))
+	assert.Equal(t, []int{1, 1, 1, 5, 9, 2, 3}, collections.Union([]int{1, 1, 1, 5, 9}, []int{1, 2, 5, 9, 3}))
 }

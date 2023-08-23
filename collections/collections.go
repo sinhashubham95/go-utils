@@ -135,7 +135,7 @@ func CollateWithComparator[K any](a, b []K, less func(x, y K) bool) []K {
 // In addition, it also removes the duplicate elements from the collection.
 // This function returns a completely new copy of the collection and none of the existing collections are modified.
 func CollateRemovingDuplicates[K ordered](a, b []K) []K {
-	return RemoveDuplicates(Collate(a, b))
+	return RemoveDuplicatesFromSorted(Collate(a, b))
 }
 
 // CollateWithComparatorRemovingDuplicates merges two Collections, a and b, into a single,
@@ -144,7 +144,7 @@ func CollateRemovingDuplicates[K ordered](a, b []K) []K {
 // In addition, it also removes the duplicate elements from the collection.
 // This function returns a completely new copy of the collection and none of the existing collections are modified.
 func CollateWithComparatorRemovingDuplicates[K comparable](a, b []K, less func(x, y K) bool) []K {
-	return RemoveDuplicates(CollateWithComparator(a, b, less))
+	return RemoveDuplicatesFromSorted(CollateWithComparator(a, b, less))
 }
 
 // Collect returns a new Collection containing all elements of the input collection transformed by the given transformer.
@@ -665,9 +665,10 @@ func Permutations[K any](a []K) [][]K {
 }
 
 // PredicatedCollection returns a predicated (validating) collection backed by the given collection.
+// Predicate should return true for all the elements of the collection.
 func PredicatedCollection[K any](a []K, predicate func(x K) bool) {
 	for _, v := range a {
-		if predicate(v) {
+		if !predicate(v) {
 			panic(fmt.Sprintf("%v rejected by predicate", v))
 		}
 	}
@@ -699,9 +700,9 @@ func RemoveAllWithEquator[K any](a, remove []K, equator func(x, y K) bool) []K {
 	return r
 }
 
-// RemoveDuplicates is used to remove duplicates from the collection given.
+// RemoveDuplicatesFromSorted is used to remove duplicates from the sorted collection given.
 // This function returns a new collection in itself and the existing collection is not affected.
-func RemoveDuplicates[K comparable](a []K) []K {
+func RemoveDuplicatesFromSorted[K comparable](a []K) []K {
 	l := len(a)
 	if l == 0 {
 		return Empty[K]()
@@ -811,7 +812,7 @@ func Subtract[K comparable](a, b []K) []K {
 		c := m[v]
 		if c > 0 {
 			m[v] -= 1
-		} else if c == 0 {
+		} else {
 			r = append(r, v)
 		}
 	}
@@ -825,8 +826,8 @@ func Transform[K, L any](a []K, transformer func(x K) L) []L {
 		panic("transformer cannot be nil")
 	}
 	r := make([]L, len(a))
-	for _, v := range a {
-		r = append(r, transformer(v))
+	for i, v := range a {
+		r[i] = transformer(v)
 	}
 	return r
 }
@@ -853,6 +854,9 @@ func Union[K comparable](a, b []K) []K {
 
 func permutations[K any](a []K, l, ind int, curr []K, vis map[int]bool, p [][]K, rind *pointerInt) {
 	if ind == l {
+		if len(curr) == 0 {
+			return
+		}
 		p[rind.value()] = curr
 		rind.increment()
 		return
