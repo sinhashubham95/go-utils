@@ -937,3 +937,57 @@ func TestStartsWithAnyIgnoreCase(t *testing.T) {
 	assert.False(t, strings.StartsWithAnyIgnoreCase("naruto", "nap"))
 	assert.True(t, strings.StartsWithAnyIgnoreCase("naruto", ""))
 }
+
+func TestStripStart(t *testing.T) {
+	assert.Equal(t, "", strings.StripStart("aaa", "abc"))
+	assert.Equal(t, "aaa", strings.StripStart("aaa", "def"))
+	assert.Equal(t, "", strings.StripStart("", "def"))
+	assert.Equal(t, "aaa", strings.StripStart("aaa", ""))
+	assert.Equal(t, "abc", strings.StripStart("abc", "cd"))
+	assert.Equal(t, "c", strings.StripStart("abc", "ab"))
+}
+
+func TestStripEnd(t *testing.T) {
+	assert.Equal(t, "", strings.StripEnd("aaa", "abc"))
+	assert.Equal(t, "aaa", strings.StripEnd("aaa", "def"))
+	assert.Equal(t, "", strings.StripEnd("", "def"))
+	assert.Equal(t, "aaa", strings.StripEnd("aaa", ""))
+	assert.Equal(t, "abc", strings.StripEnd("abc", "ab"))
+	assert.Equal(t, "a", strings.StripEnd("abc", "bc"))
+}
+
+func TestStrip(t *testing.T) {
+	assert.Equal(t, "", strings.Strip("aaa", "abc"))
+	assert.Equal(t, "aaa", strings.Strip("aaa", "def"))
+	assert.Equal(t, "", strings.Strip("", "def"))
+	assert.Equal(t, "aaa", strings.Strip("aaa", ""))
+	assert.Equal(t, "ab", strings.Strip("abc", "cd"))
+	assert.Equal(t, "c", strings.Strip("abc", "ab"))
+}
+
+func TestStripAllStart(t *testing.T) {
+	assert.Equal(t, []string{""}, strings.StripAllStart([]string{"aaa"}, "abc"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllStart([]string{"aaa"}, "def"))
+	assert.Equal(t, []string{""}, strings.StripAllStart([]string{""}, "def"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllStart([]string{"aaa"}, ""))
+	assert.Equal(t, []string{"abc"}, strings.StripAllStart([]string{"abc"}, "cd"))
+	assert.Equal(t, []string{"c"}, strings.StripAllStart([]string{"abc"}, "ab"))
+}
+
+func TestStripAllEnd(t *testing.T) {
+	assert.Equal(t, []string{""}, strings.StripAllEnd([]string{"aaa"}, "abc"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllEnd([]string{"aaa"}, "def"))
+	assert.Equal(t, []string{""}, strings.StripAllEnd([]string{""}, "def"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllEnd([]string{"aaa"}, ""))
+	assert.Equal(t, []string{"abc"}, strings.StripAllEnd([]string{"abc"}, "ab"))
+	assert.Equal(t, []string{"a"}, strings.StripAllEnd([]string{"abc"}, "bc"))
+}
+
+func TestStripAll(t *testing.T) {
+	assert.Equal(t, []string{""}, strings.StripAll([]string{"aaa"}, "abc"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAll([]string{"aaa"}, "def"))
+	assert.Equal(t, []string{""}, strings.StripAll([]string{""}, "def"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAll([]string{"aaa"}, ""))
+	assert.Equal(t, []string{"ab"}, strings.StripAll([]string{"abc"}, "cd"))
+	assert.Equal(t, []string{"c"}, strings.StripAll([]string{"abc"}, "ab"))
+}
