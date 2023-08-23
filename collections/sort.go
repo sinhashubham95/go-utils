@@ -64,7 +64,7 @@ func medianOrdered[E any](data []E, a, b, c int, swaps *int, less func(a, b E) b
 	return b
 }
 
-// medianAdjacentOrdered finds the median of data[a - 1], data[a], data[a + 1] and stores the index into a.
+// medianAdjacentOrdered finds the median of data[a - 1], data[a], data[a + 1] and stores the index into the first collection.
 func medianAdjacentOrdered[E any](data []E, a int, swaps *int, less func(a, b E) bool) int {
 	return medianOrdered(data, a-1, a, a+1, swaps, less)
 }

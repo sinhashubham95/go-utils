@@ -1252,7 +1252,8 @@ func ReplaceAll(s, search, replacement string) string {
 	return Replace(s, search, replacement, -1)
 }
 
-// ReplaceEach is used to replace each of the
+// ReplaceEach is used to replace each of the characters in the search list with the corresponding character
+// in the replacement list exactly once.
 func ReplaceEach(s string, searchList, replacementList []string) string {
 	if s == empty || len(searchList) == 0 {
 		return s

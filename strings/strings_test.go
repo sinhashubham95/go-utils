@@ -686,6 +686,73 @@ func TestRemoveEndIgnoreCase(t *testing.T) {
 	assert.Equal(t, "naruto", strings.RemoveEndIgnoreCase("naruto", "XYZ"))
 }
 
+func TestRepeat(t *testing.T) {
+	assert.Equal(t, "aaa", strings.Repeat('a', 3))
+	assert.Equal(t, "", strings.Repeat('a', 0))
+}
+
+func TestRepeatString(t *testing.T) {
+	assert.Equal(t, "aaa", strings.RepeatString("a", 3))
+	assert.Equal(t, "", strings.RepeatString("a", 0))
+}
+
+func TestRepeatStringWithSeparator(t *testing.T) {
+	assert.Equal(t, "a,a,a", strings.RepeatStringWithSeparator("a", ",", 3))
+	assert.Equal(t, "", strings.RepeatStringWithSeparator("a", ",", 0))
+}
+
+func TestReplace(t *testing.T) {
+	assert.Equal(t, "baa", strings.Replace("aaa", "a", "b", 1))
+	assert.Equal(t, "bbb", strings.Replace("aaa", "a", "b", -1))
+	assert.Equal(t, "bbb", strings.Replace("aaa", "a", "b", 3))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "b", "c", 1))
+	assert.Equal(t, "", strings.Replace("", "b", "c", 1))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "A", "B", 1))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "A", "B", -1))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "A", "B", 3))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "B", "C", 1))
+	assert.Equal(t, "", strings.Replace("", "B", "C", 1))
+}
+
+func TestReplaceAll(t *testing.T) {
+	assert.Equal(t, "bbb", strings.ReplaceAll("aaa", "a", "b"))
+	assert.Equal(t, "aaa", strings.ReplaceAll("aaa", "b", "c"))
+	assert.Equal(t, "", strings.ReplaceAll("", "b", "c"))
+}
+
+func TestReplaceEach(t *testing.T) {
+	assert.Panics(t, func() {
+		strings.ReplaceEach("aaa", []string{"a"}, []string{"a", "b"})
+	})
+	assert.Equal(t, "bbb", strings.ReplaceEach("aaa", []string{"a", "a", "a"}, []string{"b", "b", "b"}))
+	assert.Equal(t, "baa", strings.ReplaceEach("aaa", []string{"a"}, []string{"b"}))
+	assert.Equal(t, "aaa", strings.ReplaceEach("aaa", nil, nil))
+}
+
+func TestReplaceIgnoreCase(t *testing.T) {
+	assert.Equal(t, "baa", strings.ReplaceIgnoreCase("aaa", "a", "b", 1))
+	assert.Equal(t, "bbb", strings.ReplaceIgnoreCase("aaa", "a", "b", -1))
+	assert.Equal(t, "bbb", strings.ReplaceIgnoreCase("aaa", "a", "b", 3))
+	assert.Equal(t, "aaa", strings.ReplaceIgnoreCase("aaa", "b", "c", 1))
+	assert.Equal(t, "", strings.ReplaceIgnoreCase("", "b", "c", 1))
+	assert.Equal(t, "Baa", strings.ReplaceIgnoreCase("aaa", "A", "B", 1))
+	assert.Equal(t, "BBB", strings.ReplaceIgnoreCase("aaa", "A", "B", -1))
+	assert.Equal(t, "BBB", strings.ReplaceIgnoreCase("aaa", "A", "B", 3))
+	assert.Equal(t, "aaa", strings.ReplaceIgnoreCase("aaa", "B", "C", 1))
+	assert.Equal(t, "", strings.ReplaceIgnoreCase("", "B", "C", 1))
+}
+
+func TestReverse(t *testing.T) {
+	assert.Equal(t, "aba", strings.Reverse("aba"))
+	assert.Equal(t, "cba", strings.Reverse("abc"))
+	assert.Equal(t, "", strings.Reverse(""))
+}
+
+func TestReverseDelimited(t *testing.T) {
+	assert.Equal(t, "rocks,naruto", strings.ReverseDelimited("naruto,rocks", ','))
+	assert.Equal(t, "naruto", strings.ReverseDelimited("naruto", ','))
+}
+
 func TestRight(t *testing.T) {
 	assert.Equal(t, "", strings.Right("naruto", -1))
 	assert.Equal(t, "naruto", strings.Right("naruto", 10))
@@ -696,6 +763,12 @@ func TestRightPad(t *testing.T) {
 	assert.Equal(t, "naruto", strings.RightPad("naruto", 1, ' '))
 	assert.Equal(t, "naruto", strings.RightPad("naruto", 1, ' '))
 	assert.Equal(t, "narutoXXXX", strings.RightPad("naruto", 10, 'X'))
+}
+
+func TestRightPadString(t *testing.T) {
+	assert.Equal(t, "naruto", strings.RightPadString("naruto", 1, " "))
+	assert.Equal(t, "naruto", strings.RightPadString("naruto", 1, " "))
+	assert.Equal(t, "narutoXXXX", strings.RightPadString("naruto", 10, "X"))
 }
 
 func TestRotate(t *testing.T) {
