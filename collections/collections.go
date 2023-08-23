@@ -1,6 +1,8 @@
 package collections
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // AddAll adds all elements given to the given collection.
 func AddAll[K any](c []K, e ...K) []K {
@@ -248,20 +250,17 @@ func Disjunction[K comparable](a, b []K) []K {
 	ma := CardinalityMap(a)
 	mb := CardinalityMap(b)
 	r := make([]K, 0)
-	for v, c := range ma {
-		x := c - mb[v]
-		if x < 0 {
-			x = -x
-		}
-		for i := 0; i < x; i += 1 {
+	for _, v := range a {
+		if mb[v] > 0 {
+			ma[v] -= 1
+			mb[v] -= 1
+		} else {
 			r = append(r, v)
 		}
 	}
-	for v, c := range mb {
-		if ma[v] >= 0 {
-			continue
-		}
-		for i := 0; i < c; i += 1 {
+	for _, v := range b {
+		if mb[v] > 0 {
+			mb[v] -= 1
 			r = append(r, v)
 		}
 	}
@@ -280,7 +279,7 @@ func EmptyBySize[K any](size int) []K {
 
 // EmptyBySizeAndCapacity is used to return an empty collection of the required type with the specified size and capacity.
 func EmptyBySizeAndCapacity[K any](size, capacity int) []K {
-	return make([]K, size)
+	return make([]K, size, capacity)
 }
 
 // EmptyIfNil is used to return an empty collection if the value is nil otherwise returns the collection itself.
@@ -363,6 +362,9 @@ func FindInverse[K any](a []K, predicate func(x K) bool) (K, bool) {
 // It returns the default value provided if the value is not found.
 // This also returns a helper boolean to denote whether the element was found or not.
 func FindOrDefault[K any](a []K, predicate func(x K) bool, defaultValue K) (K, bool) {
+	if predicate == nil {
+		panic("predicate must not be nil")
+	}
 	for _, v := range a {
 		if predicate(v) {
 			return v, true
@@ -433,6 +435,9 @@ func ForEachButLast[K any](a []K, closure func(x K)) {
 // Get returns the ith element of the collection.
 // If the index is out of bound, then it will return the default value of the type.
 func Get[K any](a []K, i int) K {
+	if i < 0 {
+		return getZeroValue[K]()
+	}
 	l := len(a)
 	if i >= l {
 		return getZeroValue[K]()
@@ -443,6 +448,9 @@ func Get[K any](a []K, i int) K {
 // GetOrDefault returns the ith element of the collection.
 // If the index is out of bound, then it will return the default value provided.
 func GetOrDefault[K any](a []K, i int, defaultValue K) K {
+	if i < 0 {
+		return defaultValue
+	}
 	l := len(a)
 	if i >= l {
 		return defaultValue
@@ -481,14 +489,12 @@ func Intersection[K comparable](a, b []K) []K {
 	ma := CardinalityMap(a)
 	mb := CardinalityMap(b)
 	r := make([]K, 0)
-	for v, c := range ma {
-		x := c
-		if mb[v] < x {
-			x = mb[v]
-		}
-		for i := 0; i < x; i += 1 {
+	for _, v := range a {
+		if mb[v] > 0 {
+			mb[v] -= 1
 			r = append(r, v)
 		}
+		ma[v] -= 1
 	}
 	return r
 }
@@ -778,6 +784,22 @@ func SelectRejected[K any](a []K, predicate func(x K) bool) []K {
 		}
 	}
 	return r
+}
+
+// Sort sorts data in ascending order as determined by the Less method.
+// It makes one call to data.Len to determine n and O(n*log(n)) calls to
+// data.Less and data.Swap. The sort is not guaranteed to be stable.
+// This method modifies the existing collection.
+func Sort[K ordered](a []K) {
+	sortWithLess(a, func(x, y K) bool { return x < y })
+}
+
+// SortWithLess sorts data in ascending order as determined by the Less method.
+// It makes one call to data.Len to determine n and O(n*log(n)) calls to
+// data.Less and data.Swap. The sort is not guaranteed to be stable.
+// This method modifies the existing collection.
+func SortWithLess[K any](a []K, less func(x, y K) bool) {
+	sortWithLess(a, less)
 }
 
 // Subtract Returns a new Collection containing a - b.
