@@ -991,3 +991,48 @@ func TestStripAll(t *testing.T) {
 	assert.Equal(t, []string{"ab"}, strings.StripAll([]string{"abc"}, "cd"))
 	assert.Equal(t, []string{"c"}, strings.StripAll([]string{"abc"}, "ab"))
 }
+
+func TestSubstring(t *testing.T) {
+	assert.Equal(t, "na", strings.Substring("naruto", 0, 2))
+	assert.Equal(t, "a", strings.Substring("naruto", 1, 2))
+	assert.Equal(t, "aruto", strings.Substring("naruto", 1, 10))
+	assert.Equal(t, "", strings.Substring("naruto", -1, 3))
+	assert.Equal(t, "", strings.Substring("naruto", 0, -10))
+	assert.Equal(t, "narut", strings.Substring("naruto", 0, -1))
+}
+
+func TestSubstringTillEnd(t *testing.T) {
+	assert.Equal(t, "naruto", strings.SubstringTillEnd("naruto", -10))
+	assert.Equal(t, "o", strings.SubstringTillEnd("naruto", -1))
+	assert.Equal(t, "", strings.SubstringTillEnd("naruto", 10))
+}
+
+func TestSubstringAfter(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfter("nar,uto", ','))
+	assert.Equal(t, "", strings.SubstringAfter("naruto", ','))
+	assert.Equal(t, "", strings.SubstringAfter("", ','))
+}
+
+func TestSubstringAfterString(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfterString("nar,uto", ","))
+	assert.Equal(t, "", strings.SubstringAfterString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringAfterString("", ","))
+}
+
+func TestSubstringAfterLast(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfterLast("n,ar,uto", ','))
+	assert.Equal(t, "", strings.SubstringAfterLast("naruto", ','))
+	assert.Equal(t, "", strings.SubstringAfterLast("", ','))
+}
+
+func TestSubstringAfterLastString(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfterLastString("n,ar,uto", ","))
+	assert.Equal(t, "", strings.SubstringAfterLastString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringAfterLastString("", ","))
+}
+
+func TestSubstringBefore(t *testing.T) {
+	assert.Equal(t, "nar", strings.SubstringBefore("nar,uto", ','))
+	assert.Equal(t, "", strings.SubstringBefore("naruto", ','))
+	assert.Equal(t, "", strings.SubstringBefore("", ','))
+}
