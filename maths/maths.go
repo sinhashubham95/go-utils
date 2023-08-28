@@ -279,6 +279,12 @@ func Exp2[K numbers.Number64](a K) K {
 	return K(math.Exp2(float64(a)))
 }
 
+// FMA returns x * y + z, computed with only one rounding.
+// (That is, FMA returns the fused multiply-add of x, y, and z.)
+func FMA[K numbers.FloatingNumber](x, y, z K) K {
+	return K(math.FMA(float64(x), float64(y), float64(z)))
+}
+
 // Floor returns the greatest integer value less than or equal to x.
 //
 // Special cases are:
@@ -287,6 +293,165 @@ func Exp2[K numbers.Number64](a K) K {
 //	Floor(NaN) = NaN
 func Floor[K numbers.FloatingNumber](a K) K {
 	return K(math.Floor(float64(a)))
+}
+
+// FractionalExp breaks f into a normalized fraction and an integral power of two.
+// It returns fraction and exp satisfying f == frac × 2**exp,
+// with the absolute value of fraction in the interval [½, 1).
+//
+// Special cases are:
+//	FractionalExp(±0) = ±0, 0
+//	FractionalExp(±Inf) = ±Inf, 0
+//	FractionalExp(NaN) = NaN, 0
+func FractionalExp[K numbers.FloatingNumber](a K) (fraction K, exp int) {
+	fr, e := math.Frexp(float64(a))
+	return K(fr), e
+}
+
+// Gamma returns the Gamma function of x.
+//
+// Special cases are:
+//	Gamma(+Inf) = +Inf
+//	Gamma(+0) = +Inf
+//	Gamma(-0) = -Inf
+//	Gamma(x) = NaN for integer x < 0
+//	Gamma(-Inf) = NaN
+//	Gamma(NaN) = NaN
+func Gamma[K numbers.FloatingNumber](a K) K {
+	return K(math.Gamma(float64(a)))
+}
+
+// Hypotenuse returns square-root(p*p + q*q), taking care to avoid unnecessary overflow and underflow.
+//
+// Special cases are:
+//	Hypot(±Inf, q) = +Inf
+//	Hypot(p, ±Inf) = +Inf
+//	Hypot(NaN, q) = NaN
+//	Hypot(p, NaN) = NaN
+func Hypotenuse[K numbers.FloatingNumber](x, y K) K {
+	return K(math.Hypot(float64(x), float64(y)))
+}
+
+// ILogB returns the binary exponent of x as an integer.
+//
+// Special cases are:
+//	ILogB(±Inf) = MaxInt32
+//	ILogB(0) = MinInt32
+//	ILogB(NaN) = MaxInt32
+func ILogB[K numbers.FloatingNumber](a K) K {
+	return K(math.Ilogb(float64(a)))
+}
+
+// Infinity returns positive infinity if sign >= 0, negative infinity if sign < 0.
+func Infinity[K numbers.Number64](sign K) K {
+	if sign >= 0 {
+		return K(math.Inf(1))
+	}
+	return K(math.Inf(-1))
+}
+
+// IsInfinity reports whether a is an infinity, according to sign.
+// If sign > 0, IsInfinity reports whether a is positive infinity.
+// If sign < 0, IsInfinity reports whether a is negative infinity.
+// If sign == 0, IsInfinity reports whether a is either infinity.
+func IsInfinity[K numbers.Number64](a, sign K) bool {
+	return a == Infinity(sign)
+}
+
+// IsNaN reports whether a is an IEEE 754 ``not-a-number'' value.
+func IsNaN[K numbers.Number](a K) bool {
+	// IEEE 754 says that only NaNs satisfy f != f.
+	// To avoid the floating-point hardware, could use:
+	//	x := Float64bits(f);
+	//	return uint32(x>>shift)&mask == mask && x != uvinf && x != uvneginf
+	return a != a
+}
+
+// J returns the order-n Bessel function of the first kind.
+//
+// Special cases are:
+//	J(±Inf) = 0
+//	J(0) = 1
+//	J(NaN) = NaN
+func J[K numbers.FloatingNumber](a K, n int) K {
+	return K(math.Jn(n, float64(a)))
+}
+
+// J0 returns the order-zero Bessel function of the first kind.
+//
+// Special cases are:
+//	J0(±Inf) = 0
+//	J0(0) = 1
+//	J0(NaN) = NaN
+func J0[K numbers.FloatingNumber](a K) K {
+	return K(math.J0(float64(a)))
+}
+
+// J1 returns the order-one Bessel function of the first kind.
+//
+// Special cases are:
+//	J1(±Inf) = 0
+//	J1(0) = 1
+//	J1(NaN) = NaN
+func J1[K numbers.FloatingNumber](a K) K {
+	return K(math.J1(float64(a)))
+}
+
+// LDExp is the inverse of FractionalExp.
+// It returns fraction × 2**exp.
+//
+// Special cases are:
+//	LDExp(±0, exp) = ±0
+//	LDExp(±Inf, exp) = ±Inf
+//	LDExp(NaN, exp) = NaN
+func LDExp[K numbers.FloatingNumber](fraction K, exp int) K {
+	return K(math.Ldexp(float64(fraction), exp))
+}
+
+// LGamma returns the natural logarithm and sign (-1 or +1) of Gamma(x).
+//
+// Special cases are:
+//	LGamma(+Inf) = +Inf
+//	LGamma(0) = +Inf
+//	LGamma(-integer) = +Inf
+//	LGamma(-Inf) = -Inf
+//	LGamma(NaN) = NaN
+func LGamma[K numbers.FloatingNumber](a K) (l K, sign int) {
+	lg, sign := math.Lgamma(float64(a))
+	return K(lg), sign
+}
+
+// Log returns the natural logarithm of x.
+//
+// Special cases are:
+//	Log(+Inf) = +Inf
+//	Log(0) = -Inf
+//	Log(x < 0) = NaN
+//	Log(NaN) = NaN
+func Log[K numbers.FloatingNumber](a K) K {
+	return K(math.Log(float64(a)))
+}
+
+// Log10 returns the decimal logarithm of x.
+// The special cases are the same as for Log.
+func Log10[K numbers.FloatingNumber](a K) K {
+	return K(math.Log10(float64(a)))
+}
+
+// Log2 returns the binary logarithm of x.
+// The special cases are the same as for Log.
+func Log2[K numbers.FloatingNumber](a K) K {
+	return K(math.Log2(float64(a)))
+}
+
+// LogB returns the binary exponent of x.
+//
+// Special cases are:
+//	LogB(±Inf) = +Inf
+//	LogB(0) = -Inf
+//	LogB(NaN) = NaN
+func LogB[K numbers.FloatingNumber](a K) K {
+	return K(math.Logb(float64(a)))
 }
 
 // Min is used to return the smallest of the 2 numbers
@@ -317,6 +482,41 @@ func Max[K numbers.Number](a ...K) K {
 	return m
 }
 
+// Mod returns the floating-point remainder of x/y.
+// The magnitude of the result is less than y and its
+// sign agrees with that of x.
+//
+// Special cases are:
+//	Mod(±Inf, y) = NaN
+//	Mod(NaN, y) = NaN
+//	Mod(x, 0) = NaN
+//	Mod(x, ±Inf) = x
+//	Mod(x, NaN) = NaN
+func Mod[K numbers.Number](a, b K) K {
+	return K(math.Mod(float64(a), float64(b)))
+}
+
+// ModF returns integer and fractional floating-point numbers
+// that sum to f. Both values have the same sign as f.
+//
+// Special cases are:
+//	ModF(±Inf) = ±Inf, NaN
+//	ModF(NaN) = NaN, NaN
+func ModF[K numbers.FloatingNumber](a K) (K, K) {
+	x, y := math.Modf(float64(a))
+	return K(x), K(y)
+}
+
+// NaN returns an IEEE 754 ``not-a-number'' value.
+func NaN[K numbers.Number64]() K {
+	return K(math.NaN())
+}
+
+// NextAfter returns the next representable float64 value after a towards b.
+func NextAfter[K numbers.SNumber](a, b K) K {
+	return K(math.Nextafter(float64(a), float64(b)))
+}
+
 // NormalizeAngle normalizes an angle in a 2*pi wide interval around a center value.
 func NormalizeAngle[K numbers.FloatingNumber](a, center K) K {
 	return a - 6.283185307179586*Floor((a+Pi-center)/6.283185307179586)
@@ -326,4 +526,14 @@ func NormalizeAngle[K numbers.FloatingNumber](a, center K) K {
 func Reduce[K numbers.FloatingNumber](a, period, offset K) K {
 	p := Abs(period)
 	return a - p*Floor((a-offset)/p) - offset
+}
+
+// Round returns the nearest integer, rounding half away from zero.
+//
+// Special cases are:
+//	Round(±0) = ±0
+//	Round(±Inf) = ±Inf
+//	Round(NaN) = NaN
+func Round[K numbers.FloatingNumber](a K) K {
+	return K(math.Round(float64(a)))
 }
