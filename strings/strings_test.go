@@ -531,7 +531,7 @@ func TestIsNumeric(t *testing.T) {
 	assert.False(t, strings.IsNumeric(""))
 }
 
-func IsAlphaNumeric(t *testing.T) {
+func TestIsAlphaNumeric(t *testing.T) {
 	assert.True(t, strings.IsAlphaNumeric("naruto123"))
 	assert.False(t, strings.IsAlphaNumeric("naruto123    "))
 	assert.True(t, strings.IsAlphaNumeric("123"))
@@ -553,9 +553,9 @@ func TestIsNumericSpace(t *testing.T) {
 	assert.False(t, strings.IsNumericSpace(""))
 }
 
-func IsAlphaNumericSpace(t *testing.T) {
+func TestIsAlphaNumericSpace(t *testing.T) {
 	assert.True(t, strings.IsAlphaNumericSpace("naruto123"))
-	assert.True(t, strings.IsAlphaNumeric("naruto123    "))
+	assert.True(t, strings.IsAlphaNumericSpace("naruto123    "))
 	assert.True(t, strings.IsAlphaNumericSpace("123"))
 	assert.True(t, strings.IsAlphaNumericSpace("naruto"))
 	assert.False(t, strings.IsAlphaNumericSpace(""))
@@ -1035,4 +1035,89 @@ func TestSubstringBefore(t *testing.T) {
 	assert.Equal(t, "nar", strings.SubstringBefore("nar,uto", ','))
 	assert.Equal(t, "", strings.SubstringBefore("naruto", ','))
 	assert.Equal(t, "", strings.SubstringBefore("", ','))
+}
+
+func TestSubstringBeforeString(t *testing.T) {
+	assert.Equal(t, "nar", strings.SubstringBeforeString("nar,uto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeString("", ","))
+}
+
+func TestSubstringBeforeLast(t *testing.T) {
+	assert.Equal(t, "n,ar", strings.SubstringBeforeLast("n,ar,uto", ','))
+	assert.Equal(t, "", strings.SubstringBeforeLast("naruto", ','))
+	assert.Equal(t, "", strings.SubstringBeforeLast("", ','))
+}
+
+func TestSubstringBeforeLastString(t *testing.T) {
+	assert.Equal(t, "n,ar", strings.SubstringBeforeLastString("n,ar,uto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeLastString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeLastString("", ","))
+}
+
+func TestSwapCase(t *testing.T) {
+	assert.Equal(t, "Naruto Rocks", strings.SwapCase("nARUTO rOCKS"))
+	assert.Equal(t, "", strings.SwapCase(""))
+}
+
+func TestToCodePoints(t *testing.T) {
+	assert.Equal(t, []int32{32}, strings.ToCodePoints(" "))
+	assert.Equal(t, []int32{97, 98, 99, 32, 100, 101, 102}, strings.ToCodePoints("abc def"))
+	assert.Nil(t, strings.ToCodePoints(""))
+}
+
+func TestTrim(t *testing.T) {
+	assert.Equal(t, "naruto  rocks", strings.Trim("   naruto  rocks    ", " "))
+	assert.Equal(t, "aruto rocks", strings.Trim("nnaruto rocksn", "n"))
+}
+
+func TestTrimSpace(t *testing.T) {
+	assert.Equal(t, "naruto  rocks", strings.TrimSpace("   naruto  rocks    "))
+}
+
+func TestTrimLeft(t *testing.T) {
+	assert.Equal(t, "aruto rocks", strings.TrimLeft("nnaruto rocks", "n"))
+}
+
+func TestTrimRight(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.TrimRight("naruto rocksn", "n"))
+}
+
+func TestTrimPrefix(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.TrimPrefix("boruto naruto rocks", "boruto "))
+}
+
+func TestTrimSuffix(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.TrimSuffix("naruto rocks boruto", " boruto"))
+}
+
+func TestTruncate(t *testing.T) {
+	assert.Panics(t, func() {
+		strings.Truncate("naruto", -1, 3)
+	})
+	assert.Panics(t, func() {
+		strings.Truncate("naruto", 1, -1)
+	})
+	assert.Equal(t, "", strings.Truncate("", 1, 1))
+	assert.Equal(t, "", strings.Truncate("naruto", 6, 3))
+	assert.Equal(t, "aruto", strings.Truncate("naruto", 1, 10))
+	assert.Equal(t, "aru", strings.Truncate("naruto", 1, 3))
+}
+
+func TestTruncateFromStart(t *testing.T) {
+	assert.Equal(t, "nar", strings.TruncateFromStart("naruto", 3))
+}
+
+func TestUncapitalize(t *testing.T) {
+	assert.Equal(t, "naruto", strings.Uncapitalize("Naruto"))
+	assert.Equal(t, "nARUTO", strings.Uncapitalize("NARUTO"))
+	assert.Equal(t, "naruto", strings.Uncapitalize("naruto"))
+	assert.Equal(t, "narutO", strings.Uncapitalize("narutO"))
+}
+
+func TestUpperCase(t *testing.T) {
+	assert.Equal(t, "NARUTO", strings.UpperCase("nARUTO"))
+	assert.Equal(t, "NARUTO", strings.UpperCase("naruto"))
+	assert.Equal(t, "NARUTO", strings.UpperCase("NARUTO"))
+	assert.Equal(t, "", strings.UpperCase(""))
 }
