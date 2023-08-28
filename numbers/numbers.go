@@ -48,6 +48,11 @@ type Number64 interface {
 	~int64 | ~float64
 }
 
+// FloatingNumber is the generic type for floating point numbers.
+type FloatingNumber interface {
+	~float32 | ~float64
+}
+
 // Compare is used to compare 2 numbers.
 // The result will be 0 if a==b, -1 if a < b, and +1 if a > b.
 func Compare[K Number](a, b K) int {
@@ -58,6 +63,11 @@ func Compare[K Number](a, b K) int {
 		return 1
 	}
 	return 0
+}
+
+// Equals is used to check if the 2 numbers are equal or not
+func Equals[K Number](a, b K) bool {
+	return a == b
 }
 
 // HashCode is used to compute the hash values for the given number.
