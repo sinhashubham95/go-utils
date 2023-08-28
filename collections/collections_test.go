@@ -472,6 +472,18 @@ func TestSort(t *testing.T) {
 	a = []int{1, 5, 1, 9, 1, 2, 1, 2, 3}
 	collections.Sort(a)
 	assert.Equal(t, []int{1, 1, 1, 1, 2, 2, 3, 5, 9}, a)
+	a = []int{1, 5, 1, 9, 1, 2, 1, 2, 3, 1, 2, 1, 2}
+	collections.Sort(a)
+	assert.Equal(t, []int{1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 5, 9}, a)
+	a = []int{1, 5, 1, 9, 1, 2, 1, 2, 3, 1, 2, 1, 2, 1}
+	collections.Sort(a)
+	assert.Equal(t, []int{1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 5, 9}, a)
+	a = []int{1, 5, 9, 2, 3, 1, 5, 9, 2, 3, 1, 5, 9, 2, 3, 1, 5}
+	collections.Sort(a)
+	assert.Equal(t, []int{1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 5, 5, 5, 5, 9, 9, 9}, a)
+	a = []int{9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1}
+	collections.Sort(a)
+	assert.Equal(t, []int{1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9}, a)
 }
 
 func TestSortWithLess(t *testing.T) {
