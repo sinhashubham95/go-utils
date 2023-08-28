@@ -531,7 +531,7 @@ func TestIsNumeric(t *testing.T) {
 	assert.False(t, strings.IsNumeric(""))
 }
 
-func IsAlphaNumeric(t *testing.T) {
+func TestIsAlphaNumeric(t *testing.T) {
 	assert.True(t, strings.IsAlphaNumeric("naruto123"))
 	assert.False(t, strings.IsAlphaNumeric("naruto123    "))
 	assert.True(t, strings.IsAlphaNumeric("123"))
@@ -553,9 +553,9 @@ func TestIsNumericSpace(t *testing.T) {
 	assert.False(t, strings.IsNumericSpace(""))
 }
 
-func IsAlphaNumericSpace(t *testing.T) {
+func TestIsAlphaNumericSpace(t *testing.T) {
 	assert.True(t, strings.IsAlphaNumericSpace("naruto123"))
-	assert.True(t, strings.IsAlphaNumeric("naruto123    "))
+	assert.True(t, strings.IsAlphaNumericSpace("naruto123    "))
 	assert.True(t, strings.IsAlphaNumericSpace("123"))
 	assert.True(t, strings.IsAlphaNumericSpace("naruto"))
 	assert.False(t, strings.IsAlphaNumericSpace(""))
@@ -686,6 +686,73 @@ func TestRemoveEndIgnoreCase(t *testing.T) {
 	assert.Equal(t, "naruto", strings.RemoveEndIgnoreCase("naruto", "XYZ"))
 }
 
+func TestRepeat(t *testing.T) {
+	assert.Equal(t, "aaa", strings.Repeat('a', 3))
+	assert.Equal(t, "", strings.Repeat('a', 0))
+}
+
+func TestRepeatString(t *testing.T) {
+	assert.Equal(t, "aaa", strings.RepeatString("a", 3))
+	assert.Equal(t, "", strings.RepeatString("a", 0))
+}
+
+func TestRepeatStringWithSeparator(t *testing.T) {
+	assert.Equal(t, "a,a,a", strings.RepeatStringWithSeparator("a", ",", 3))
+	assert.Equal(t, "", strings.RepeatStringWithSeparator("a", ",", 0))
+}
+
+func TestReplace(t *testing.T) {
+	assert.Equal(t, "baa", strings.Replace("aaa", "a", "b", 1))
+	assert.Equal(t, "bbb", strings.Replace("aaa", "a", "b", -1))
+	assert.Equal(t, "bbb", strings.Replace("aaa", "a", "b", 3))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "b", "c", 1))
+	assert.Equal(t, "", strings.Replace("", "b", "c", 1))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "A", "B", 1))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "A", "B", -1))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "A", "B", 3))
+	assert.Equal(t, "aaa", strings.Replace("aaa", "B", "C", 1))
+	assert.Equal(t, "", strings.Replace("", "B", "C", 1))
+}
+
+func TestReplaceAll(t *testing.T) {
+	assert.Equal(t, "bbb", strings.ReplaceAll("aaa", "a", "b"))
+	assert.Equal(t, "aaa", strings.ReplaceAll("aaa", "b", "c"))
+	assert.Equal(t, "", strings.ReplaceAll("", "b", "c"))
+}
+
+func TestReplaceEach(t *testing.T) {
+	assert.Panics(t, func() {
+		strings.ReplaceEach("aaa", []string{"a"}, []string{"a", "b"})
+	})
+	assert.Equal(t, "bbb", strings.ReplaceEach("aaa", []string{"a", "a", "a"}, []string{"b", "b", "b"}))
+	assert.Equal(t, "baa", strings.ReplaceEach("aaa", []string{"a"}, []string{"b"}))
+	assert.Equal(t, "aaa", strings.ReplaceEach("aaa", nil, nil))
+}
+
+func TestReplaceIgnoreCase(t *testing.T) {
+	assert.Equal(t, "baa", strings.ReplaceIgnoreCase("aaa", "a", "b", 1))
+	assert.Equal(t, "bbb", strings.ReplaceIgnoreCase("aaa", "a", "b", -1))
+	assert.Equal(t, "bbb", strings.ReplaceIgnoreCase("aaa", "a", "b", 3))
+	assert.Equal(t, "aaa", strings.ReplaceIgnoreCase("aaa", "b", "c", 1))
+	assert.Equal(t, "", strings.ReplaceIgnoreCase("", "b", "c", 1))
+	assert.Equal(t, "Baa", strings.ReplaceIgnoreCase("aaa", "A", "B", 1))
+	assert.Equal(t, "BBB", strings.ReplaceIgnoreCase("aaa", "A", "B", -1))
+	assert.Equal(t, "BBB", strings.ReplaceIgnoreCase("aaa", "A", "B", 3))
+	assert.Equal(t, "aaa", strings.ReplaceIgnoreCase("aaa", "B", "C", 1))
+	assert.Equal(t, "", strings.ReplaceIgnoreCase("", "B", "C", 1))
+}
+
+func TestReverse(t *testing.T) {
+	assert.Equal(t, "aba", strings.Reverse("aba"))
+	assert.Equal(t, "cba", strings.Reverse("abc"))
+	assert.Equal(t, "", strings.Reverse(""))
+}
+
+func TestReverseDelimited(t *testing.T) {
+	assert.Equal(t, "rocks,naruto", strings.ReverseDelimited("naruto,rocks", ','))
+	assert.Equal(t, "naruto", strings.ReverseDelimited("naruto", ','))
+}
+
 func TestRight(t *testing.T) {
 	assert.Equal(t, "", strings.Right("naruto", -1))
 	assert.Equal(t, "naruto", strings.Right("naruto", 10))
@@ -696,6 +763,12 @@ func TestRightPad(t *testing.T) {
 	assert.Equal(t, "naruto", strings.RightPad("naruto", 1, ' '))
 	assert.Equal(t, "naruto", strings.RightPad("naruto", 1, ' '))
 	assert.Equal(t, "narutoXXXX", strings.RightPad("naruto", 10, 'X'))
+}
+
+func TestRightPadString(t *testing.T) {
+	assert.Equal(t, "naruto", strings.RightPadString("naruto", 1, " "))
+	assert.Equal(t, "naruto", strings.RightPadString("naruto", 1, " "))
+	assert.Equal(t, "narutoXXXX", strings.RightPadString("naruto", 10, "X"))
 }
 
 func TestRotate(t *testing.T) {
@@ -863,4 +936,188 @@ func TestStartsWithAnyIgnoreCase(t *testing.T) {
 	assert.True(t, strings.StartsWithAnyIgnoreCase("naruto", "N"))
 	assert.False(t, strings.StartsWithAnyIgnoreCase("naruto", "nap"))
 	assert.True(t, strings.StartsWithAnyIgnoreCase("naruto", ""))
+}
+
+func TestStripStart(t *testing.T) {
+	assert.Equal(t, "", strings.StripStart("aaa", "abc"))
+	assert.Equal(t, "aaa", strings.StripStart("aaa", "def"))
+	assert.Equal(t, "", strings.StripStart("", "def"))
+	assert.Equal(t, "aaa", strings.StripStart("aaa", ""))
+	assert.Equal(t, "abc", strings.StripStart("abc", "cd"))
+	assert.Equal(t, "c", strings.StripStart("abc", "ab"))
+}
+
+func TestStripEnd(t *testing.T) {
+	assert.Equal(t, "", strings.StripEnd("aaa", "abc"))
+	assert.Equal(t, "aaa", strings.StripEnd("aaa", "def"))
+	assert.Equal(t, "", strings.StripEnd("", "def"))
+	assert.Equal(t, "aaa", strings.StripEnd("aaa", ""))
+	assert.Equal(t, "abc", strings.StripEnd("abc", "ab"))
+	assert.Equal(t, "a", strings.StripEnd("abc", "bc"))
+}
+
+func TestStrip(t *testing.T) {
+	assert.Equal(t, "", strings.Strip("aaa", "abc"))
+	assert.Equal(t, "aaa", strings.Strip("aaa", "def"))
+	assert.Equal(t, "", strings.Strip("", "def"))
+	assert.Equal(t, "aaa", strings.Strip("aaa", ""))
+	assert.Equal(t, "ab", strings.Strip("abc", "cd"))
+	assert.Equal(t, "c", strings.Strip("abc", "ab"))
+}
+
+func TestStripAllStart(t *testing.T) {
+	assert.Equal(t, []string{""}, strings.StripAllStart([]string{"aaa"}, "abc"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllStart([]string{"aaa"}, "def"))
+	assert.Equal(t, []string{""}, strings.StripAllStart([]string{""}, "def"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllStart([]string{"aaa"}, ""))
+	assert.Equal(t, []string{"abc"}, strings.StripAllStart([]string{"abc"}, "cd"))
+	assert.Equal(t, []string{"c"}, strings.StripAllStart([]string{"abc"}, "ab"))
+}
+
+func TestStripAllEnd(t *testing.T) {
+	assert.Equal(t, []string{""}, strings.StripAllEnd([]string{"aaa"}, "abc"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllEnd([]string{"aaa"}, "def"))
+	assert.Equal(t, []string{""}, strings.StripAllEnd([]string{""}, "def"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAllEnd([]string{"aaa"}, ""))
+	assert.Equal(t, []string{"abc"}, strings.StripAllEnd([]string{"abc"}, "ab"))
+	assert.Equal(t, []string{"a"}, strings.StripAllEnd([]string{"abc"}, "bc"))
+}
+
+func TestStripAll(t *testing.T) {
+	assert.Equal(t, []string{""}, strings.StripAll([]string{"aaa"}, "abc"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAll([]string{"aaa"}, "def"))
+	assert.Equal(t, []string{""}, strings.StripAll([]string{""}, "def"))
+	assert.Equal(t, []string{"aaa"}, strings.StripAll([]string{"aaa"}, ""))
+	assert.Equal(t, []string{"ab"}, strings.StripAll([]string{"abc"}, "cd"))
+	assert.Equal(t, []string{"c"}, strings.StripAll([]string{"abc"}, "ab"))
+}
+
+func TestSubstring(t *testing.T) {
+	assert.Equal(t, "na", strings.Substring("naruto", 0, 2))
+	assert.Equal(t, "a", strings.Substring("naruto", 1, 2))
+	assert.Equal(t, "aruto", strings.Substring("naruto", 1, 10))
+	assert.Equal(t, "", strings.Substring("naruto", -1, 3))
+	assert.Equal(t, "", strings.Substring("naruto", 0, -10))
+	assert.Equal(t, "narut", strings.Substring("naruto", 0, -1))
+}
+
+func TestSubstringTillEnd(t *testing.T) {
+	assert.Equal(t, "naruto", strings.SubstringTillEnd("naruto", -10))
+	assert.Equal(t, "o", strings.SubstringTillEnd("naruto", -1))
+	assert.Equal(t, "", strings.SubstringTillEnd("naruto", 10))
+}
+
+func TestSubstringAfter(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfter("nar,uto", ','))
+	assert.Equal(t, "", strings.SubstringAfter("naruto", ','))
+	assert.Equal(t, "", strings.SubstringAfter("", ','))
+}
+
+func TestSubstringAfterString(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfterString("nar,uto", ","))
+	assert.Equal(t, "", strings.SubstringAfterString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringAfterString("", ","))
+}
+
+func TestSubstringAfterLast(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfterLast("n,ar,uto", ','))
+	assert.Equal(t, "", strings.SubstringAfterLast("naruto", ','))
+	assert.Equal(t, "", strings.SubstringAfterLast("", ','))
+}
+
+func TestSubstringAfterLastString(t *testing.T) {
+	assert.Equal(t, "uto", strings.SubstringAfterLastString("n,ar,uto", ","))
+	assert.Equal(t, "", strings.SubstringAfterLastString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringAfterLastString("", ","))
+}
+
+func TestSubstringBefore(t *testing.T) {
+	assert.Equal(t, "nar", strings.SubstringBefore("nar,uto", ','))
+	assert.Equal(t, "", strings.SubstringBefore("naruto", ','))
+	assert.Equal(t, "", strings.SubstringBefore("", ','))
+}
+
+func TestSubstringBeforeString(t *testing.T) {
+	assert.Equal(t, "nar", strings.SubstringBeforeString("nar,uto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeString("", ","))
+}
+
+func TestSubstringBeforeLast(t *testing.T) {
+	assert.Equal(t, "n,ar", strings.SubstringBeforeLast("n,ar,uto", ','))
+	assert.Equal(t, "", strings.SubstringBeforeLast("naruto", ','))
+	assert.Equal(t, "", strings.SubstringBeforeLast("", ','))
+}
+
+func TestSubstringBeforeLastString(t *testing.T) {
+	assert.Equal(t, "n,ar", strings.SubstringBeforeLastString("n,ar,uto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeLastString("naruto", ","))
+	assert.Equal(t, "", strings.SubstringBeforeLastString("", ","))
+}
+
+func TestSwapCase(t *testing.T) {
+	assert.Equal(t, "Naruto Rocks", strings.SwapCase("nARUTO rOCKS"))
+	assert.Equal(t, "", strings.SwapCase(""))
+}
+
+func TestToCodePoints(t *testing.T) {
+	assert.Equal(t, []int32{32}, strings.ToCodePoints(" "))
+	assert.Equal(t, []int32{97, 98, 99, 32, 100, 101, 102}, strings.ToCodePoints("abc def"))
+	assert.Nil(t, strings.ToCodePoints(""))
+}
+
+func TestTrim(t *testing.T) {
+	assert.Equal(t, "naruto  rocks", strings.Trim("   naruto  rocks    ", " "))
+	assert.Equal(t, "aruto rocks", strings.Trim("nnaruto rocksn", "n"))
+}
+
+func TestTrimSpace(t *testing.T) {
+	assert.Equal(t, "naruto  rocks", strings.TrimSpace("   naruto  rocks    "))
+}
+
+func TestTrimLeft(t *testing.T) {
+	assert.Equal(t, "aruto rocks", strings.TrimLeft("nnaruto rocks", "n"))
+}
+
+func TestTrimRight(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.TrimRight("naruto rocksn", "n"))
+}
+
+func TestTrimPrefix(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.TrimPrefix("boruto naruto rocks", "boruto "))
+}
+
+func TestTrimSuffix(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.TrimSuffix("naruto rocks boruto", " boruto"))
+}
+
+func TestTruncate(t *testing.T) {
+	assert.Panics(t, func() {
+		strings.Truncate("naruto", -1, 3)
+	})
+	assert.Panics(t, func() {
+		strings.Truncate("naruto", 1, -1)
+	})
+	assert.Equal(t, "", strings.Truncate("", 1, 1))
+	assert.Equal(t, "", strings.Truncate("naruto", 6, 3))
+	assert.Equal(t, "aruto", strings.Truncate("naruto", 1, 10))
+	assert.Equal(t, "aru", strings.Truncate("naruto", 1, 3))
+}
+
+func TestTruncateFromStart(t *testing.T) {
+	assert.Equal(t, "nar", strings.TruncateFromStart("naruto", 3))
+}
+
+func TestUncapitalize(t *testing.T) {
+	assert.Equal(t, "naruto", strings.Uncapitalize("Naruto"))
+	assert.Equal(t, "nARUTO", strings.Uncapitalize("NARUTO"))
+	assert.Equal(t, "naruto", strings.Uncapitalize("naruto"))
+	assert.Equal(t, "narutO", strings.Uncapitalize("narutO"))
+}
+
+func TestUpperCase(t *testing.T) {
+	assert.Equal(t, "NARUTO", strings.UpperCase("nARUTO"))
+	assert.Equal(t, "NARUTO", strings.UpperCase("naruto"))
+	assert.Equal(t, "NARUTO", strings.UpperCase("NARUTO"))
+	assert.Equal(t, "", strings.UpperCase(""))
 }
