@@ -53,6 +53,11 @@ type FloatingNumber interface {
 	~float32 | ~float64
 }
 
+// IntegerNumber is the generic type for integers.
+type IntegerNumber interface {
+	~int8 | ~int16 | ~int32 | ~int | ~int64 | ~uint8 | ~uint16 | ~uint32 | ~uint | ~uint64
+}
+
 // Compare is used to compare 2 numbers.
 // The result will be 0 if a==b, -1 if a < b, and +1 if a > b.
 func Compare[K Number](a, b K) int {

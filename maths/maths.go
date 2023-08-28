@@ -537,3 +537,103 @@ func Reduce[K numbers.FloatingNumber](a, period, offset K) K {
 func Round[K numbers.FloatingNumber](a K) K {
 	return K(math.Round(float64(a)))
 }
+
+// SignBit reports whether x is negative or negative zero.
+func SignBit[K numbers.SNumber](a K) bool {
+	return math.Signbit(float64(a))
+}
+
+// Sin returns the sine of the radian argument x.
+//
+// Special cases are:
+//	Sin(±0) = ±0
+//	Sin(±Inf) = NaN
+//	Sin(NaN) = NaN
+func Sin[K numbers.FloatingNumber](a K) K {
+	return K(math.Sin(float64(a)))
+}
+
+// SinH returns the hyperbolic sine of x.
+//
+// Special cases are:
+//	Sinh(±0) = ±0
+//	Sinh(±Inf) = ±Inf
+//	Sinh(NaN) = NaN
+func SinH[K numbers.FloatingNumber](a K) K {
+	return K(math.Sinh(float64(a)))
+}
+
+// Sqrt returns the square root of a.
+//
+// Special cases are:
+//	Sqrt(+Inf) = +Inf
+//	Sqrt(±0) = ±0
+//	Sqrt(x < 0) = NaN
+//	Sqrt(NaN) = NaN
+func Sqrt[K numbers.Number, V numbers.FloatingNumber](a K) V {
+	return V(math.Sqrt(float64(a)))
+}
+
+// Tan returns the tangent of the radian argument x.
+//
+// Special cases are:
+//	Tan(±0) = ±0
+//	Tan(±Inf) = NaN
+//	Tan(NaN) = NaN
+func Tan[K numbers.FloatingNumber](a K) K {
+	return K(math.Tan(float64(a)))
+}
+
+// TanH returns the hyperbolic tangent of x.
+//
+// Special cases are:
+//	TanH(±0) = ±0
+//	TanH(±Inf) = ±1
+//	TanH(NaN) = NaN
+func TanH[K numbers.FloatingNumber](a K) K {
+	return K(math.Tanh(float64(a)))
+}
+
+// Truncate returns the integer value of x.
+//
+// Special cases are:
+//	Truncate(±0) = ±0
+//	Truncate(±Inf) = ±Inf
+//	Truncate(NaN) = NaN
+func Truncate[K numbers.FloatingNumber, V numbers.IntegerNumber](a K) V {
+	return V(math.Trunc(float64(a)))
+}
+
+// Y returns the order-n Bessel function of the second kind.
+//
+// Special cases are:
+//	Yn(n, +Inf) = 0
+//	Yn(n ≥ 0, 0) = -Inf
+//	Yn(n < 0, 0) = +Inf if n is odd, -Inf if n is even
+//	Yn(n, x < 0) = NaN
+//	Yn(n, NaN) = NaN
+func Y[K numbers.FloatingNumber](a K, n int) K {
+	return K(math.Yn(n, float64(a)))
+}
+
+// Y0 returns the order-zero Bessel function of the second kind.
+//
+// Special cases are:
+//	Y0(+Inf) = 0
+//	Y0(0) = -Inf
+//	Y0(x < 0) = NaN
+//	Y0(NaN) = NaN
+func Y0[K numbers.FloatingNumber](a K) K {
+	return K(math.Y0(float64(a)))
+}
+
+// Y1 returns the order-one Bessel function of the second kind.
+//
+// Special cases are:
+//	Y1(+Inf) = 0
+//	Y1(0) = -Inf
+//	Y1(x < 0) = NaN
+//	Y1(NaN) = NaN
+func Y1[K numbers.FloatingNumber](a K) K {
+	return K(math.Y1(float64(a)))
+}
