@@ -508,12 +508,12 @@ func ModF[K numbers.FloatingNumber](a K) (K, K) {
 }
 
 // NaN returns an IEEE 754 ``not-a-number'' value.
-func NaN[K numbers.Number64]() K {
+func NaN[K numbers.FloatingNumber]() K {
 	return K(math.NaN())
 }
 
 // NextAfter returns the next representable float64 value after a towards b.
-func NextAfter[K numbers.SNumber](a, b K) K {
+func NextAfter[K numbers.FloatingNumber](a, b K) K {
 	return K(math.Nextafter(float64(a), float64(b)))
 }
 
