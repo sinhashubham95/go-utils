@@ -138,23 +138,23 @@ func CopySign[K numbers.SNumber](magnitude, sign K) K {
 	if (magnitude < 0 && sign >= 0) || (magnitude >= 0 && sign < 0) {
 		switch any(magnitude).(type) {
 		case int8:
-			if magnitude == math.MinInt8 {
+			if int8(magnitude) == numbers.MinInt8 {
 				panic("overflow")
 			}
 		case int16:
-			if magnitude == math.MinInt16 {
+			if int16(magnitude) == numbers.MinInt16 {
 				panic("overflow")
 			}
 		case int32:
-			if magnitude == math.MinInt32 {
+			if int32(magnitude) == numbers.MinInt32 {
 				panic("overflow")
 			}
 		case int:
-			if magnitude == math.MinInt {
+			if int(magnitude) == numbers.MinInt {
 				panic("overflow")
 			}
 		case int64:
-			if magnitude == math.MinInt64 {
+			if int64(magnitude) == numbers.MinInt64 {
 				panic("overflow")
 			}
 		}
