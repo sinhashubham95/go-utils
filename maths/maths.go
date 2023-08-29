@@ -1,8 +1,9 @@
 package maths
 
 import (
-	"github.com/sinhashubham95/go-utils/numbers"
 	"math"
+
+	"github.com/sinhashubham95/go-utils/numbers"
 )
 
 // mathematical constants
