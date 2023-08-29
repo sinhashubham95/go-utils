@@ -182,6 +182,17 @@ func CosH[K numbers.FloatingNumber](a K) K {
 	return K(math.Cosh(float64(a)))
 }
 
+// Degrees converts an angle measured in radians to an approximately equivalent angle measured in degrees.
+// The conversion from radian to degree is generally inexact.
+func Degrees[K numbers.FloatingNumber](a K) K {
+	if IsInfinity(float64(a), 1.0) || IsInfinity(float64(a), -1.0) || a == 0 {
+		return a
+	}
+	d := doubleHighPart(float64(a))
+	ab := float64(a) - d
+	return K(ab*3.145894820876798e-6 + ab*57.2957763671875 + d*3.145894820876798e-6 + d*57.2957763671875)
+}
+
 // Dim returns the maximum of a-b or 0.
 //
 // Special cases are:
@@ -277,6 +288,18 @@ func ExpE(a float64) float64 {
 // Special cases are the same as ExpE.
 func Exp2[K numbers.Number64](a K) K {
 	return K(math.Exp2(float64(a)))
+}
+
+// ExpM1 returns e**x - 1, the base-e exponential of x minus 1.
+// It is more accurate than Exp(x) - 1 when x is near zero.
+//
+// Special cases are:
+//	ExpM1(+Inf) = +Inf
+//	ExpM1(-Inf) = -1
+//	ExpM1(NaN) = NaN
+// Very large values overflow to -1 or +Inf.
+func ExpM1[K numbers.Number64](a K) K {
+	return K(math.Expm1(float64(a)))
 }
 
 // FMA returns x * y + z, computed with only one rounding.
@@ -522,6 +545,17 @@ func NormalizeAngle[K numbers.FloatingNumber](a, center K) K {
 	return a - 6.283185307179586*Floor((a+Pi-center)/6.283185307179586)
 }
 
+// Radians converts an angle measured in degrees to an approximately equivalent angle measured in radians.
+// The conversion from degrees to radian is generally inexact.
+func Radians[K numbers.FloatingNumber](a K) K {
+	if IsInfinity(float64(a), 1.0) || IsInfinity(float64(a), -1.0) || a == 0 {
+		return a
+	}
+	d := doubleHighPart(float64(a))
+	ab := float64(a) - d
+	return K(ab*1.997844754509471e-9 + ab*0.01745329052209854 + d*1.997844754509471e-9 + d*0.01745329052209854)
+}
+
 // Reduce ...
 func Reduce[K numbers.FloatingNumber](a, period, offset K) K {
 	p := Abs(period)
@@ -541,6 +575,20 @@ func Round[K numbers.FloatingNumber](a K) K {
 // SignBit reports whether x is negative or negative zero.
 func SignBit[K numbers.SNumber](a K) bool {
 	return math.Signbit(float64(a))
+}
+
+// Signum returns the sign for the given values of x.
+// For x value greater than zero, the value of the output is +1,
+// for x value lesser than zero, the value of the output is -1,
+// and for x value equal to zero, the output is equal to zero.
+func Signum[K numbers.SNumber](x K) K {
+	if x < K(0) {
+		return K(-1)
+	}
+	if x > K(0) {
+		return K(1)
+	}
+	return K(0)
 }
 
 // Sin returns the sine of the radian argument x.
@@ -636,4 +684,13 @@ func Y0[K numbers.FloatingNumber](a K) K {
 //	Y1(NaN) = NaN
 func Y1[K numbers.FloatingNumber](a K) K {
 	return K(math.Y1(float64(a)))
+}
+
+func doubleHighPart(a float64) float64 {
+	if a > -numbers.MaxFloat64 && a < numbers.MaxFloat64 {
+		return a
+	}
+	b := int64(math.Float64bits(a))
+	b &= int64(-1073741824)
+	return math.Float64frombits(uint64(b))
 }

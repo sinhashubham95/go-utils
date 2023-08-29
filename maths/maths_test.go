@@ -94,6 +94,10 @@ func TestCosH(t *testing.T) {
 	assert.Equal(t, 2.770311192196755e+34, maths.CosH(80.0))
 }
 
+func TestDegrees(t *testing.T) {
+	assert.Equal(t, 4583.662361046586, maths.Degrees(80.0))
+}
+
 func TestDim(t *testing.T) {
 	assert.Equal(t, 0, maths.Dim(2, 3))
 	assert.Equal(t, 1, maths.Dim(3, 2))
@@ -128,6 +132,10 @@ func TestExpE(t *testing.T) {
 func TestExp2(t *testing.T) {
 	assert.Equal(t, 8.0, maths.Exp2(3.0))
 	assert.Equal(t, int64(8), maths.Exp2[int64](3))
+}
+
+func TestExpM1(t *testing.T) {
+	assert.Equal(t, 19.085536923187668, maths.ExpM1(3.0))
 }
 
 func TestFMA(t *testing.T) {
@@ -256,6 +264,10 @@ func TestNormalizeAngle(t *testing.T) {
 	assert.Equal(t, 1.0, maths.NormalizeAngle(1.0, 1.0))
 }
 
+func TestRadians(t *testing.T) {
+	assert.Equal(t, 1.3962634015954636, maths.Radians(80.0))
+}
+
 func TestReduce(t *testing.T) {
 	assert.Equal(t, 0.0, maths.Reduce(7.0, 3.0, 1.0))
 }
@@ -270,6 +282,12 @@ func TestSignBit(t *testing.T) {
 	assert.False(t, maths.SignBit(1.1))
 	assert.True(t, maths.SignBit(-1.1))
 	assert.False(t, maths.SignBit(0.0))
+}
+
+func TestSignum(t *testing.T) {
+	assert.Equal(t, -1, maths.Signum(-2))
+	assert.Equal(t, 1, maths.Signum(2))
+	assert.Equal(t, 0, maths.Signum(0))
 }
 
 func TestSin(t *testing.T) {
