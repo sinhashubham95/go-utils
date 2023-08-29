@@ -6,6 +6,30 @@ import (
 	"testing"
 )
 
+func TestConstants(t *testing.T) {
+	assert.Equal(t, float32(3.4028235e+38), numbers.MaxFloat32)
+	assert.Equal(t, float32(1e-45), numbers.SmallestNonZeroFloat32)
+	assert.Equal(t, 1.7976931348623157e+308, numbers.MaxFloat64)
+	assert.Equal(t, 5e-324, numbers.SmallestNonZeroFloat64)
+
+	assert.Equal(t, 64, numbers.IntSize)
+	assert.Equal(t, 9223372036854775807, numbers.MaxInt)
+	assert.Equal(t, -9223372036854775808, numbers.MinInt)
+	assert.Equal(t, int8(127), numbers.MaxInt8)
+	assert.Equal(t, int8(-128), numbers.MinInt8)
+	assert.Equal(t, int16(32767), numbers.MaxInt16)
+	assert.Equal(t, int16(-32768), numbers.MinInt16)
+	assert.Equal(t, int32(2147483647), numbers.MaxInt32)
+	assert.Equal(t, int32(-2147483648), numbers.MinInt32)
+	assert.Equal(t, int64(9223372036854775807), numbers.MaxInt64)
+	assert.Equal(t, int64(-9223372036854775808), numbers.MinInt64)
+	assert.Equal(t, uint8(0xff), numbers.MaxUint8)
+	assert.Equal(t, uint16(0xffff), numbers.MaxUint16)
+	assert.Equal(t, uint32(0xffffffff), numbers.MaxUint32)
+	assert.Equal(t, uint(0xffffffffffffffff), numbers.MaxUint)
+	assert.Equal(t, uint64(0xffffffffffffffff), numbers.MaxUint64)
+}
+
 func TestCompare(t *testing.T) {
 	assert.Equal(t, 0, numbers.Compare[uint8](1, 1))
 	assert.Equal(t, 0, numbers.Compare[uint16](1, 1))
