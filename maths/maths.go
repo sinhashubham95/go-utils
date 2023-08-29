@@ -182,7 +182,7 @@ func CosH[K numbers.FloatingNumber](a K) K {
 	return K(math.Cosh(float64(a)))
 }
 
-// Dim returns the maximum of x-y or 0.
+// Dim returns the maximum of a-b or 0.
 //
 // Special cases are:
 //	Dim(+Inf, +Inf) = NaN
@@ -268,8 +268,8 @@ func Exp[K numbers.Number64](a, b K) K {
 //	ExpE(NaN) = NaN
 // Very large values overflow to 0 or +Inf.
 // Very small values underflow to 1.
-func ExpE[K numbers.Number64](a K) K {
-	return K(math.Exp(float64(a)))
+func ExpE(a float64) float64 {
+	return math.Exp(a)
 }
 
 // Exp2 returns 2**x, the base-2 exponential of x.
@@ -281,7 +281,7 @@ func Exp2[K numbers.Number64](a K) K {
 
 // FMA returns x * y + z, computed with only one rounding.
 // (That is, FMA returns the fused multiply-add of x, y, and z.)
-func FMA[K numbers.FloatingNumber](x, y, z K) K {
+func FMA[K numbers.Number](x, y, z K) K {
 	return K(math.FMA(float64(x), float64(y), float64(z)))
 }
 
