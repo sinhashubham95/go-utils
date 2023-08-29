@@ -305,6 +305,11 @@ func TestGetIfEmpty(t *testing.T) {
 	}))
 }
 
+func TestHashCode(t *testing.T) {
+	assert.Equal(t, int32(0), strings.HashCode(""))
+	assert.Equal(t, int32(32), strings.HashCode(" "))
+}
+
 func TestIndexOf(t *testing.T) {
 	assert.Equal(t, 0, strings.IndexOf("naruto", 'n'))
 	assert.Equal(t, -1, strings.IndexOf("naruto", 'N'))

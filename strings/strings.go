@@ -159,7 +159,7 @@ func Chop(s string) string {
 }
 
 // Compare returns an integer comparing two strings lexicographically.
-// The result will be 0 if a==b, -1 if a < b, and +1 if a > b.
+// The result will be 0 if a==b, -1 if a < b, and +1 if a > b.h
 func Compare(a, b string) int {
 	return strings.Compare(a, b)
 }
@@ -464,6 +464,18 @@ func GetIfEmpty(ctx context.Context, s string, supplier func(ctx context.Context
 		return supplier(ctx)
 	}
 	return s
+}
+
+// HashCode is used to compute the hash values for the given string.
+func HashCode(s string) int32 {
+	if s == "" {
+		return 0
+	}
+	h := int32(0)
+	for _, r := range s {
+		h = 31*h + r
+	}
+	return h
 }
 
 // IndexOf is used to get the index of the first occurrence of the given character. If the character is not found,
