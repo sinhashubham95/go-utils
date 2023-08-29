@@ -78,7 +78,7 @@ func Equals[K Number](a, b K) bool {
 // HashCode is used to compute the hash values for the given number.
 func HashCode[K Number](a K) int32 {
 	switch any(a).(type) {
-	case int64, uint64:
+	case int, uint, int64, uint64:
 		v := int64(a)
 		return (int32)(v ^ (v >> 32))
 	case float32:
@@ -165,8 +165,12 @@ func StringToNumberWithBits[K Number64](a string, bitSize int) (r K, err error) 
 	return
 }
 
-// StringToNumberWithBaseAndBits is used to convert the string to a number in the given base represented
+// StringToIntegerNumberWithBaseAndBits is used to convert the string to a number in the given base represented
 // within the specified number of bits.
-func StringToNumberWithBaseAndBits(a string, base, bitSize int) (int64, error) {
-	return strconv.ParseInt(a, base, bitSize)
+func StringToIntegerNumberWithBaseAndBits[K IntegerNumber](a string, base, bitSize int) (K, error) {
+	r, err := strconv.ParseInt(a, base, bitSize)
+	if err != nil {
+		return 0, err
+	}
+	return K(r), nil
 }
