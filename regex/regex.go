@@ -110,6 +110,109 @@ func ExpandAllStringWithPattern(d, template string, pattern string) string {
 	return string(re)
 }
 
+// Find returns a slice of max n successive matches in d of the regular expression.
+// A return value of nil indicates no match.
+func Find(d []byte, r *regexp.Regexp, n int) [][]byte {
+	return r.FindAll(d, n)
+}
+
+// FindWithPattern is like Find but instead of a regex, it takes a pattern to match the content.
+func FindWithPattern(d []byte, pattern string, n int) [][]byte {
+	return regexp.MustCompile(pattern).FindAll(d, n)
+}
+
+// FindString is like Find but the source d is a string.
+func FindString(d string, r *regexp.Regexp, n int) []string {
+	return r.FindAllString(d, n)
+}
+
+// FindStringWithPattern is like FindString but instead of a regex, it takes a pattern to match the content.
+func FindStringWithPattern(d string, pattern string, n int) []string {
+	return regexp.MustCompile(pattern).FindAllString(d, n)
+}
+
+// FindAll returns a slice of all successive matches in d of the regular expression.
+func FindAll(d []byte, r *regexp.Regexp) [][]byte {
+	return r.FindAll(d, -1)
+}
+
+// FindAllWithPattern is like FindAll but instead of a regex, it takes a pattern to match the content.
+func FindAllWithPattern(d []byte, pattern string) [][]byte {
+	return regexp.MustCompile(pattern).FindAll(d, -1)
+}
+
+// FindAllString is like FindAll but the source d is a string.
+func FindAllString(d string, r *regexp.Regexp) []string {
+	return r.FindAllString(d, -1)
+}
+
+// FindAllStringWithPattern is like FindAllString but instead of a regex, it takes a pattern to match the content.
+func FindAllStringWithPattern(d string, pattern string) []string {
+	return regexp.MustCompile(pattern).FindAllString(d, -1)
+}
+
+// FindFirst returns the leftmost match in d of the regular expression.
+// A return value of nil indicates no match.
+func FindFirst(d []byte, r *regexp.Regexp) []byte {
+	return r.Find(d)
+}
+
+// FindFirstWithPattern is like FindFirst but instead of a regex, it takes a pattern to match the content.
+func FindFirstWithPattern(d []byte, pattern string) []byte {
+	return regexp.MustCompile(pattern).Find(d)
+}
+
+// FindFirstString is like FindFirst but the source d is a string.
+func FindFirstString(d string, r *regexp.Regexp) string {
+	return r.FindString(d)
+}
+
+// FindFirstStringWithPattern is like FindFirstString but instead of a regex, it takes a pattern to match the content.
+func FindFirstStringWithPattern(d string, pattern string) string {
+	return regexp.MustCompile(pattern).FindString(d)
+}
+
+// FindLast returns the rightmost match in d of the regular expression.
+// A return value of nil indicates no match.
+func FindLast(d []byte, r *regexp.Regexp) []byte {
+	matches := r.FindAll(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastWithPattern is like FindLast but instead of a regex, it takes a pattern to match the content.
+func FindLastWithPattern(d []byte, pattern string) []byte {
+	matches := regexp.MustCompile(pattern).FindAll(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastString is like FindLast but the source d is a string.
+func FindLastString(d string, r *regexp.Regexp) string {
+	matches := r.FindAllString(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return ""
+	}
+	return matches[l-1]
+}
+
+// FindLastStringWithPattern is like FindLastString but instead of a regex, it takes a pattern to match the content.
+func FindLastStringWithPattern(d string, pattern string) string {
+	matches := regexp.MustCompile(pattern).FindAllString(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return ""
+	}
+	return matches[l-1]
+}
+
 // RemoveAll is used to remove all the matches of the regex in the given data.
 func RemoveAll(d []byte, r *regexp.Regexp) []byte {
 	return r.ReplaceAll(d, nil)
