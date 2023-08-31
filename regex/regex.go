@@ -555,6 +555,26 @@ func FindLastSubMatchingIndexForStringWithPattern(d string, pattern string) []in
 	return matches[l-1]
 }
 
+// Match reports whether the byte slice d contains any match of the regular expression r.
+func Match(d []byte, r *regexp.Regexp) bool {
+	return r.Match(d)
+}
+
+// MatchWithPattern is like Match but instead of a regex, it takes a pattern to match the content.
+func MatchWithPattern(d []byte, pattern string) bool {
+	return regexp.MustCompile(pattern).Match(d)
+}
+
+// MatchString is like Match but the source d is a string.
+func MatchString(d string, r *regexp.Regexp) bool {
+	return r.MatchString(d)
+}
+
+// MatchStringWithPattern is like MatchString but instead of a regex, it takes a pattern to match the content.
+func MatchStringWithPattern(d string, pattern string) bool {
+	return regexp.MustCompile(pattern).MatchString(d)
+}
+
 // RemoveAll is used to remove all the matches of the regex in the given data.
 func RemoveAll(d []byte, r *regexp.Regexp) []byte {
 	return r.ReplaceAll(d, nil)
