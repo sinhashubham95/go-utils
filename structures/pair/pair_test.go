@@ -43,8 +43,7 @@ func TestPairWithBuilder(t *testing.T) {
 
 func TestPairFromCollection(t *testing.T) {
 	p := pair.NewFromCollection[int](nil)
-	assert.Zero(t, p.GetFirst())
-	assert.Zero(t, p.GetSecond())
+	assert.Nil(t, p)
 	p = pair.NewFromCollection([]int{1, 2})
 	assert.Equal(t, 1, p.GetFirst())
 	assert.Equal(t, 2, p.GetSecond())

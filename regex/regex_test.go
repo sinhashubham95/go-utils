@@ -199,3 +199,73 @@ func TestFindIndexForStringWithPattern(t *testing.T) {
 		regex.FindIndexForStringWithPattern(`seafood fool`, `foo.?`, 1))
 	assert.Nil(t, regex.FindIndexForStringWithPattern(`seafood fool`, `xyz.?`, 1))
 }
+
+func TestFindAllIndex(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7), pair.New(8, 12)},
+		regex.FindAllIndex([]byte(`seafood fool`), regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindAllIndex([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindAllIndexWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7), pair.New(8, 12)},
+		regex.FindAllIndexWithPattern([]byte(`seafood fool`), `foo.?`))
+	assert.Nil(t, regex.FindAllIndexWithPattern([]byte(`seafood fool`), `xyz.?`))
+}
+
+func TestFindAllIndexForString(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7), pair.New(8, 12)},
+		regex.FindAllIndexForString(`seafood fool`, regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindAllIndexForString(`seafood fool`, regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindAllIndexForStringWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7), pair.New(8, 12)},
+		regex.FindAllIndexForStringWithPattern(`seafood fool`, `foo.?`))
+	assert.Nil(t, regex.FindAllIndexForStringWithPattern(`seafood fool`, `xyz.?`))
+}
+
+func TestFindFirstIndex(t *testing.T) {
+	assert.Equal(t, pair.New(3, 7),
+		regex.FindFirstIndex([]byte(`seafood fool`), regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindFirstIndex([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindFirstIndexWithPattern(t *testing.T) {
+	assert.Equal(t, pair.New(3, 7), regex.FindFirstIndexWithPattern([]byte(`seafood fool`), `foo.?`))
+	assert.Nil(t, regex.FindFirstIndexWithPattern([]byte(`seafood fool`), `xyz.?`))
+}
+
+func TestFindFirstIndexForString(t *testing.T) {
+	assert.Equal(t, pair.New(3, 7),
+		regex.FindFirstIndexForString(`seafood fool`, regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindFirstIndexForString(`seafood fool`, regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindFirstIndexForStringWithPattern(t *testing.T) {
+	assert.Equal(t, pair.New(3, 7),
+		regex.FindFirstIndexForStringWithPattern(`seafood fool`, `foo.?`))
+	assert.Nil(t, regex.FindFirstIndexForStringWithPattern(`seafood fool`, `xyz.?`))
+}
+
+func TestFindLastIndex(t *testing.T) {
+	assert.Equal(t, pair.New(8, 12),
+		regex.FindLastIndex([]byte(`seafood fool`), regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindLastIndex([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindLastIndexWithPattern(t *testing.T) {
+	assert.Equal(t, pair.New(8, 12), regex.FindLastIndexWithPattern([]byte(`seafood fool`), `foo.?`))
+	assert.Nil(t, regex.FindLastIndexWithPattern([]byte(`seafood fool`), `xyz.?`))
+}
+
+func TestFindLastIndexForString(t *testing.T) {
+	assert.Equal(t, pair.New(8, 12),
+		regex.FindLastIndexForString(`seafood fool`, regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindLastIndexForString(`seafood fool`, regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindLastIndexForStringWithPattern(t *testing.T) {
+	assert.Equal(t, pair.New(8, 12),
+		regex.FindLastIndexForStringWithPattern(`seafood fool`, `foo.?`))
+	assert.Nil(t, regex.FindLastIndexForStringWithPattern(`seafood fool`, `xyz.?`))
+}

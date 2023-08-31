@@ -22,10 +22,10 @@ func New[K, V any](f K, s V) *Pair[K, V] {
 
 // NewFromCollection is used to create a new Pair from the given collection.
 // The collection should contain exactly 2 elements, first element of which becomes first and second element becomes second.
-// If the collection contains more or less than 2 elements, then it returns a Pair with the zero value of the given type as first and second.
+// If the collection contains more or less than 2 elements, then it returns NIL Pair.
 func NewFromCollection[K any](l []K) *Pair[K, K] {
 	if len(l) != 2 {
-		return &Pair[K, K]{}
+		return nil
 	}
 	return New(l[0], l[1])
 }
