@@ -213,6 +213,109 @@ func FindLastStringWithPattern(d string, pattern string) string {
 	return matches[l-1]
 }
 
+// FindIndex returns a slice of max n successive matching indices in d of the regular expression.
+// A return value of nil indicates no match.
+func FindIndex(d []byte, r *regexp.Regexp, n int) [][]int {
+	return r.FindAllIndex(d, n)
+}
+
+// FindIndexWithPattern is like FindIndex but instead of a regex, it takes a pattern to match the content.
+func FindIndexWithPattern(d []byte, pattern string, n int) [][]int {
+	return regexp.MustCompile(pattern).FindAllIndex(d, n)
+}
+
+// FindIndexForString is like FindIndex but the source d is a string.
+func FindIndexForString(d string, r *regexp.Regexp, n int) [][]int {
+	return r.FindAllStringIndex(d, n)
+}
+
+// FindIndexForStringWithPattern is like FindIndexForString but instead of a regex, it takes a pattern to match the content.
+func FindIndexForStringWithPattern(d string, pattern string, n int) [][]int {
+	return regexp.MustCompile(pattern).FindAllStringIndex(d, n)
+}
+
+// FindAllIndex returns a slice of all successive matching indices in d of the regular expression.
+func FindAllIndex(d []byte, r *regexp.Regexp) [][]int {
+	return r.FindAllIndex(d, -1)
+}
+
+// FindAllIndexWithPattern is like FindAllIndex but instead of a regex, it takes a pattern to match the content.
+func FindAllIndexWithPattern(d []byte, pattern string) [][]int {
+	return regexp.MustCompile(pattern).FindAllIndex(d, -1)
+}
+
+// FindAllIndexForString is like FindAllIndex but the source d is a string.
+func FindAllIndexForString(d string, r *regexp.Regexp) [][]int {
+	return r.FindAllStringIndex(d, -1)
+}
+
+// FindAllIndexForStringWithPattern is like FindAllIndexForString but instead of a regex, it takes a pattern to match the content.
+func FindAllIndexForStringWithPattern(d string, pattern string) [][]int {
+	return regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+}
+
+// FindFirstIndex returns the leftmost matching index in d of the regular expression.
+// A return value of nil indicates no match.
+func FindFirstIndex(d []byte, r *regexp.Regexp) []int {
+	return r.FindIndex(d)
+}
+
+// FindFirstIndexWithPattern is like FindFirstIndex but instead of a regex, it takes a pattern to match the content.
+func FindFirstIndexWithPattern(d []byte, pattern string) []int {
+	return regexp.MustCompile(pattern).FindIndex(d)
+}
+
+// FindFirstIndexForString is like FindFirstIndex but the source d is a string.
+func FindFirstIndexForString(d string, r *regexp.Regexp) []int {
+	return r.FindStringIndex(d)
+}
+
+// FindFirstIndexForStringWithPattern is like FindFirstIndexForString but instead of a regex, it takes a pattern to match the content.
+func FindFirstIndexForStringWithPattern(d string, pattern string) []int {
+	return regexp.MustCompile(pattern).FindStringIndex(d)
+}
+
+// FindLastIndex returns the rightmost matching index in d of the regular expression.
+// A return value of nil indicates no match.
+func FindLastIndex(d []byte, r *regexp.Regexp) []int {
+	matches := r.FindAllIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastIndexWithPattern is like FindLastIndex but instead of a regex, it takes a pattern to match the content.
+func FindLastIndexWithPattern(d []byte, pattern string) []int {
+	matches := regexp.MustCompile(pattern).FindAllIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastIndexForString is like FindLastIndex but the source d is a string.
+func FindLastIndexForString(d string, r *regexp.Regexp) []int {
+	matches := r.FindAllStringIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastIndexForStringWithPattern is like FindLastIndexForString but instead of a regex, it takes a pattern to match the content.
+func FindLastIndexForStringWithPattern(d string, pattern string) []int {
+	matches := regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
 // RemoveAll is used to remove all the matches of the regex in the given data.
 func RemoveAll(d []byte, r *regexp.Regexp) []byte {
 	return r.ReplaceAll(d, nil)
