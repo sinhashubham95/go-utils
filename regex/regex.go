@@ -1,5 +1,9 @@
 package regex
 
+// SubMatches are matches of parenthesized subexpressions (also known as capturing groups) within the regular expression,
+// numbered from left to right in order of opening parenthesis. SubMatch 0 is the match of the entire expression,
+// subMatch 1 is the match of the first parenthesized subexpression, and so on.
+
 import "regexp"
 
 // Expand appends template to the result and during append it replaces variables in the template with n number of
@@ -309,6 +313,241 @@ func FindLastIndexForString(d string, r *regexp.Regexp) []int {
 // FindLastIndexForStringWithPattern is like FindLastIndexForString but instead of a regex, it takes a pattern to match the content.
 func FindLastIndexForStringWithPattern(d string, pattern string) []int {
 	matches := regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindSubMatches returns a slice of slices holding the text of the n number of
+// sub-matches of the regular expression in d and the matches, if any, of its
+// subexpressions, as defined by the 'SubMatch' descriptions in the package
+// comment.
+// A return value of nil indicates no match.
+func FindSubMatches(d []byte, r *regexp.Regexp, n int) [][][]byte {
+	return r.FindAllSubmatch(d, n)
+}
+
+// FindSubMatchesWithPattern is like FindSubMatches but instead of a regex, it takes a pattern to match the content.
+func FindSubMatchesWithPattern(d []byte, pattern string, n int) [][][]byte {
+	return regexp.MustCompile(pattern).FindAllSubmatch(d, n)
+}
+
+// FindSubMatchesForString is like FindSubMatches but the source d is a string.
+func FindSubMatchesForString(d string, r *regexp.Regexp, n int) [][]string {
+	return r.FindAllStringSubmatch(d, n)
+}
+
+// FindSubMatchesForStringWithPattern is like FindSubMatchesForString but instead of a regex, it takes a pattern to match the content.
+func FindSubMatchesForStringWithPattern(d string, pattern string, n int) [][]string {
+	return regexp.MustCompile(pattern).FindAllStringSubmatch(d, n)
+}
+
+// FindAllSubMatches returns a slice of slices holding the text of all
+// sub-matches of the regular expression in d and the matches, if any, of its
+// subexpressions, as defined by the 'SubMatch' descriptions in the package
+// comment.
+// A return value of nil indicates no match.
+func FindAllSubMatches(d []byte, r *regexp.Regexp) [][][]byte {
+	return r.FindAllSubmatch(d, -1)
+}
+
+// FindAllSubMatchesWithPattern is like FindAllSubMatches but instead of a regex, it takes a pattern to match the content.
+func FindAllSubMatchesWithPattern(d []byte, pattern string) [][][]byte {
+	return regexp.MustCompile(pattern).FindAllSubmatch(d, -1)
+}
+
+// FindAllSubMatchesForString is like FindAllSubMatches but the source d is a string.
+func FindAllSubMatchesForString(d string, r *regexp.Regexp) [][]string {
+	return r.FindAllStringSubmatch(d, -1)
+}
+
+// FindAllSubMatchesForStringWithPattern is like FindAllSubMatchesForString but instead of a regex,
+// it takes a pattern to match the content.
+func FindAllSubMatchesForStringWithPattern(d string, pattern string) [][]string {
+	return regexp.MustCompile(pattern).FindAllStringSubmatch(d, -1)
+}
+
+// FindFirstSubMatch returns a slice of slices holding the text of the leftmost sub-match of the regular
+// expression in b and the matches, if any, of its subexpressions, as defined by the 'SubMatch' descriptions
+// in the package comment.
+// A return value of nil indicates no match.
+func FindFirstSubMatch(d []byte, r *regexp.Regexp) [][]byte {
+	return r.FindSubmatch(d)
+}
+
+// FindFirstSubMatchWithPattern is like FindFirstSubMatch but instead of a regex, it takes a pattern to match the content.
+func FindFirstSubMatchWithPattern(d []byte, pattern string) [][]byte {
+	return regexp.MustCompile(pattern).FindSubmatch(d)
+}
+
+// FindFirstSubMatchForString is like FindFirstSubMatch but the source d is a string.
+func FindFirstSubMatchForString(d string, r *regexp.Regexp) []string {
+	return r.FindStringSubmatch(d)
+}
+
+// FindFirstSubMatchForStringWithPattern is like FindFirstSubMatchForString but instead of a regex,
+// it takes a pattern to match the content.
+func FindFirstSubMatchForStringWithPattern(d string, pattern string) []string {
+	return regexp.MustCompile(pattern).FindStringSubmatch(d)
+}
+
+// FindLastSubMatch returns a slice of slices holding the text of the rightmost sub-match of the regular
+// expression in b and the matches, if any, of its subexpressions, as defined by the 'SubMatch' descriptions
+// in the package comment.
+// A return value of nil indicates no match.
+func FindLastSubMatch(d []byte, r *regexp.Regexp) [][]byte {
+	matches := r.FindAllSubmatch(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastSubMatchWithPattern is like FindLastSubMatch but instead of a regex, it takes a pattern to match the content.
+func FindLastSubMatchWithPattern(d []byte, pattern string) [][]byte {
+	matches := regexp.MustCompile(pattern).FindAllSubmatch(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastSubMatchForString is like FindLastSubMatch but the source d is a string.
+func FindLastSubMatchForString(d string, r *regexp.Regexp) []string {
+	matches := r.FindAllStringSubmatch(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastSubMatchForStringWithPattern is like FindLastSubMatchForString but instead of a regex, it takes a pattern to match the content.
+func FindLastSubMatchForStringWithPattern(d string, pattern string) []string {
+	matches := regexp.MustCompile(pattern).FindAllStringSubmatch(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindSubMatchingIndices returns a slice of slices holding the index pairs identifying the
+// n number of sub-matches of the regular expression in d and the matches, if any, of
+// its subexpressions, as defined by the 'SubMatch' descriptions in the package comment.
+// A return value of nil indicates no match.
+func FindSubMatchingIndices(d []byte, r *regexp.Regexp, n int) [][]int {
+	return r.FindAllSubmatchIndex(d, n)
+}
+
+// FindSubMatchingIndicesWithPattern is like FindSubMatchingIndices but instead of a regex, it takes a pattern to match the content.
+func FindSubMatchingIndicesWithPattern(d []byte, pattern string, n int) [][]int {
+	return regexp.MustCompile(pattern).FindAllSubmatchIndex(d, n)
+}
+
+// FindSubMatchingIndicesForString is like FindSubMatchingIndices but the source d is a string.
+func FindSubMatchingIndicesForString(d string, r *regexp.Regexp, n int) [][]int {
+	return r.FindAllStringSubmatchIndex(d, n)
+}
+
+// FindSubMatchingIndicesForStringWithPattern is like FindSubMatchingIndicesForString but instead of a regex,
+// it takes a pattern to match the content.
+func FindSubMatchingIndicesForStringWithPattern(d string, pattern string, n int) [][]int {
+	return regexp.MustCompile(pattern).FindAllStringSubmatchIndex(d, n)
+}
+
+// FindAllSubMatchingIndices returns a slice of slices holding the index pairs identifying the
+// all the sub-matches of the regular expression in d and the matches, if any, of
+// its subexpressions, as defined by the 'SubMatch' descriptions in the package comment.
+// A return value of nil indicates no match.
+func FindAllSubMatchingIndices(d []byte, r *regexp.Regexp) [][]int {
+	return r.FindAllSubmatchIndex(d, -1)
+}
+
+// FindAllSubMatchingIndicesWithPattern is like FindAllSubMatchingIndices but instead of a regex,
+// it takes a pattern to match the content.
+func FindAllSubMatchingIndicesWithPattern(d []byte, pattern string) [][]int {
+	return regexp.MustCompile(pattern).FindAllSubmatchIndex(d, -1)
+}
+
+// FindAllSubMatchingIndicesForString is like FindAllSubMatchingIndices but the source d is a string.
+func FindAllSubMatchingIndicesForString(d string, r *regexp.Regexp) [][]int {
+	return r.FindAllStringSubmatchIndex(d, -1)
+}
+
+// FindAllSubMatchingIndicesForStringWithPattern is like FindAllSubMatchingIndicesForString but instead of a regex,
+// it takes a pattern to match the content.
+func FindAllSubMatchingIndicesForStringWithPattern(d string, pattern string) [][]int {
+	return regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+}
+
+// FindFirstSubMatchingIndex returns a slice holding the index pairs identifying the
+// leftmost sub-match of the regular expression in b and the matches, if any, of
+// its subexpressions, as defined by the 'SubMatch'.
+// A return value of nil indicates no match.
+func FindFirstSubMatchingIndex(d []byte, r *regexp.Regexp) []int {
+	return r.FindSubmatchIndex(d)
+}
+
+// FindFirstSubMatchingIndexWithPattern is like FindFirstSubMatchingIndex but instead of a regex,
+// it takes a pattern to match the content.
+func FindFirstSubMatchingIndexWithPattern(d []byte, pattern string) []int {
+	return regexp.MustCompile(pattern).FindSubmatchIndex(d)
+}
+
+// FindFirstSubMatchingIndexForString is like FindFirstSubMatchingIndex but the source d is a string.
+func FindFirstSubMatchingIndexForString(d string, r *regexp.Regexp) []int {
+	return r.FindStringSubmatchIndex(d)
+}
+
+// FindFirstSubMatchingIndexForStringWithPattern is like FindFirstSubMatchingIndexForString but instead of a regex,
+// it takes a pattern to match the content.
+func FindFirstSubMatchingIndexForStringWithPattern(d string, pattern string) []int {
+	return regexp.MustCompile(pattern).FindStringSubmatchIndex(d)
+}
+
+// FindLastSubMatchingIndex returns a slice holding the index pairs identifying the
+// rightmost sub-match of the regular expression in b and the matches, if any, of
+// its subexpressions, as defined by the 'SubMatch'.
+// A return value of nil indicates no match.
+func FindLastSubMatchingIndex(d []byte, r *regexp.Regexp) []int {
+	matches := r.FindAllSubmatchIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastSubMatchingIndexWithPattern is like FindLastSubMatchingIndex but instead of a regex,
+// it takes a pattern to match the content.
+func FindLastSubMatchingIndexWithPattern(d []byte, pattern string) []int {
+	matches := regexp.MustCompile(pattern).FindAllSubmatchIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastSubMatchingIndexForString is like FindLastSubMatchingIndex but the source d is a string.
+func FindLastSubMatchingIndexForString(d string, r *regexp.Regexp) []int {
+	matches := r.FindAllStringSubmatchIndex(d, -1)
+	l := len(matches)
+	if l == 0 {
+		return nil
+	}
+	return matches[l-1]
+}
+
+// FindLastSubMatchingIndexForStringWithPattern is like FindLastSubMatchingIndexForString but instead of a regex,
+// it takes a pattern to match the content.
+func FindLastSubMatchingIndexForStringWithPattern(d string, pattern string) []int {
+	matches := regexp.MustCompile(pattern).FindAllStringSubmatchIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
