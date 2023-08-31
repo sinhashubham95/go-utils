@@ -4,7 +4,10 @@ package regex
 // numbered from left to right in order of opening parenthesis. SubMatch 0 is the match of the entire expression,
 // subMatch 1 is the match of the first parenthesized subexpression, and so on.
 
-import "regexp"
+import (
+	"github.com/sinhashubham95/go-utils/structures/pair"
+	"regexp"
+)
 
 // Expand appends template to the result and during append it replaces variables in the template with n number of
 // matches drawn from the source data d.
@@ -219,105 +222,177 @@ func FindLastStringWithPattern(d string, pattern string) string {
 
 // FindIndex returns a slice of max n successive matching indices in d of the regular expression.
 // A return value of nil indicates no match.
-func FindIndex(d []byte, r *regexp.Regexp, n int) [][]int {
-	return r.FindAllIndex(d, n)
+func FindIndex(d []byte, r *regexp.Regexp, n int) []*pair.Pair[int, int] {
+	indices := r.FindAllIndex(d, n)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindIndexWithPattern is like FindIndex but instead of a regex, it takes a pattern to match the content.
-func FindIndexWithPattern(d []byte, pattern string, n int) [][]int {
-	return regexp.MustCompile(pattern).FindAllIndex(d, n)
+func FindIndexWithPattern(d []byte, pattern string, n int) []*pair.Pair[int, int] {
+	indices := regexp.MustCompile(pattern).FindAllIndex(d, n)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindIndexForString is like FindIndex but the source d is a string.
-func FindIndexForString(d string, r *regexp.Regexp, n int) [][]int {
-	return r.FindAllStringIndex(d, n)
+func FindIndexForString(d string, r *regexp.Regexp, n int) []*pair.Pair[int, int] {
+	indices := r.FindAllStringIndex(d, n)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindIndexForStringWithPattern is like FindIndexForString but instead of a regex, it takes a pattern to match the content.
-func FindIndexForStringWithPattern(d string, pattern string, n int) [][]int {
-	return regexp.MustCompile(pattern).FindAllStringIndex(d, n)
+func FindIndexForStringWithPattern(d string, pattern string, n int) []*pair.Pair[int, int] {
+	indices := regexp.MustCompile(pattern).FindAllStringIndex(d, n)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindAllIndex returns a slice of all successive matching indices in d of the regular expression.
-func FindAllIndex(d []byte, r *regexp.Regexp) [][]int {
-	return r.FindAllIndex(d, -1)
+func FindAllIndex(d []byte, r *regexp.Regexp) []*pair.Pair[int, int] {
+	indices := r.FindAllIndex(d, -1)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindAllIndexWithPattern is like FindAllIndex but instead of a regex, it takes a pattern to match the content.
-func FindAllIndexWithPattern(d []byte, pattern string) [][]int {
-	return regexp.MustCompile(pattern).FindAllIndex(d, -1)
+func FindAllIndexWithPattern(d []byte, pattern string) []*pair.Pair[int, int] {
+	indices := regexp.MustCompile(pattern).FindAllIndex(d, -1)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindAllIndexForString is like FindAllIndex but the source d is a string.
-func FindAllIndexForString(d string, r *regexp.Regexp) [][]int {
-	return r.FindAllStringIndex(d, -1)
+func FindAllIndexForString(d string, r *regexp.Regexp) []*pair.Pair[int, int] {
+	indices := r.FindAllStringIndex(d, -1)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindAllIndexForStringWithPattern is like FindAllIndexForString but instead of a regex, it takes a pattern to match the content.
-func FindAllIndexForStringWithPattern(d string, pattern string) [][]int {
-	return regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+func FindAllIndexForStringWithPattern(d string, pattern string) []*pair.Pair[int, int] {
+	indices := regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+	l := len(indices)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l)
+	for i, idx := range indices {
+		result[i] = pair.NewFromCollection(idx)
+	}
+	return result
 }
 
 // FindFirstIndex returns the leftmost matching index in d of the regular expression.
 // A return value of nil indicates no match.
-func FindFirstIndex(d []byte, r *regexp.Regexp) []int {
-	return r.FindIndex(d)
+func FindFirstIndex(d []byte, r *regexp.Regexp) *pair.Pair[int, int] {
+	return pair.NewFromCollection(r.FindIndex(d))
 }
 
 // FindFirstIndexWithPattern is like FindFirstIndex but instead of a regex, it takes a pattern to match the content.
-func FindFirstIndexWithPattern(d []byte, pattern string) []int {
-	return regexp.MustCompile(pattern).FindIndex(d)
+func FindFirstIndexWithPattern(d []byte, pattern string) *pair.Pair[int, int] {
+	return pair.NewFromCollection(regexp.MustCompile(pattern).FindIndex(d))
 }
 
 // FindFirstIndexForString is like FindFirstIndex but the source d is a string.
-func FindFirstIndexForString(d string, r *regexp.Regexp) []int {
-	return r.FindStringIndex(d)
+func FindFirstIndexForString(d string, r *regexp.Regexp) *pair.Pair[int, int] {
+	return pair.NewFromCollection(r.FindStringIndex(d))
 }
 
 // FindFirstIndexForStringWithPattern is like FindFirstIndexForString but instead of a regex, it takes a pattern to match the content.
-func FindFirstIndexForStringWithPattern(d string, pattern string) []int {
-	return regexp.MustCompile(pattern).FindStringIndex(d)
+func FindFirstIndexForStringWithPattern(d string, pattern string) *pair.Pair[int, int] {
+	return pair.NewFromCollection(regexp.MustCompile(pattern).FindStringIndex(d))
 }
 
 // FindLastIndex returns the rightmost matching index in d of the regular expression.
 // A return value of nil indicates no match.
-func FindLastIndex(d []byte, r *regexp.Regexp) []int {
+func FindLastIndex(d []byte, r *regexp.Regexp) *pair.Pair[int, int] {
 	matches := r.FindAllIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return pair.NewFromCollection(matches[l-1])
 }
 
 // FindLastIndexWithPattern is like FindLastIndex but instead of a regex, it takes a pattern to match the content.
-func FindLastIndexWithPattern(d []byte, pattern string) []int {
+func FindLastIndexWithPattern(d []byte, pattern string) *pair.Pair[int, int] {
 	matches := regexp.MustCompile(pattern).FindAllIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return pair.NewFromCollection(matches[l-1])
 }
 
 // FindLastIndexForString is like FindLastIndex but the source d is a string.
-func FindLastIndexForString(d string, r *regexp.Regexp) []int {
+func FindLastIndexForString(d string, r *regexp.Regexp) *pair.Pair[int, int] {
 	matches := r.FindAllStringIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return pair.NewFromCollection(matches[l-1])
 }
 
 // FindLastIndexForStringWithPattern is like FindLastIndexForString but instead of a regex, it takes a pattern to match the content.
-func FindLastIndexForStringWithPattern(d string, pattern string) []int {
+func FindLastIndexForStringWithPattern(d string, pattern string) *pair.Pair[int, int] {
 	matches := regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return pair.NewFromCollection(matches[l-1])
 }
 
 // FindSubMatches returns a slice of slices holding the text of the n number of

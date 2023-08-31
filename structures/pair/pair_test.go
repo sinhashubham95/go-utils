@@ -40,3 +40,12 @@ func TestPairWithBuilder(t *testing.T) {
 	assert.Zero(t, p.GetFirst())
 	assert.Zero(t, p.GetSecond())
 }
+
+func TestPairFromCollection(t *testing.T) {
+	p := pair.NewFromCollection[int](nil)
+	assert.Zero(t, p.GetFirst())
+	assert.Zero(t, p.GetSecond())
+	p = pair.NewFromCollection([]int{1, 2})
+	assert.Equal(t, 1, p.GetFirst())
+	assert.Equal(t, 2, p.GetSecond())
+}

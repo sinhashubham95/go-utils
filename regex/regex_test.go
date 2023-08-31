@@ -1,6 +1,7 @@
 package regex_test
 
 import (
+	"github.com/sinhashubham95/go-utils/structures/pair"
 	"regexp"
 	"testing"
 
@@ -94,4 +95,107 @@ func TestExpandAllStringWithPattern(t *testing.T) {
 	# another comment line
 	option3: value3
 `, "$key=$value\n", `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+}
+
+func TestFind(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("food")}, regex.Find([]byte(`seafood fool`), regexp.MustCompile(`foo.?`), 1))
+	assert.Nil(t, regex.Find([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`), 1))
+}
+
+func TestFindWithPattern(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("food")}, regex.FindWithPattern([]byte(`seafood fool`), `foo.?`, 1))
+	assert.Nil(t, regex.FindWithPattern([]byte(`seafood fool`), `xyz.?`, 1))
+}
+
+func TestFindString(t *testing.T) {
+	assert.Equal(t, []string{"food"}, regex.FindString(`seafood fool`, regexp.MustCompile(`foo.?`), 1))
+	assert.Nil(t, regex.FindString(`seafood fool`, regexp.MustCompile(`xyz.?`), 1))
+}
+
+func TestFindStringWithPattern(t *testing.T) {
+	assert.Equal(t, []string{"food"}, regex.FindStringWithPattern(`seafood fool`, `foo.?`, 1))
+	assert.Nil(t, regex.FindStringWithPattern(`seafood fool`, `xyz.?`, 1))
+}
+
+func TestFindAll(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("food"), []byte("fool")}, regex.FindAll([]byte(`seafood fool`), regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindAll([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindAllWithPattern(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("food"), []byte("fool")}, regex.FindAllWithPattern([]byte(`seafood fool`), `foo.?`))
+	assert.Nil(t, regex.FindAllWithPattern([]byte(`seafood fool`), `xyz.?`))
+}
+
+func TestFindAllString(t *testing.T) {
+	assert.Equal(t, []string{"food", "fool"}, regex.FindAllString(`seafood fool`, regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindAllString(`seafood fool`, regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindAllStringWithPattern(t *testing.T) {
+	assert.Equal(t, []string{"food", "fool"}, regex.FindAllStringWithPattern(`seafood fool`, `foo.?`))
+	assert.Nil(t, regex.FindAllStringWithPattern(`seafood fool`, `xyz.?`))
+}
+
+func TestFindFirst(t *testing.T) {
+	assert.Equal(t, []byte("food"), regex.FindFirst([]byte(`seafood fool`), regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindFirst([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindFirstWithPattern(t *testing.T) {
+	assert.Equal(t, []byte("food"), regex.FindFirstWithPattern([]byte(`seafood fool`), `foo.?`))
+	assert.Nil(t, regex.FindFirstWithPattern([]byte(`seafood fool`), `xyz.?`))
+}
+
+func TestFindFirstString(t *testing.T) {
+	assert.Equal(t, "food", regex.FindFirstString(`seafood fool`, regexp.MustCompile(`foo.?`)))
+	assert.Empty(t, regex.FindFirstString(`seafood fool`, regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindFirstStringWithPattern(t *testing.T) {
+	assert.Equal(t, "food", regex.FindFirstStringWithPattern(`seafood fool`, `foo.?`))
+	assert.Empty(t, regex.FindFirstStringWithPattern(`seafood fool`, `xyz.?`))
+}
+
+func TestFindLast(t *testing.T) {
+	assert.Equal(t, []byte("fool"), regex.FindLast([]byte(`seafood fool`), regexp.MustCompile(`foo.?`)))
+	assert.Nil(t, regex.FindLast([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindLastWithPattern(t *testing.T) {
+	assert.Equal(t, []byte("fool"), regex.FindLastWithPattern([]byte(`seafood fool`), `foo.?`))
+	assert.Nil(t, regex.FindLastWithPattern([]byte(`seafood fool`), `xyz.?`))
+}
+
+func TestFindLastString(t *testing.T) {
+	assert.Equal(t, "fool", regex.FindLastString(`seafood fool`, regexp.MustCompile(`foo.?`)))
+	assert.Empty(t, regex.FindLastString(`seafood fool`, regexp.MustCompile(`xyz.?`)))
+}
+
+func TestFindLastStringWithPattern(t *testing.T) {
+	assert.Equal(t, "fool", regex.FindLastStringWithPattern(`seafood fool`, `foo.?`))
+	assert.Empty(t, regex.FindLastStringWithPattern(`seafood fool`, `xyz.?`))
+}
+
+func TestFindIndex(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7)},
+		regex.FindIndex([]byte(`seafood fool`), regexp.MustCompile(`foo.?`), 1))
+	assert.Nil(t, regex.FindIndex([]byte(`seafood fool`), regexp.MustCompile(`xyz.?`), 1))
+}
+
+func TestFindIndexWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7)}, regex.FindIndexWithPattern([]byte(`seafood fool`), `foo.?`, 1))
+	assert.Nil(t, regex.FindIndexWithPattern([]byte(`seafood fool`), `xyz.?`, 1))
+}
+
+func TestFindIndexForString(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7)},
+		regex.FindIndexForString(`seafood fool`, regexp.MustCompile(`foo.?`), 1))
+	assert.Nil(t, regex.FindIndexForString(`seafood fool`, regexp.MustCompile(`xyz.?`), 1))
+}
+
+func TestFindIndexForStringWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(3, 7)},
+		regex.FindIndexForStringWithPattern(`seafood fool`, `foo.?`, 1))
+	assert.Nil(t, regex.FindIndexForStringWithPattern(`seafood fool`, `xyz.?`, 1))
 }
