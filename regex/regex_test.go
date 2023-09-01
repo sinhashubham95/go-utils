@@ -269,3 +269,331 @@ func TestFindLastIndexForStringWithPattern(t *testing.T) {
 		regex.FindLastIndexForStringWithPattern(`seafood fool`, `foo.?`))
 	assert.Nil(t, regex.FindLastIndexForStringWithPattern(`seafood fool`, `xyz.?`))
 }
+
+func TestFindSubMatches(t *testing.T) {
+	assert.Equal(t, [][][]byte{{[]byte("option1: value1"), []byte("option1"), []byte("value1")}},
+		regex.FindSubMatches([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`), 1))
+	assert.Nil(t, regex.FindSubMatches([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*"), 1))
+}
+
+func TestFindSubMatchesWithPattern(t *testing.T) {
+	assert.Equal(t, [][][]byte{{[]byte("option1: value1"), []byte("option1"), []byte("value1")}},
+		regex.FindSubMatchesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`, 1))
+	assert.Nil(t, regex.FindSubMatchesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*", 1))
+}
+
+func TestFindSubMatchesForString(t *testing.T) {
+	assert.Equal(t, [][]string{{"option1: value1", "option1", "value1"}},
+		regex.FindSubMatchesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`), 1))
+	assert.Nil(t, regex.FindSubMatchesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*"), 1))
+}
+
+func TestFindSubMatchesForStringWithPattern(t *testing.T) {
+	assert.Equal(t, [][]string{{"option1: value1", "option1", "value1"}},
+		regex.FindSubMatchesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`, 1))
+	assert.Nil(t, regex.FindSubMatchesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*", 1))
+}
+
+func TestFindAllSubMatches(t *testing.T) {
+	assert.Equal(t, [][][]byte{{[]byte("option1: value1"), []byte("option1"), []byte("value1")},
+		{[]byte("option2: value2"), []byte("option2"), []byte("value2")},
+		{[]byte("option3: value3"), []byte("option3"), []byte("value3")}},
+		regex.FindAllSubMatches([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindAllSubMatches([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*")))
+}
+
+func TestFindAllSubMatchesWithPattern(t *testing.T) {
+	assert.Equal(t, [][][]byte{{[]byte("option1: value1"), []byte("option1"), []byte("value1")},
+		{[]byte("option2: value2"), []byte("option2"), []byte("value2")},
+		{[]byte("option3: value3"), []byte("option3"), []byte("value3")}},
+		regex.FindAllSubMatchesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindAllSubMatchesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*"))
+}
+
+func TestFindAllSubMatchesForString(t *testing.T) {
+	assert.Equal(t, [][]string{{"option1: value1", "option1", "value1"},
+		{"option2: value2", "option2", "value2"},
+		{"option3: value3", "option3", "value3"}},
+		regex.FindAllSubMatchesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindAllSubMatchesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*")))
+}
+
+func TestFindAllSubMatchesForStringWithPattern(t *testing.T) {
+	assert.Equal(t, [][]string{{"option1: value1", "option1", "value1"},
+		{"option2: value2", "option2", "value2"},
+		{"option3: value3", "option3", "value3"}},
+		regex.FindAllSubMatchesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindAllSubMatchesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*"))
+}
+
+func TestFindFirstSubMatch(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("option1: value1"), []byte("option1"), []byte("value1")},
+		regex.FindFirstSubMatch([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindFirstSubMatch([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*")))
+}
+
+func TestFindFirstSubMatchWithPattern(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("option1: value1"), []byte("option1"), []byte("value1")},
+		regex.FindFirstSubMatchWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindFirstSubMatchWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*"))
+}
+
+func TestFindFirstSubMatchForString(t *testing.T) {
+	assert.Equal(t, []string{"option1: value1", "option1", "value1"},
+		regex.FindFirstSubMatchForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindFirstSubMatchForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*")))
+}
+
+func TestFindFirstSubMatchForStringWithPattern(t *testing.T) {
+	assert.Equal(t, []string{"option1: value1", "option1", "value1"},
+		regex.FindFirstSubMatchForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindFirstSubMatchForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*"))
+}
+
+func TestFindLastSubMatch(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("option3: value3"), []byte("option3"), []byte("value3")},
+		regex.FindLastSubMatch([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindLastSubMatch([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*")))
+}
+
+func TestFindLastSubMatchWithPattern(t *testing.T) {
+	assert.Equal(t, [][]byte{[]byte("option3: value3"), []byte("option3"), []byte("value3")},
+		regex.FindLastSubMatchWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindLastSubMatchWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*"))
+}
+
+func TestFindLastSubMatchForString(t *testing.T) {
+	assert.Equal(t, []string{"option3: value3", "option3", "value3"},
+		regex.FindLastSubMatchForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindLastSubMatchForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*")))
+}
+
+func TestFindLastSubMatchForStringWithPattern(t *testing.T) {
+	assert.Equal(t, []string{"option3: value3", "option3", "value3"},
+		regex.FindLastSubMatchForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindLastSubMatchForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*"))
+}
