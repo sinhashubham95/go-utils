@@ -925,3 +925,27 @@ func TestFindLastSubMatchingIndexForStringWithPattern(t *testing.T) {
 		option3: value3
 	`, "xyz*"))
 }
+
+func TestMatch(t *testing.T) {
+	assert.False(t, regex.Match([]byte("naruto rocks"), regexp.MustCompile("xyz*")))
+	assert.True(t, regex.Match([]byte("naruto rocks"), regexp.MustCompile("naruto*")))
+	assert.True(t, regex.Match([]byte("seafood fool"), regexp.MustCompile("foo.?")))
+}
+
+func TestMatchWithPattern(t *testing.T) {
+	assert.False(t, regex.MatchWithPattern([]byte("naruto rocks"), "xyz*"))
+	assert.True(t, regex.MatchWithPattern([]byte("naruto rocks"), "naruto*"))
+	assert.True(t, regex.MatchWithPattern([]byte("seafood fool"), "foo.?"))
+}
+
+func TestMatchString(t *testing.T) {
+	assert.False(t, regex.MatchString("naruto rocks", regexp.MustCompile("xyz*")))
+	assert.True(t, regex.MatchString("naruto rocks", regexp.MustCompile("naruto*")))
+	assert.True(t, regex.MatchString("seafood fool", regexp.MustCompile("foo.?")))
+}
+
+func TestMatchStringWithPattern(t *testing.T) {
+	assert.False(t, regex.MatchStringWithPattern("naruto rocks", "xyz*"))
+	assert.True(t, regex.MatchStringWithPattern("naruto rocks", "naruto*"))
+	assert.True(t, regex.MatchStringWithPattern("seafood fool", "foo.?"))
+}
