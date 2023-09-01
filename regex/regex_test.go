@@ -949,3 +949,51 @@ func TestMatchStringWithPattern(t *testing.T) {
 	assert.True(t, regex.MatchStringWithPattern("naruto rocks", "naruto*"))
 	assert.True(t, regex.MatchStringWithPattern("seafood fool", "foo.?"))
 }
+
+func TestRemoveAll(t *testing.T) {
+	assert.Equal(t, []byte("sea "), regex.RemoveAll([]byte("seafood fool"), regexp.MustCompile("foo.?")))
+	assert.Equal(t, []byte("naruto rocks"), regex.RemoveAll([]byte("naruto rocks"), regexp.MustCompile("xyz*")))
+	assert.Equal(t, []byte(" rocks"), regex.RemoveAll([]byte("naruto rocks"), regexp.MustCompile("naruto*")))
+}
+
+func TestRemoveAllWithPattern(t *testing.T) {
+	assert.Equal(t, []byte("sea "), regex.RemoveAllWithPattern([]byte("seafood fool"), "foo.?"))
+	assert.Equal(t, []byte("naruto rocks"), regex.RemoveAllWithPattern([]byte("naruto rocks"), "xyz*"))
+	assert.Equal(t, []byte(" rocks"), regex.RemoveAllWithPattern([]byte("naruto rocks"), "naruto*"))
+}
+
+func TestRemoveAllString(t *testing.T) {
+	assert.Equal(t, "sea ", regex.RemoveAllString("seafood fool", regexp.MustCompile("foo.?")))
+	assert.Equal(t, "naruto rocks", regex.RemoveAllString("naruto rocks", regexp.MustCompile("xyz*")))
+	assert.Equal(t, " rocks", regex.RemoveAllString("naruto rocks", regexp.MustCompile("naruto*")))
+}
+
+func TestRemoveAllStringWithPattern(t *testing.T) {
+	assert.Equal(t, "sea ", regex.RemoveAllStringWithPattern("seafood fool", "foo.?"))
+	assert.Equal(t, "naruto rocks", regex.RemoveAllStringWithPattern("naruto rocks", "xyz*"))
+	assert.Equal(t, " rocks", regex.RemoveAllStringWithPattern("naruto rocks", "naruto*"))
+}
+
+func TestReplaceAll(t *testing.T) {
+	assert.Equal(t, []byte("sea "), regex.ReplaceAll([]byte("seafood fool"), regexp.MustCompile("foo.?"), []byte("")))
+	assert.Equal(t, []byte("naruto rocks"), regex.ReplaceAll([]byte("naruto rocks"), regexp.MustCompile("xyz*"), []byte("")))
+	assert.Equal(t, []byte(" rocks"), regex.ReplaceAll([]byte("naruto rocks"), regexp.MustCompile("naruto*"), []byte("")))
+}
+
+func TestReplaceAllWithPattern(t *testing.T) {
+	assert.Equal(t, []byte("sea "), regex.ReplaceAllWithPattern([]byte("seafood fool"), "foo.?", []byte("")))
+	assert.Equal(t, []byte("naruto rocks"), regex.ReplaceAllWithPattern([]byte("naruto rocks"), "xyz*", []byte("")))
+	assert.Equal(t, []byte(" rocks"), regex.ReplaceAllWithPattern([]byte("naruto rocks"), "naruto*", []byte("")))
+}
+
+func TestReplaceAllString(t *testing.T) {
+	assert.Equal(t, "sea ", regex.ReplaceAllString("seafood fool", regexp.MustCompile("foo.?"), ""))
+	assert.Equal(t, "naruto rocks", regex.ReplaceAllString("naruto rocks", regexp.MustCompile("xyz*"), ""))
+	assert.Equal(t, " rocks", regex.ReplaceAllString("naruto rocks", regexp.MustCompile("naruto*"), ""))
+}
+
+func TestReplaceAllStringWithPattern(t *testing.T) {
+	assert.Equal(t, "sea ", regex.ReplaceAllStringWithPattern("seafood fool", "foo.?", ""))
+	assert.Equal(t, "naruto rocks", regex.ReplaceAllStringWithPattern("naruto rocks", "xyz*", ""))
+	assert.Equal(t, " rocks", regex.ReplaceAllStringWithPattern("naruto rocks", "naruto*", ""))
+}
