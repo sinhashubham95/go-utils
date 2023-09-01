@@ -515,119 +515,119 @@ func FindLastSubMatchForStringWithPattern(d string, pattern string) []string {
 // n number of sub-matches of the regular expression in d and the matches, if any, of
 // its subexpressions, as defined by the 'SubMatch' descriptions in the package comment.
 // A return value of nil indicates no match.
-func FindSubMatchingIndices(d []byte, r *regexp.Regexp, n int) [][]int {
-	return r.FindAllSubmatchIndex(d, n)
+func FindSubMatchingIndices(d []byte, r *regexp.Regexp, n int) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(r.FindAllSubmatchIndex(d, n))
 }
 
 // FindSubMatchingIndicesWithPattern is like FindSubMatchingIndices but instead of a regex, it takes a pattern to match the content.
-func FindSubMatchingIndicesWithPattern(d []byte, pattern string, n int) [][]int {
-	return regexp.MustCompile(pattern).FindAllSubmatchIndex(d, n)
+func FindSubMatchingIndicesWithPattern(d []byte, pattern string, n int) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(regexp.MustCompile(pattern).FindAllSubmatchIndex(d, n))
 }
 
 // FindSubMatchingIndicesForString is like FindSubMatchingIndices but the source d is a string.
-func FindSubMatchingIndicesForString(d string, r *regexp.Regexp, n int) [][]int {
-	return r.FindAllStringSubmatchIndex(d, n)
+func FindSubMatchingIndicesForString(d string, r *regexp.Regexp, n int) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(r.FindAllStringSubmatchIndex(d, n))
 }
 
 // FindSubMatchingIndicesForStringWithPattern is like FindSubMatchingIndicesForString but instead of a regex,
 // it takes a pattern to match the content.
-func FindSubMatchingIndicesForStringWithPattern(d string, pattern string, n int) [][]int {
-	return regexp.MustCompile(pattern).FindAllStringSubmatchIndex(d, n)
+func FindSubMatchingIndicesForStringWithPattern(d string, pattern string, n int) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(regexp.MustCompile(pattern).FindAllStringSubmatchIndex(d, n))
 }
 
 // FindAllSubMatchingIndices returns a slice of slices holding the index pairs identifying the
 // all the sub-matches of the regular expression in d and the matches, if any, of
 // its subexpressions, as defined by the 'SubMatch' descriptions in the package comment.
 // A return value of nil indicates no match.
-func FindAllSubMatchingIndices(d []byte, r *regexp.Regexp) [][]int {
-	return r.FindAllSubmatchIndex(d, -1)
+func FindAllSubMatchingIndices(d []byte, r *regexp.Regexp) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(r.FindAllSubmatchIndex(d, -1))
 }
 
 // FindAllSubMatchingIndicesWithPattern is like FindAllSubMatchingIndices but instead of a regex,
 // it takes a pattern to match the content.
-func FindAllSubMatchingIndicesWithPattern(d []byte, pattern string) [][]int {
-	return regexp.MustCompile(pattern).FindAllSubmatchIndex(d, -1)
+func FindAllSubMatchingIndicesWithPattern(d []byte, pattern string) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(regexp.MustCompile(pattern).FindAllSubmatchIndex(d, -1))
 }
 
 // FindAllSubMatchingIndicesForString is like FindAllSubMatchingIndices but the source d is a string.
-func FindAllSubMatchingIndicesForString(d string, r *regexp.Regexp) [][]int {
-	return r.FindAllStringSubmatchIndex(d, -1)
+func FindAllSubMatchingIndicesForString(d string, r *regexp.Regexp) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(r.FindAllStringSubmatchIndex(d, -1))
 }
 
 // FindAllSubMatchingIndicesForStringWithPattern is like FindAllSubMatchingIndicesForString but instead of a regex,
 // it takes a pattern to match the content.
-func FindAllSubMatchingIndicesForStringWithPattern(d string, pattern string) [][]int {
-	return regexp.MustCompile(pattern).FindAllStringIndex(d, -1)
+func FindAllSubMatchingIndicesForStringWithPattern(d string, pattern string) [][]*pair.Pair[int, int] {
+	return getPairedIndicesFromCollections(regexp.MustCompile(pattern).FindAllStringSubmatchIndex(d, -1))
 }
 
 // FindFirstSubMatchingIndex returns a slice holding the index pairs identifying the
 // leftmost sub-match of the regular expression in b and the matches, if any, of
 // its subexpressions, as defined by the 'SubMatch'.
 // A return value of nil indicates no match.
-func FindFirstSubMatchingIndex(d []byte, r *regexp.Regexp) []int {
-	return r.FindSubmatchIndex(d)
+func FindFirstSubMatchingIndex(d []byte, r *regexp.Regexp) []*pair.Pair[int, int] {
+	return getPairedIndicesFromCollection(r.FindSubmatchIndex(d))
 }
 
 // FindFirstSubMatchingIndexWithPattern is like FindFirstSubMatchingIndex but instead of a regex,
 // it takes a pattern to match the content.
-func FindFirstSubMatchingIndexWithPattern(d []byte, pattern string) []int {
-	return regexp.MustCompile(pattern).FindSubmatchIndex(d)
+func FindFirstSubMatchingIndexWithPattern(d []byte, pattern string) []*pair.Pair[int, int] {
+	return getPairedIndicesFromCollection(regexp.MustCompile(pattern).FindSubmatchIndex(d))
 }
 
 // FindFirstSubMatchingIndexForString is like FindFirstSubMatchingIndex but the source d is a string.
-func FindFirstSubMatchingIndexForString(d string, r *regexp.Regexp) []int {
-	return r.FindStringSubmatchIndex(d)
+func FindFirstSubMatchingIndexForString(d string, r *regexp.Regexp) []*pair.Pair[int, int] {
+	return getPairedIndicesFromCollection(r.FindStringSubmatchIndex(d))
 }
 
 // FindFirstSubMatchingIndexForStringWithPattern is like FindFirstSubMatchingIndexForString but instead of a regex,
 // it takes a pattern to match the content.
-func FindFirstSubMatchingIndexForStringWithPattern(d string, pattern string) []int {
-	return regexp.MustCompile(pattern).FindStringSubmatchIndex(d)
+func FindFirstSubMatchingIndexForStringWithPattern(d string, pattern string) []*pair.Pair[int, int] {
+	return getPairedIndicesFromCollection(regexp.MustCompile(pattern).FindStringSubmatchIndex(d))
 }
 
 // FindLastSubMatchingIndex returns a slice holding the index pairs identifying the
 // rightmost sub-match of the regular expression in b and the matches, if any, of
 // its subexpressions, as defined by the 'SubMatch'.
 // A return value of nil indicates no match.
-func FindLastSubMatchingIndex(d []byte, r *regexp.Regexp) []int {
+func FindLastSubMatchingIndex(d []byte, r *regexp.Regexp) []*pair.Pair[int, int] {
 	matches := r.FindAllSubmatchIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return getPairedIndicesFromCollection(matches[l-1])
 }
 
 // FindLastSubMatchingIndexWithPattern is like FindLastSubMatchingIndex but instead of a regex,
 // it takes a pattern to match the content.
-func FindLastSubMatchingIndexWithPattern(d []byte, pattern string) []int {
+func FindLastSubMatchingIndexWithPattern(d []byte, pattern string) []*pair.Pair[int, int] {
 	matches := regexp.MustCompile(pattern).FindAllSubmatchIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return getPairedIndicesFromCollection(matches[l-1])
 }
 
 // FindLastSubMatchingIndexForString is like FindLastSubMatchingIndex but the source d is a string.
-func FindLastSubMatchingIndexForString(d string, r *regexp.Regexp) []int {
+func FindLastSubMatchingIndexForString(d string, r *regexp.Regexp) []*pair.Pair[int, int] {
 	matches := r.FindAllStringSubmatchIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return getPairedIndicesFromCollection(matches[l-1])
 }
 
 // FindLastSubMatchingIndexForStringWithPattern is like FindLastSubMatchingIndexForString but instead of a regex,
 // it takes a pattern to match the content.
-func FindLastSubMatchingIndexForStringWithPattern(d string, pattern string) []int {
+func FindLastSubMatchingIndexForStringWithPattern(d string, pattern string) []*pair.Pair[int, int] {
 	matches := regexp.MustCompile(pattern).FindAllStringSubmatchIndex(d, -1)
 	l := len(matches)
 	if l == 0 {
 		return nil
 	}
-	return matches[l-1]
+	return getPairedIndicesFromCollection(matches[l-1])
 }
 
 // Match reports whether the byte slice d contains any match of the regular expression r.
@@ -692,4 +692,32 @@ func ReplaceAllString(s string, r *regexp.Regexp, replacement string) string {
 // Inside replacement, $ signs are interpreted as in Expand, so for instance $1 represents the text of the first sub-match.
 func ReplaceAllStringWithPattern(s, pattern, replacement string) string {
 	return regexp.MustCompile(pattern).ReplaceAllString(s, replacement)
+}
+
+func getPairedIndicesFromCollections(matches [][]int) [][]*pair.Pair[int, int] {
+	if len(matches) == 0 {
+		return nil
+	}
+	result := make([][]*pair.Pair[int, int], len(matches))
+	for i, m := range matches {
+		result[i] = getPairedIndicesFromCollection(m)
+	}
+	return result
+}
+
+func getPairedIndicesFromCollection(m []int) []*pair.Pair[int, int] {
+	l := len(m)
+	if l == 0 {
+		return nil
+	}
+	result := make([]*pair.Pair[int, int], l/2)
+	j := 0
+	k := 1
+	x := 0
+	for ; j < l && k < l; x += 1 {
+		result[x] = pair.New(m[j], m[k])
+		j += 2
+		k += 2
+	}
+	return result
 }

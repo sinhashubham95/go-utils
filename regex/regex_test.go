@@ -597,3 +597,331 @@ func TestFindLastSubMatchForStringWithPattern(t *testing.T) {
 		option3: value3
 	`, "xyz*"))
 }
+
+func TestFindSubMatchingIndices(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)}},
+		regex.FindSubMatchingIndices([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`), 1))
+	assert.Nil(t, regex.FindSubMatchingIndices([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*"), 1))
+}
+
+func TestFindSubMatchingIndicesWithPattern(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)}},
+		regex.FindSubMatchingIndicesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`, 1))
+	assert.Nil(t, regex.FindSubMatchingIndicesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*", 1))
+}
+
+func TestFindSubMatchingIndicesForString(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)}},
+		regex.FindSubMatchingIndicesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`), 1))
+	assert.Nil(t, regex.FindSubMatchingIndicesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*"), 1))
+}
+
+func TestFindSubMatchingIndicesForStringWithPattern(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)}},
+		regex.FindSubMatchingIndicesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`, 1))
+	assert.Nil(t, regex.FindSubMatchingIndicesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*", 1))
+}
+
+func TestFindAllSubMatchingIndices(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		{pair.New(38, 53), pair.New(38, 45), pair.New(47, 53)},
+		{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)}},
+		regex.FindAllSubMatchingIndices([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindAllSubMatchingIndices([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*")))
+}
+
+func TestFindAllSubMatchingIndicesWithPattern(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		{pair.New(38, 53), pair.New(38, 45), pair.New(47, 53)},
+		{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)}},
+		regex.FindAllSubMatchingIndicesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindAllSubMatchingIndicesWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*"))
+}
+
+func TestFindAllSubMatchingIndicesForString(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		{pair.New(38, 53), pair.New(38, 45), pair.New(47, 53)},
+		{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)}},
+		regex.FindAllSubMatchingIndicesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindAllSubMatchingIndicesForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*")))
+}
+
+func TestFindAllSubMatchingIndicesForStringWithPattern(t *testing.T) {
+	assert.Equal(t, [][]*pair.Pair[int, int]{{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		{pair.New(38, 53), pair.New(38, 45), pair.New(47, 53)},
+		{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)}},
+		regex.FindAllSubMatchingIndicesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindAllSubMatchingIndicesForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*"))
+}
+
+func TestFindFirstSubMatchingIndex(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		regex.FindFirstSubMatchingIndex([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindFirstSubMatchingIndex([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*")))
+}
+
+func TestFindFirstSubMatchingIndexWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		regex.FindFirstSubMatchingIndexWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindFirstSubMatchingIndexWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*"))
+}
+
+func TestFindFirstSubMatchingIndexForString(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		regex.FindFirstSubMatchingIndexForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindFirstSubMatchingIndexForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*")))
+}
+
+func TestFindFirstSubMatchingIndexForStringWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(20, 35), pair.New(20, 27), pair.New(29, 35)},
+		regex.FindFirstSubMatchingIndexForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindFirstSubMatchingIndexForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*"))
+}
+
+func TestFindLastSubMatchingIndex(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)},
+		regex.FindLastSubMatchingIndex([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindLastSubMatchingIndex([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), regexp.MustCompile("xyz*")))
+}
+
+func TestFindLastSubMatchingIndexWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)},
+		regex.FindLastSubMatchingIndexWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindLastSubMatchingIndexWithPattern([]byte(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`), "xyz*"))
+}
+
+func TestFindLastSubMatchingIndexForString(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)},
+		regex.FindLastSubMatchingIndexForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile(`(?m)(?P<key>\w+):\s+(?P<value>\w+)$`)))
+	assert.Nil(t, regex.FindLastSubMatchingIndexForString(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, regexp.MustCompile("xyz*")))
+}
+
+func TestFindLastSubMatchingIndexForStringWithPattern(t *testing.T) {
+	assert.Equal(t, []*pair.Pair[int, int]{pair.New(83, 98), pair.New(83, 90), pair.New(92, 98)},
+		regex.FindLastSubMatchingIndexForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, `(?m)(?P<key>\w+):\s+(?P<value>\w+)$`))
+	assert.Nil(t, regex.FindLastSubMatchingIndexForStringWithPattern(`
+		# comment line
+		option1: value1
+		option2: value2
+	
+		# another comment line
+		option3: value3
+	`, "xyz*"))
+}
