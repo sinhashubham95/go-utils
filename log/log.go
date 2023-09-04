@@ -101,5 +101,5 @@ func withIDAndPath(ctx context.Context, event *zerolog.Event) *zerolog.Event {
 	if correlationId != nil {
 		event.Interface(CorrelationLogParam, correlationId)
 	}
-	return event
+	return event.Ctx(ctx)
 }
