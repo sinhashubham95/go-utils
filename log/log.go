@@ -10,8 +10,8 @@ import (
 	"sync"
 )
 
-var o = sync.Once{}
-var mu sync.RWMutex
+var o = &sync.Once{}
+var mu = &sync.RWMutex{}
 var p []string
 
 // InitLogger is used to initialize logger
@@ -28,6 +28,10 @@ func InitLogger(level Level, params []string) {
 
 // InitLoggerWithWriter is used to initialize logger with a writer
 func InitLoggerWithWriter(level Level, w io.Writer, params []string) {
+	if w == nil {
+		InitLogger(level, params)
+		return
+	}
 	o.Do(func() {
 		zerolog.ErrorStackMarshaler = getErrorStackMarshaller()
 		zerolog.SetGlobalLevel(level.zeroLogLevel())
