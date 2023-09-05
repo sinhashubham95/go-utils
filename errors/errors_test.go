@@ -2,10 +2,11 @@ package errors_test
 
 import (
 	"fmt"
-	"github.com/sinhashubham95/go-utils/errors"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/sinhashubham95/go-utils/errors"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNew(t *testing.T) {
