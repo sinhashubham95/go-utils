@@ -2,12 +2,13 @@ package log
 
 import (
 	"context"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
-	"github.com/sinhashubham95/go-utils/errors"
 	"io"
 	"runtime/debug"
 	"sync"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"github.com/sinhashubham95/go-utils/errors"
 )
 
 var o = &sync.Once{}

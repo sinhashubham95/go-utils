@@ -5,14 +5,17 @@ package log
 import (
 	"context"
 	"fmt"
-	"github.com/rs/zerolog"
-	"github.com/sinhashubham95/go-utils/errors"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"os"
 	"sync"
 	"testing"
+
+	"github.com/rs/zerolog"
+	"github.com/sinhashubham95/go-utils/errors"
+	"github.com/stretchr/testify/assert"
 )
+
+type cKey string
 
 func TestInitLoggerTraceLevel(t *testing.T) {
 	defer resetOnce()
@@ -107,10 +110,11 @@ func TestInitLoggerWithParams(t *testing.T) {
 func TestLoggerMethods(t *testing.T) {
 	defer resetOnce()
 	InitLogger(DebugLevel, []string{"naruto", "rocks"})
-	Trace(nil)
-	Debug(nil)
+	Trace(context.Background())
+	Debug(context.Background())
 	Info(context.Background())
-	ctx := context.WithValue(context.Background(), "naruto", "rocks")
+	var a cKey = "naruto"
+	ctx := context.WithValue(context.Background(), a, "rocks")
 	Warn(ctx)
 	Error(ctx)
 	Fatal(ctx)
@@ -120,59 +124,59 @@ func TestLoggerMethods(t *testing.T) {
 func TestLoggerErrorWarn(t *testing.T) {
 	defer resetOnce()
 	InitLogger(DebugLevel, []string{"naruto", "rocks"})
-	ErrorWarn(nil, &errors.Error{StatusCode: http.StatusUnauthorized})
-	ErrorWarn(nil, nil)
+	ErrorWarn(context.Background(), &errors.Error{StatusCode: http.StatusUnauthorized})
+	ErrorWarn(context.Background(), nil)
 }
 
 func TestLoggerCapabilities(t *testing.T) {
 	defer resetOnce()
 	InitLogger(DebugLevel, []string{"naruto", "rocks"})
-	Error(nil).Err(&errors.Error{Code: "naruto"}).Stack().Msg("naruto rocks")
-	Error(nil).Msgf("naruto rocks")
-	Error(nil).Send()
-	Debug(nil).Bool("naruto", false).Send()
-	Debug(nil).Bools("naruto", []bool{false}).Send()
+	Error(context.Background()).Err(&errors.Error{Code: "naruto"}).Stack().Msg("naruto rocks")
+	Error(context.Background()).Msgf("naruto rocks")
+	Error(context.Background()).Send()
+	Debug(context.Background()).Bool("naruto", false).Send()
+	Debug(context.Background()).Bools("naruto", []bool{false}).Send()
 
-	Debug(nil).Bytes("naruto", []byte("naruto rocks")).Send()
+	Debug(context.Background()).Bytes("naruto", []byte("naruto rocks")).Send()
 
-	Debug(nil).Errs("naruto", nil).Send()
+	Debug(context.Background()).Errs("naruto", nil).Send()
 
-	Debug(nil).Float32("naruto", 0).Send()
-	Debug(nil).Floats32("naruto", nil).Send()
-	Debug(nil).Float64("naruto", 0).Send()
-	Debug(nil).Floats64("naruto", nil).Send()
+	Debug(context.Background()).Float32("naruto", 0).Send()
+	Debug(context.Background()).Floats32("naruto", nil).Send()
+	Debug(context.Background()).Float64("naruto", 0).Send()
+	Debug(context.Background()).Floats64("naruto", nil).Send()
 
-	Debug(nil).Hex("naruto", nil).Send()
+	Debug(context.Background()).Hex("naruto", nil).Send()
 
-	Debug(nil).Int("naruto", 0).Send()
-	Debug(nil).Ints("naruto", nil).Send()
-	Debug(nil).Int8("naruto", 0).Send()
-	Debug(nil).Ints8("naruto", nil).Send()
-	Debug(nil).Int16("naruto", 0).Send()
-	Debug(nil).Ints16("naruto", nil).Send()
-	Debug(nil).Int32("naruto", 0).Send()
-	Debug(nil).Ints32("naruto", nil).Send()
-	Debug(nil).Int64("naruto", 0).Send()
-	Debug(nil).Ints64("naruto", nil).Send()
+	Debug(context.Background()).Int("naruto", 0).Send()
+	Debug(context.Background()).Ints("naruto", nil).Send()
+	Debug(context.Background()).Int8("naruto", 0).Send()
+	Debug(context.Background()).Ints8("naruto", nil).Send()
+	Debug(context.Background()).Int16("naruto", 0).Send()
+	Debug(context.Background()).Ints16("naruto", nil).Send()
+	Debug(context.Background()).Int32("naruto", 0).Send()
+	Debug(context.Background()).Ints32("naruto", nil).Send()
+	Debug(context.Background()).Int64("naruto", 0).Send()
+	Debug(context.Background()).Ints64("naruto", nil).Send()
 
-	Debug(nil).RawJSON("naruto", []byte("naruto rocks"))
+	Debug(context.Background()).RawJSON("naruto", []byte("naruto rocks"))
 
-	Debug(nil).Str("naruto", "").Send()
-	Debug(nil).Strs("naruto", nil).Send()
+	Debug(context.Background()).Str("naruto", "").Send()
+	Debug(context.Background()).Strs("naruto", nil).Send()
 
-	Debug(nil).Stringer("naruto", nil).Send()
-	Debug(nil).Stringers("naruto", nil).Send()
+	Debug(context.Background()).Stringer("naruto", nil).Send()
+	Debug(context.Background()).Stringers("naruto", nil).Send()
 
-	Debug(nil).Uint("naruto", 0).Send()
-	Debug(nil).Uints("naruto", nil).Send()
-	Debug(nil).Uint8("naruto", 0).Send()
-	Debug(nil).Uints8("naruto", nil).Send()
-	Debug(nil).Uint16("naruto", 0).Send()
-	Debug(nil).Uints16("naruto", nil).Send()
-	Debug(nil).Uint32("naruto", 0).Send()
-	Debug(nil).Uints32("naruto", nil).Send()
-	Debug(nil).Uint64("naruto", 0).Send()
-	Debug(nil).Uints64("naruto", nil).Send()
+	Debug(context.Background()).Uint("naruto", 0).Send()
+	Debug(context.Background()).Uints("naruto", nil).Send()
+	Debug(context.Background()).Uint8("naruto", 0).Send()
+	Debug(context.Background()).Uints8("naruto", nil).Send()
+	Debug(context.Background()).Uint16("naruto", 0).Send()
+	Debug(context.Background()).Uints16("naruto", nil).Send()
+	Debug(context.Background()).Uint32("naruto", 0).Send()
+	Debug(context.Background()).Uints32("naruto", nil).Send()
+	Debug(context.Background()).Uint64("naruto", 0).Send()
+	Debug(context.Background()).Uints64("naruto", nil).Send()
 }
 
 func resetOnce() {
