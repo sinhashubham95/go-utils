@@ -585,8 +585,18 @@ func TestJoinStringsByChar(t *testing.T) {
 	assert.Equal(t, "naruto rocks", strings.JoinStringsByChar([]string{"naruto", "rocks"}, ' '))
 }
 
+func TestJoinStringersByChar(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.JoinStringersByChar([]string{"naruto", "rocks"}, ' ',
+		func(a string) string { return a }))
+}
+
 func TestJoinStringsByString(t *testing.T) {
 	assert.Equal(t, "naruto rocks", strings.JoinStringsByString([]string{"naruto", "rocks"}, " "))
+}
+
+func TestJoinStringersByString(t *testing.T) {
+	assert.Equal(t, "naruto rocks", strings.JoinStringersByString([]string{"naruto", "rocks"}, " ",
+		func(a string) string { return a }))
 }
 
 func TestLeft(t *testing.T) {

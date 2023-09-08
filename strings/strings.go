@@ -982,9 +982,33 @@ func JoinStringsByChar(ss []string, d uint8) string {
 	return b.String()
 }
 
+// JoinStringersByChar is used to join the values converting them to string by stringer by a character.
+func JoinStringersByChar[K any](ss []K, d uint8, stringer func(a K) string) string {
+	var b strings.Builder
+	for i, s := range ss {
+		if i > 0 {
+			b.WriteByte(d)
+		}
+		b.WriteString(stringer(s))
+	}
+	return b.String()
+}
+
 // JoinStringsByString is used to join the strings by a string.
 func JoinStringsByString(ss []string, ds string) string {
 	return strings.Join(ss, ds)
+}
+
+// JoinStringersByString is used to join the values converting them to string by stringer by a string.
+func JoinStringersByString[K any](ss []K, ds string, stringer func(a K) string) string {
+	var b strings.Builder
+	for i, s := range ss {
+		if i > 0 {
+			b.WriteString(ds)
+		}
+		b.WriteString(stringer(s))
+	}
+	return b.String()
 }
 
 // Left is used to get the specified number of leftmost characters of a string.
