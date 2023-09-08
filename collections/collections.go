@@ -32,7 +32,7 @@ func Cardinality[K comparable](a []K, x K) int {
 }
 
 // CardinalityWithEquator returns the number of occurrences of the given element in the collection according to the equator.
-func CardinalityWithEquator[K any](a []K, x K, equator func(a, b K) bool) int {
+func CardinalityWithEquator[K, V any](a []K, x V, equator func(a K, b V) bool) int {
 	if equator == nil {
 		panic("equator cannot be nil")
 	}
@@ -171,7 +171,7 @@ func Contains[K comparable](a []K, x K) bool {
 }
 
 // ContainsWithEquator is used to check if x is contained in the collection according to the equator
-func ContainsWithEquator[K any](a []K, x K, equator func(a, b K) bool) bool {
+func ContainsWithEquator[K, V any](a []K, x V, equator func(a K, b V) bool) bool {
 	if equator == nil {
 		panic("equator cannot be nil")
 	}
@@ -526,7 +526,7 @@ func IsEqual[K comparable](a, b []K) bool {
 
 // IsEqualWithEquator Returns true iff the given Collections contain exactly the same elements according to the equator
 // with exactly the same cardinalities.
-func IsEqualWithEquator[K any](a, b []K, equator func(x, y K) bool) bool {
+func IsEqualWithEquator[K, V any](a []K, b []V, equator func(x K, y V) bool) bool {
 	if equator == nil {
 		panic("equator cannot be nil")
 	}
