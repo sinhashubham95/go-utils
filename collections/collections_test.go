@@ -318,7 +318,7 @@ func TestIsEqualWithEquator(t *testing.T) {
 	assert.False(t, collections.IsEqualWithEquator([]int{1, 2, 3}, []int{1, 2, 3, 4, 5}, func(x, y int) bool { return x == y }))
 	assert.True(t, collections.IsEqualWithEquator(nil, nil, func(x, y int) bool { return x == y }))
 	assert.Panics(t, func() {
-		collections.IsEqualWithEquator[int](nil, nil, nil)
+		collections.IsEqualWithEquator[int, int](nil, nil, nil)
 	})
 }
 
