@@ -1,9 +1,10 @@
 package pair_test
 
 import (
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/structures/pair"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestPair(t *testing.T) {

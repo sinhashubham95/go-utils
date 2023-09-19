@@ -1,9 +1,10 @@
 package numbers_test
 
 import (
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/numbers"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestConstants(t *testing.T) {

@@ -5,8 +5,9 @@ package regex
 // subMatch 1 is the match of the first parenthesized subexpression, and so on.
 
 import (
-	"github.com/sinhashubham95/go-utils/structures/pair"
 	"regexp"
+
+	"github.com/sinhashubham95/go-utils/structures/pair"
 )
 
 // Expand appends template to the result and during append it replaces variables in the template with n number of

@@ -1,9 +1,10 @@
 package regex_test
 
 import (
-	"github.com/sinhashubham95/go-utils/structures/pair"
 	"regexp"
 	"testing"
+
+	"github.com/sinhashubham95/go-utils/structures/pair"
 
 	"github.com/sinhashubham95/go-utils/regex"
 	"github.com/stretchr/testify/assert"

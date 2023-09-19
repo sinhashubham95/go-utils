@@ -2,8 +2,9 @@ package log
 
 import (
 	"fmt"
-	"github.com/rs/zerolog"
 	"sync"
+
+	"github.com/rs/zerolog"
 )
 
 // Logger is the interface to the logging possibilities.

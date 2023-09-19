@@ -1,9 +1,10 @@
 package set_test
 
 import (
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/structures/set"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestSet(t *testing.T) {
