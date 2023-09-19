@@ -174,3 +174,37 @@ func StringToIntegerNumberWithBaseAndBits[K IntegerNumber](a string, base, bitSi
 	}
 	return K(r), nil
 }
+
+// IntegerNumberToString is used to convert the given integer number to string.
+func IntegerNumberToString[K IntegerNumber](a K) string {
+	return strconv.FormatInt(int64(a), 10)
+}
+
+// FloatingNumberToString is used to convert the given floating number to string,
+// according to the format and precision.
+//
+// The format is one of
+// 'b' (-ddddp±ddd, a binary exponent),
+// 'e' (-d.dddde±dd, a decimal exponent),
+// 'E' (-d.ddddE±dd, a decimal exponent),
+// 'f' (-ddd.dddd, no exponent),
+// 'g' ('e' for large exponents, 'f' otherwise),
+// 'G' ('E' for large exponents, 'f' otherwise),
+// 'x' (-0xd.ddddp±ddd, a hexadecimal fraction and binary exponent), or
+// 'X' (-0Xd.ddddP±ddd, a hexadecimal fraction and binary exponent).
+//
+// The precision controls the number of digits (excluding the exponent)
+// printed by the 'e', 'E', 'f', 'g', 'G', 'x', and 'X' formats.
+// For 'e', 'E', 'f', 'x', and 'X', it is the number of digits after the decimal point.
+// For 'g' and 'G' it is the maximum number of significant digits (trailing
+// zeros are removed).
+// The special precision -1 uses the smallest number of digits
+// necessary such that StringToNumber will return the same value exactly.
+func FloatingNumberToString[K FloatingNumber](a K, format byte, precision int) string {
+	switch any(a).(type) {
+	case float32:
+		return strconv.FormatFloat(float64(a), format, precision, 32)
+	default:
+		return strconv.FormatFloat(float64(a), format, precision, 64)
+	}
+}
