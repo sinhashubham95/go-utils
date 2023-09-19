@@ -139,10 +139,22 @@ func (s Set[T]) Intersection(o Set[T]) Set[T] {
 
 // Iterator returns an Iterator object that can be used to range over the set.
 func (s Set[T]) Iterator() *Iterator[T] {
-	return &Iterator[T]{
+	i := &Iterator[T]{
 		c:    make(chan T),
 		stop: make(chan struct{}),
 	}
+	go func() {
+	L:
+		for v := range s {
+			select {
+			case <-i.stop:
+				break L
+			case i.c <- v:
+			}
+		}
+		close(i.c)
+	}()
+	return i
 }
 
 // Length is used to find the number of elements in the set.

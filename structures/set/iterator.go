@@ -2,7 +2,7 @@ package set
 
 // Iterator defines an iterator over a Set, its channel can be used to range over the Set's elements.
 type Iterator[T comparable] struct {
-	c    <-chan T
+	c    chan T
 	stop chan struct{}
 }
 
@@ -11,6 +11,7 @@ func (i *Iterator[T]) Close() {
 	close(i.stop)
 	// Exhaust any remaining elements.
 	for range i.c {
+		// do nothing
 	}
 }
 
