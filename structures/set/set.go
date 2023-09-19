@@ -42,6 +42,15 @@ func (s Set[T]) Clone() Set[T] {
 	return clone
 }
 
+// Collection returns the elements of the set as a collection.
+func (s Set[T]) Collection() []T {
+	r := make([]T, 0, s.Length())
+	for v := range s {
+		r = append(r, v)
+	}
+	return r
+}
+
 // Contains returns whether the given items are all in the set.
 func (s Set[T]) Contains(v ...T) bool {
 	for _, val := range v {
@@ -128,7 +137,47 @@ func (s Set[T]) Intersection(o Set[T]) Set[T] {
 	return intersection
 }
 
+// Iterator returns an Iterator object that can be used to range over the set.
+func (s Set[T]) Iterator() *Iterator[T] {
+	return &Iterator[T]{
+		c:    make(chan T),
+		stop: make(chan struct{}),
+	}
+}
+
 // Length is used to find the number of elements in the set.
 func (s Set[T]) Length() int {
 	return len(s)
+}
+
+// Remove removes a single element from the set.
+func (s Set[T]) Remove(v T) {
+	delete(s, v)
+}
+
+// RemoveAll removes multiple elements from the set.
+func (s Set[T]) RemoveAll(i ...T) {
+	for _, v := range i {
+		delete(s, v)
+	}
+}
+
+// Union returns a new set with all elements in both sets.
+//
+// Note that the argument to Union must be of the
+// same type as the receiver of the method.
+// Otherwise, Union will panic.
+func (s Set[T]) Union(o Set[T]) Set[T] {
+	n := s.Length()
+	if o.Length() > n {
+		n = o.Length()
+	}
+	r := make(Set[T], n)
+	for v := range s {
+		r[v] = struct{}{}
+	}
+	for v := range o {
+		r[v] = struct{}{}
+	}
+	return r
 }
