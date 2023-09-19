@@ -24,6 +24,7 @@ const (
 // Abs returns the absolute value of x.
 //
 // Special cases are:
+//
 //	Abs(±Inf) = +Inf
 //	Abs(NaN) = NaN
 func Abs[K numbers.SNumber](a K) K {
@@ -33,6 +34,7 @@ func Abs[K numbers.SNumber](a K) K {
 // ACos returns the arc-cosine, in radians, of x.
 //
 // Special case is:
+//
 //	ACos(x) = NaN if x < -1 or x > 1
 func ACos[K numbers.FloatingNumber](a K) K {
 	return K(math.Acos(float64(a)))
@@ -41,6 +43,7 @@ func ACos[K numbers.FloatingNumber](a K) K {
 // ACosH returns the inverse hyperbolic cosine of x.
 //
 // Special cases are:
+//
 //	ACosH(+Inf) = +Inf
 //	ACosH(x) = NaN if x < 1
 //	ACosH(NaN) = NaN
@@ -51,6 +54,7 @@ func ACosH[K numbers.FloatingNumber](a K) K {
 // ASin returns the arc-sine, in radians, of x.
 //
 // Special cases are:
+//
 //	ASin(±0) = ±0
 //	ASin(x) = NaN if x < -1 or x > 1
 func ASin[K numbers.FloatingNumber](a K) K {
@@ -60,6 +64,7 @@ func ASin[K numbers.FloatingNumber](a K) K {
 // ASinH returns the inverse hyperbolic sine of x.
 //
 // Special cases are:
+//
 //	ASinH(±0) = ±0
 //	ASinH(±Inf) = ±Inf
 //	ASinH(NaN) = NaN
@@ -70,8 +75,9 @@ func ASinH[K numbers.FloatingNumber](a K) K {
 // ATan returns the arc-tangent, in radians, of x.
 //
 // Special cases are:
-//      ATan(±0) = ±0
-//      ATan(±Inf) = ±Pi/2
+//
+//	ATan(±0) = ±0
+//	ATan(±Inf) = ±Pi/2
 func ATan[K numbers.FloatingNumber](a K) K {
 	return K(math.Atan(float64(a)))
 }
@@ -81,6 +87,7 @@ func ATan[K numbers.FloatingNumber](a K) K {
 // of the return value.
 //
 // Special cases are (in order):
+//
 //	ATanXY(y, NaN) = NaN
 //	ATanXY(NaN, x) = NaN
 //	ATanXY(+0, x>=0) = +0
@@ -105,6 +112,7 @@ func ATanXY[K numbers.FloatingNumber](x, y K) K {
 // ATanH returns the inverse hyperbolic tangent of x.
 //
 // Special cases are:
+//
 //	ATanH(1) = +Inf
 //	ATanH(±0) = ±0
 //	ATanH(-1) = -Inf
@@ -117,6 +125,7 @@ func ATanH[K numbers.FloatingNumber](a K) K {
 // Cbrt returns the cube root of x.
 //
 // Special cases are:
+//
 //	Cbrt(±0) = ±0
 //	Cbrt(±Inf) = ±Inf
 //	Cbrt(NaN) = NaN
@@ -127,6 +136,7 @@ func Cbrt[K numbers.FloatingNumber](a K) K {
 // Ceil returns the least integer value greater than or equal to x.
 //
 // Special cases are:
+//
 //	Ceil(±0) = ±0
 //	Ceil(±Inf) = ±Inf
 //	Ceil(NaN) = NaN
@@ -167,6 +177,7 @@ func CopySign[K numbers.SNumber](magnitude, sign K) K {
 // Cos returns the cosine of the radian argument x.
 //
 // Special cases are:
+//
 //	Cos(±Inf) = NaN
 //	Cos(NaN) = NaN
 func Cos[K numbers.FloatingNumber](a K) K {
@@ -176,6 +187,7 @@ func Cos[K numbers.FloatingNumber](a K) K {
 // CosH returns the hyperbolic cosine of x.
 //
 // Special cases are:
+//
 //	CosH(±0) = 1
 //	CosH(±Inf) = +Inf
 //	CosH(NaN) = NaN
@@ -197,6 +209,7 @@ func Degrees[K numbers.FloatingNumber](a K) K {
 // Dim returns the maximum of a-b or 0.
 //
 // Special cases are:
+//
 //	Dim(+Inf, +Inf) = NaN
 //	Dim(-Inf, -Inf) = NaN
 //	Dim(x, NaN) = Dim(NaN, x) = NaN
@@ -207,6 +220,7 @@ func Dim[K numbers.SNumber](a, b K) K {
 // ERF returns the error function of x.
 //
 // Special cases are:
+//
 //	Erf(+Inf) = 1
 //	Erf(-Inf) = -1
 //	Erf(NaN) = NaN
@@ -217,6 +231,7 @@ func ERF[K numbers.FloatingNumber](a K) K {
 // ERFInverse returns the inverse error function of x.
 //
 // Special cases are:
+//
 //	ERFInverse(1) = +Inf
 //	ERFInverse(-1) = -Inf
 //	ERFInverse(x) = NaN if x < -1 or x > 1
@@ -228,6 +243,7 @@ func ERFInverse[K numbers.FloatingNumber](a K) K {
 // ERFC returns the complementary error function of x.
 //
 // Special cases are:
+//
 //	ERFC(+Inf) = 0
 //	ERFC(-Inf) = 2
 //	ERFC(NaN) = NaN
@@ -238,6 +254,7 @@ func ERFC[K numbers.FloatingNumber](a K) K {
 // ERFCInverse returns the inverse of Erfc(x).
 //
 // Special cases are:
+//
 //	ERFCInverse(0) = +Inf
 //	ERFCInverse(2) = -Inf
 //	ERFCInverse(x) = NaN if x < 0 or x > 2
@@ -249,6 +266,7 @@ func ERFCInverse[K numbers.FloatingNumber](a K) K {
 // Exp returns x**y, the base-x exponential of y.
 //
 // Special cases are (in order):
+//
 //	Exp(x, ±0) = 1 for any x
 //	Exp(1, y) = 1 for any y
 //	Exp(x, 1) = x for any x
@@ -276,8 +294,10 @@ func Exp[K numbers.Number64](a, b K) K {
 // ExpE returns e**x, the base-e exponential of x.
 //
 // Special cases are:
+//
 //	ExpE(+Inf) = +Inf
 //	ExpE(NaN) = NaN
+//
 // Very large values overflow to 0 or +Inf.
 // Very small values underflow to 1.
 func ExpE(a float64) float64 {
@@ -295,9 +315,11 @@ func Exp2[K numbers.Number64](a K) K {
 // It is more accurate than Exp(x) - 1 when x is near zero.
 //
 // Special cases are:
+//
 //	ExpM1(+Inf) = +Inf
 //	ExpM1(-Inf) = -1
 //	ExpM1(NaN) = NaN
+//
 // Very large values overflow to -1 or +Inf.
 func ExpM1[K numbers.Number64](a K) K {
 	return K(math.Expm1(float64(a)))
@@ -312,6 +334,7 @@ func FMA[K numbers.Number](x, y, z K) K {
 // Floor returns the greatest integer value less than or equal to x.
 //
 // Special cases are:
+//
 //	Floor(±0) = ±0
 //	Floor(±Inf) = ±Inf
 //	Floor(NaN) = NaN
@@ -324,6 +347,7 @@ func Floor[K numbers.FloatingNumber](a K) K {
 // with the absolute value of fraction in the interval [½, 1).
 //
 // Special cases are:
+//
 //	FractionalExp(±0) = ±0, 0
 //	FractionalExp(±Inf) = ±Inf, 0
 //	FractionalExp(NaN) = NaN, 0
@@ -335,6 +359,7 @@ func FractionalExp[K numbers.FloatingNumber](a K) (fraction K, exp int) {
 // Gamma returns the Gamma function of x.
 //
 // Special cases are:
+//
 //	Gamma(+Inf) = +Inf
 //	Gamma(+0) = +Inf
 //	Gamma(-0) = -Inf
@@ -348,6 +373,7 @@ func Gamma[K numbers.FloatingNumber](a K) K {
 // Hypotenuse returns square-root(p*p + q*q), taking care to avoid unnecessary overflow and underflow.
 //
 // Special cases are:
+//
 //	Hypot(±Inf, q) = +Inf
 //	Hypot(p, ±Inf) = +Inf
 //	Hypot(NaN, q) = NaN
@@ -359,6 +385,7 @@ func Hypotenuse[K numbers.FloatingNumber](x, y K) K {
 // ILogB returns the binary exponent of x as an integer.
 //
 // Special cases are:
+//
 //	ILogB(±Inf) = MaxInt32
 //	ILogB(0) = MinInt32
 //	ILogB(NaN) = MaxInt32
@@ -382,7 +409,7 @@ func IsInfinity[K numbers.Number64](a, sign K) bool {
 	return a == Infinity(sign)
 }
 
-// IsNaN reports whether a is an IEEE 754 ``not-a-number'' value.
+// IsNaN reports whether a is an IEEE 754 “not-a-number” value.
 func IsNaN[K numbers.Number](a K) bool {
 	// IEEE 754 says that only NaNs satisfy f != f.
 	// To avoid the floating-point hardware, could use:
@@ -394,6 +421,7 @@ func IsNaN[K numbers.Number](a K) bool {
 // J returns the order-n Bessel function of the first kind.
 //
 // Special cases are:
+//
 //	J(±Inf) = 0
 //	J(0) = 1
 //	J(NaN) = NaN
@@ -404,6 +432,7 @@ func J[K numbers.FloatingNumber](a K, n int) K {
 // J0 returns the order-zero Bessel function of the first kind.
 //
 // Special cases are:
+//
 //	J0(±Inf) = 0
 //	J0(0) = 1
 //	J0(NaN) = NaN
@@ -414,6 +443,7 @@ func J0[K numbers.FloatingNumber](a K) K {
 // J1 returns the order-one Bessel function of the first kind.
 //
 // Special cases are:
+//
 //	J1(±Inf) = 0
 //	J1(0) = 1
 //	J1(NaN) = NaN
@@ -425,6 +455,7 @@ func J1[K numbers.FloatingNumber](a K) K {
 // It returns fraction × 2**exp.
 //
 // Special cases are:
+//
 //	LDExp(±0, exp) = ±0
 //	LDExp(±Inf, exp) = ±Inf
 //	LDExp(NaN, exp) = NaN
@@ -435,6 +466,7 @@ func LDExp[K numbers.FloatingNumber](fraction K, exp int) K {
 // LGamma returns the natural logarithm and sign (-1 or +1) of Gamma(x).
 //
 // Special cases are:
+//
 //	LGamma(+Inf) = +Inf
 //	LGamma(0) = +Inf
 //	LGamma(-integer) = +Inf
@@ -448,6 +480,7 @@ func LGamma[K numbers.FloatingNumber](a K) (l K, sign int) {
 // Log returns the natural logarithm of x.
 //
 // Special cases are:
+//
 //	Log(+Inf) = +Inf
 //	Log(0) = -Inf
 //	Log(x < 0) = NaN
@@ -471,6 +504,7 @@ func Log2[K numbers.FloatingNumber](a K) K {
 // LogB returns the binary exponent of x.
 //
 // Special cases are:
+//
 //	LogB(±Inf) = +Inf
 //	LogB(0) = -Inf
 //	LogB(NaN) = NaN
@@ -511,6 +545,7 @@ func Max[K numbers.Number](a ...K) K {
 // sign agrees with that of x.
 //
 // Special cases are:
+//
 //	Mod(±Inf, y) = NaN
 //	Mod(NaN, y) = NaN
 //	Mod(x, 0) = NaN
@@ -524,6 +559,7 @@ func Mod[K numbers.Number](a, b K) K {
 // that sum to f. Both values have the same sign as f.
 //
 // Special cases are:
+//
 //	ModF(±Inf) = ±Inf, NaN
 //	ModF(NaN) = NaN, NaN
 func ModF[K numbers.FloatingNumber](a K) (K, K) {
@@ -531,7 +567,7 @@ func ModF[K numbers.FloatingNumber](a K) (K, K) {
 	return K(x), K(y)
 }
 
-// NaN returns an IEEE 754 ``not-a-number'' value.
+// NaN returns an IEEE 754 “not-a-number” value.
 func NaN[K numbers.FloatingNumber]() K {
 	return K(math.NaN())
 }
@@ -566,6 +602,7 @@ func Reduce[K numbers.FloatingNumber](a, period, offset K) K {
 // Round returns the nearest integer, rounding half away from zero.
 //
 // Special cases are:
+//
 //	Round(±0) = ±0
 //	Round(±Inf) = ±Inf
 //	Round(NaN) = NaN
@@ -595,6 +632,7 @@ func Signum[K numbers.SNumber](x K) K {
 // Sin returns the sine of the radian argument x.
 //
 // Special cases are:
+//
 //	Sin(±0) = ±0
 //	Sin(±Inf) = NaN
 //	Sin(NaN) = NaN
@@ -605,6 +643,7 @@ func Sin[K numbers.FloatingNumber](a K) K {
 // SinH returns the hyperbolic sine of x.
 //
 // Special cases are:
+//
 //	Sinh(±0) = ±0
 //	Sinh(±Inf) = ±Inf
 //	Sinh(NaN) = NaN
@@ -615,6 +654,7 @@ func SinH[K numbers.FloatingNumber](a K) K {
 // Sqrt returns the square root of a.
 //
 // Special cases are:
+//
 //	Sqrt(+Inf) = +Inf
 //	Sqrt(±0) = ±0
 //	Sqrt(x < 0) = NaN
@@ -626,6 +666,7 @@ func Sqrt[K numbers.Number, V numbers.FloatingNumber](a K) V {
 // Tan returns the tangent of the radian argument x.
 //
 // Special cases are:
+//
 //	Tan(±0) = ±0
 //	Tan(±Inf) = NaN
 //	Tan(NaN) = NaN
@@ -636,6 +677,7 @@ func Tan[K numbers.FloatingNumber](a K) K {
 // TanH returns the hyperbolic tangent of x.
 //
 // Special cases are:
+//
 //	TanH(±0) = ±0
 //	TanH(±Inf) = ±1
 //	TanH(NaN) = NaN
@@ -646,6 +688,7 @@ func TanH[K numbers.FloatingNumber](a K) K {
 // Truncate returns the integer value of x.
 //
 // Special cases are:
+//
 //	Truncate(±0) = ±0
 //	Truncate(±Inf) = ±Inf
 //	Truncate(NaN) = NaN
@@ -656,6 +699,7 @@ func Truncate[K numbers.FloatingNumber, V numbers.IntegerNumber](a K) V {
 // Y returns the order-n Bessel function of the second kind.
 //
 // Special cases are:
+//
 //	Yn(n, +Inf) = 0
 //	Yn(n ≥ 0, 0) = -Inf
 //	Yn(n < 0, 0) = +Inf if n is odd, -Inf if n is even
@@ -668,6 +712,7 @@ func Y[K numbers.FloatingNumber](a K, n int) K {
 // Y0 returns the order-zero Bessel function of the second kind.
 //
 // Special cases are:
+//
 //	Y0(+Inf) = 0
 //	Y0(0) = -Inf
 //	Y0(x < 0) = NaN
@@ -679,6 +724,7 @@ func Y0[K numbers.FloatingNumber](a K) K {
 // Y1 returns the order-one Bessel function of the second kind.
 //
 // Special cases are:
+//
 //	Y1(+Inf) = 0
 //	Y1(0) = -Inf
 //	Y1(x < 0) = NaN

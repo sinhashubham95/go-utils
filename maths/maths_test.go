@@ -1,11 +1,12 @@
 package maths_test
 
 import (
+	"math"
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/maths"
 	"github.com/sinhashubham95/go-utils/numbers"
 	"github.com/stretchr/testify/assert"
-	"math"
-	"testing"
 )
 
 func TestConstants(t *testing.T) {

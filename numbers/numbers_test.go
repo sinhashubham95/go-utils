@@ -1,9 +1,10 @@
 package numbers_test
 
 import (
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/numbers"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestConstants(t *testing.T) {
@@ -211,4 +212,13 @@ func TestStringToIntegerNumberWithBaseAndBits(t *testing.T) {
 	assert.NoError(t, err)
 	_, err = numbers.StringToIntegerNumberWithBaseAndBits[int8]("abc", 10, 64)
 	assert.Error(t, err)
+}
+
+func TestIntegerNumberToString(t *testing.T) {
+	assert.Equal(t, "1", numbers.IntegerNumberToString(1))
+}
+
+func TestFloatingNumberToString(t *testing.T) {
+	assert.Equal(t, "1.10", numbers.FloatingNumberToString(float32(1.1), 'f', 2))
+	assert.Equal(t, "1.10", numbers.FloatingNumberToString(1.1, 'f', 2))
 }

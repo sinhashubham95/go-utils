@@ -2,9 +2,10 @@ package strings_test
 
 import (
 	"context"
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/strings"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestAbbreviate(t *testing.T) {

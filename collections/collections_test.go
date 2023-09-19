@@ -1,9 +1,10 @@
 package collections_test
 
 import (
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/collections"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestAddAll(t *testing.T) {
