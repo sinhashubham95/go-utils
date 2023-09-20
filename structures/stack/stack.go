@@ -37,6 +37,7 @@ func (s *Stack[T]) Pop() (a T, b bool) {
 	}
 	n := s.top
 	s.top = n.previous
+	s.l--
 	return n.value, true
 }
 
