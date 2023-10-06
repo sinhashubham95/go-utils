@@ -687,13 +687,13 @@ func RemoveAll[K comparable](a, remove []K) []K {
 }
 
 // RemoveAllWithEquator Removes the elements in remove from collection according to the equator
-func RemoveAllWithEquator[K any](a, remove []K, equator func(x, y K) bool) []K {
+func RemoveAllWithEquator[K, V any](a []K, remove []V, equator func(x K, y V) bool) []K {
 	if equator == nil {
 		panic("equator cannot be nil")
 	}
 	r := make([]K, 0)
 	for _, v := range a {
-		if !ContainsWithEquator(remove, v, equator) {
+		if !ContainsWithEquator(remove, v, func(a V, b K) bool { return equator(b, a) }) {
 			r = append(r, v)
 		}
 	}
@@ -733,13 +733,13 @@ func RetainAll[K comparable](a, retain []K) []K {
 }
 
 // RetainAllWithEquator Retains the elements in retain from collection according to the equator
-func RetainAllWithEquator[K any](a, retain []K, equator func(x, y K) bool) []K {
+func RetainAllWithEquator[K, V any](a []K, retain []V, equator func(x K, y V) bool) []K {
 	if equator == nil {
 		panic("equator cannot be nil")
 	}
 	r := make([]K, 0)
 	for _, v := range a {
-		if ContainsWithEquator(retain, v, equator) {
+		if ContainsWithEquator(retain, v, func(a V, b K) bool { return equator(b, a) }) {
 			r = append(r, v)
 		}
 	}
