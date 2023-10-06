@@ -1,9 +1,10 @@
 package stack_test
 
 import (
+	"testing"
+
 	"github.com/sinhashubham95/go-utils/structures/stack"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestStack(t *testing.T) {
