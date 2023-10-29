@@ -139,6 +139,12 @@ type Logger interface {
 
 	// Uints64 adds the field key with i as a []int64 to the Logger context.
 	Uints64(key string, i []uint64) Logger
+
+	// Interface adds the field key with value marshaled using reflection.
+	Interface(key string, i interface{}) Logger
+
+	// Any adds the field key with value marshaled using reflection.
+	Any(key string, a any) Logger
 }
 
 type l struct {
@@ -356,5 +362,15 @@ func (x *l) Uint64(key string, i uint64) Logger {
 
 func (x *l) Uints64(key string, i []uint64) Logger {
 	x.e.Uints64(key, i)
+	return x
+}
+
+func (x *l) Interface(key string, i interface{}) Logger {
+	x.e.Interface(key, i)
+	return x
+}
+
+func (x *l) Any(key string, a any) Logger {
+	x.e.Any(key, a)
 	return x
 }
