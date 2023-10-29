@@ -177,6 +177,9 @@ func TestLoggerCapabilities(t *testing.T) {
 	Debug(context.Background()).Uints32("naruto", nil).Send()
 	Debug(context.Background()).Uint64("naruto", 0).Send()
 	Debug(context.Background()).Uints64("naruto", nil).Send()
+
+	Debug(context.Background()).Interface("naruto", nil).Send()
+	Debug(context.Background()).Any("naruto", nil).Send()
 }
 
 func resetOnce() {
